@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Título de la página -->
+{% block title %} Registro {% endblock %}
+
+<!-- CSS específico (opcional, si necesitas estilos adicionales) -->
+{% block extra_css %}
+{% endblock %}
+
+<!-- Contenido de la página -->
+{% block content %}
+<a href="#" class="back-arrow">&larr;</a>
+
+<div class="registro-container">
+    <div class="registro-header">
+        <img src="{% static 'img/logos/escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEM">
+    </div>
+    <form id="registro-form" class="registro-form" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <input type="text" class="form-control" id="nombre" placeholder="Nombre">
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" id="apellidos" placeholder="Apellidos">
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" id="numCuenta" placeholder="Num. Cuenta">
+        </div>
+        <div class="mb-3">
+            <select class="form-control" id="licenciatura" name="licenciatura">
+                <option value="Administracion">Administración</option>
+                <option value="Contaduria">Contaduría</option>
+                <option value="Mercadotecnia">Mercadotecnia</option>
+                <option value="Informatica_Administrativa">Informática Administrativa</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <input type="email" class="form-control" id="correo" placeholder="Correo Institucional">
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" id="contrasena" placeholder="Contraseña">
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" id="confirmarContrasena" placeholder="Confirmar contraseña">
+        </div>
+        <button type="submit" class="btn btn-primary">Registrarse</button>
+    </form>
+    <div class="modal" id="errorModal">
+        <div class="modalContent">
+            <span class="close">&times;</span>
+            <p class="modalMessage"></p>
+        </div>
+    </div>
+    <div class="modal" id="successModal">
+        <div class="modalContent">
+            <span class="close">&times;</span>
+            <p class="modalMessage"></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
