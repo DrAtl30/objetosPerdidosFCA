@@ -6,6 +6,7 @@ from apps import view
 
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('users/registro', view.user_registro, name='user_registro'),
 ]
 
