@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from app.views import prueba  # Asegúrate de usar el nombre correcto de tu aplicación
+from app.views import *  # Importar las vistas de la aplicación
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('prueba/', prueba, name='prueba'),
+    path('inicio', inicio, name='inicio'),
 ]
