@@ -20,6 +20,7 @@ from app.views import *  # Importar las vistas de la aplicación
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('prueba/', prueba, name='prueba'),
+    path('inicio-sesion/', inicio_sesion, name='inicio_sesion'),
     path('inicio', inicio, name='inicio'),
+    path('administrador', administrador, name='administrador'),
 ]
