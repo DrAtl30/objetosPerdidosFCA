@@ -4,9 +4,9 @@ services:
     container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_DB: perdido_db
-      POSTGRES_USER: trajano
-      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: ${POSTGRES_DB} 
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -27,11 +27,11 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DB_NAME=perdido_db
-      - DB_USER=trajano
-      - DB_PASSWORD=123456
-      - DB_HOST=db
-      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD={DB_PASSWORD}
+      - DB_HOST={DB_HOST}
+      - DB_PORT=${DB_PORT}
 
     command: >
       sh -c "if [ ! -f manage.py ]; then django-admin startproject backend_proyect .; fi && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
