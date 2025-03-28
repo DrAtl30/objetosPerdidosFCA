@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: perdido_db
+      POSTGRES_USER: trajano
+      POSTGRES_PASSWORD: 123456
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - networkop
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_app
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - ../backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_NAME=perdido_db
+      - DB_USER=trajano
+      - DB_PASSWORD=123456
+      - DB_HOST=db
+      - DB_PORT=5432
+
+    command: >
+      sh -c "if [ ! -f manage.py ]; then django-admin startproject backend_proyect .; fi && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+    networks:
+      - networkop
+
+networks:
+  networkop:
+    driver: bridge
+
+volumes:
+  postgres_data:
