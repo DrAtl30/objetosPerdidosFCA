@@ -1,0 +1,9 @@
+# Para evitar cargar las variables de configuración de los contenedores creados
+.env 
+
+# Para ignorar archivos compilados de Python
+*.pyc
+__pycache__/
+
+# Ignorar caché de migraciones de Django
+migrations/__pycache__/
