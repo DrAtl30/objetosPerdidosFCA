@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB} 
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - networkop
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_app
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - ../backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD={DB_PASSWORD}
+      - DB_HOST={DB_HOST}
+      - DB_PORT=${DB_PORT}
+       networks:
+      - networkop
+networks:
+  networkop:
+    driver: bridge
+volumes:
+  postgres_data:
