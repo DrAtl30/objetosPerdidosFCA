@@ -5,5 +5,5 @@
 *.pyc
 __pycache__/
 
-# Ignorar caché de migraciones de Django
+# Ignorar caché de migraciones de Django.
 migrations/__pycache__/
