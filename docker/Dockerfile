@@ -1,3 +1,5 @@
+# Usamos una imagen oficial de Python como base
+FROM python:3.9
 # Creamos un usuario no root para seguridad
 RUN useradd -m django
 # Establecemos el directorio de trabajo en el contenedor, este directorio se genera DENTRO del contenedor que se crea
