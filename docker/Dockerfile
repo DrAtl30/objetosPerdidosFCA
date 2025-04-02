@@ -17,5 +17,8 @@ COPY . /app/
 # Exponemos el puerto en el que correrá Django
 EXPOSE 8000
 # Comando por defecto al iniciar el contenedor
-# CMD ["tail", "-f", "/dev/null"]
-#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+#Para debugging/desarrollo --> CMD ["tail", "-f", "/dev/null"]
+#Para una configuración básica No producción --> CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+#Para producción utilizar Gunicorn 
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
