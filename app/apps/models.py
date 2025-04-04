@@ -1,6 +1,19 @@
 from django.db import models
 
 
+class Usuario(models.Model):
+    id_usuario = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    apellidos = models.CharField(max_length=100)
+    correo_institucional = models.CharField(unique=True, max_length=150)
+    contrasena = models.TextField()
+    rol = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = "usuario"
+
+
 class Administrador(models.Model):
     id_admin = models.AutoField(primary_key=True)
     id_usuario = models.OneToOneField('Usuario', models.DO_NOTHING, db_column='id_usuario')
@@ -94,17 +107,3 @@ class Reporteentrega(models.Model):
     class Meta:
         managed = False
         db_table = 'reporteentrega'
-
-
-class Usuario(models.Model):
-    id_usuario = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=100)
-    apellido1 = models.CharField(max_length=100)
-    apellido2 = models.CharField(max_length=100, blank=True, null=True)
-    correo_institucional = models.CharField(unique=True, max_length=150)
-    contrasena = models.TextField()
-    rol = models.CharField(max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'usuario'

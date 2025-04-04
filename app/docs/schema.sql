@@ -2,8 +2,7 @@
 CREATE TABLE Usuario (
     id_usuario SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    apellido1 VARCHAR(100) NOT NULL,
-    apellido2 VARCHAR(100),
+    apellidos VARCHAR(100) NOT NULL,
     correo_institucional VARCHAR(150) UNIQUE NOT NULL,
     contrasena TEXT NOT NULL CHECK (LENGTH(contrasena) >= 60), -- Para almacenar hashes seguros (bcrypt)
     rol VARCHAR(50) NOT NULL CHECK (rol IN ('alumno', 'administrador'))
@@ -96,3 +95,14 @@ CREATE INDEX idx_estado_objeto ON ObjetoPerdido(estado_objeto);
 CREATE INDEX idx_fecha_hora_entrega ON ReporteEntrega(fecha_hora_entrega);
 CREATE INDEX idx_estado_lectura ON Notificacion(estado_lectura);
 CREATE INDEX idx_fecha_comentario ON Comentario(fecha_comentario);
+
+-- registros de la tabla Carrera
+insert into carrera (nombre, facultad)
+values ('Administración','FCA');
+insert into carrera (nombre, facultad)
+values ('Contaduría','FCA');
+insert into carrera (nombre, facultad)
+values ('Mercadotecnia','FCA');
+insert into carrera (nombre, facultad)
+values ('Informática Administrativa','FCA');
+

@@ -12,9 +12,9 @@
 </head>
 <body>
     <header>
-        <!-- Cabecera común -->
+        <img src="{% static 'img\header\pleca-superior-web.jpg' %}" alt="">
     </header>
-    <main>
+    <main {% block class %}{% endblock  %} >
         {% block content %}
         {% endblock %}
     </main>
