@@ -7,6 +7,8 @@ services:
       POSTGRES_DB: objetos_perdidos_fca
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - backend
 
@@ -16,6 +18,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./app:/app  # Asegurar que la carpeta "app" se monta correctamente
+      - ./frontend:/frontend
     ports:
       - "8000:8000"
     depends_on:
