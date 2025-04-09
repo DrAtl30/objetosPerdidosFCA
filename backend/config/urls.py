@@ -19,8 +19,10 @@ from django.urls import path
 from app.views import *  # Importar las vistas de la aplicación
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('inicio-sesion/', inicio_sesion, name='inicio_sesion'),
+    path('admin', admin.site.urls),
+    path('inicio-sesion', inicio_sesion, name='inicio_sesion'),
     path('inicio', inicio, name='inicio'),
     path('administrador', administrador, name='administrador'),
+    path('registro-sesion', registro_sesion, name='registro_sesion'),
+    path('registro-objeto', registro_objeto, name='registro_objeto'),
 ]

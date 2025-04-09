@@ -8,3 +8,7 @@ def inicio(request):
     return render(request, 'inicio.html')
 def administrador(request):
     return render(request, 'administrador.html')
+def registro_sesion(request):
+    return render(request, 'registro_sesion.html')
+def registro_objeto(request):
+    return render(request, 'registro_objeto.html')
