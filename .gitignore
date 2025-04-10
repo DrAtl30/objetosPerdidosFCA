@@ -3,3 +3,4 @@ env/
 *.dbml
 out/
 *.puml
+.vscode/

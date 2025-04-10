@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from apps.views import *
+from apps import views
 
 
 urlpatterns = [
@@ -10,10 +10,10 @@ urlpatterns = [
     
     path('api/', include('apps.urls')),
     
-    path("", home, name="home"),
-    path("login/", login, name="login"),
-    path("registro/", user_registro, name="user_registro"),
-    path("administrador/", home_admin, name="home_admin"),
+    path("", views.home, name="home"),
+    path("login/", views.login, name="login"),
+    path("registro/", views.user_registro, name="user_registro"),
+    path("administrador/", views.home_admin, name="home_admin"),
     
 ]
 

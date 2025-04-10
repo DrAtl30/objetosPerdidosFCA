@@ -2,10 +2,9 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 
-from .models import Usuario, Alumno, Carrera
+from .models import Usuario, Alumno
 
 class registroUser(serializers.ModelSerializer):
-    rol = serializers.CharField(required=False, allow_null = True, max_length=50)
     num_cuenta = serializers.CharField(
         required=False, allow_null=True, max_length=20, write_only=True
     )
@@ -62,25 +61,17 @@ class registroUser(serializers.ModelSerializer):
             "Informatica_Administrativa": "Informática Administrativa",
         }
 
-        licenciatura1 = LICENCIATURA_OPCIONES.get(licenciatura, None)
-
-        if not rol:
-            if num_cuenta and licenciatura:
-                rol = 'alumno'
-            elif num_empleado and curp:
-                rol = 'administrador'
-            else:
-                raise serializers.ValidationError({"rol": "El rol debe ser 'alumno' o 'administrador'."})
+        licenciatura_valida = LICENCIATURA_OPCIONES.get(licenciatura, None)
 
         user = Usuario.objects.create(**validated_data)
 
         if rol == 'alumno':
-            try:
-                carrer = Carrera.objects.get(nombre = licenciatura1)
-            except Carrera.DoesNotExist:
-                raise serializers.ValidationError(
-                    {"error": f"Carrera no Valida '{licenciatura1}' "}
-                )
-            Alumno.objects.create(id_usuario=user, numero_cuenta=num_cuenta, id_carrera = carrer)
+            if not licenciatura_valida:
+                raise serializers.ValidationError({"licenciatura": f"Licenciatura no valida '{licenciatura_valida}'"})
+            Alumno.objects.create(
+                id_usuario=user,
+                numero_cuenta=num_cuenta,
+                licenciatura = licenciatura_valida
+            )
 
         return user

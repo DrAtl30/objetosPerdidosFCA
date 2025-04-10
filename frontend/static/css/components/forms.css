@@ -33,7 +33,11 @@
 /* Campos del formulario */
 .registro-form .form-control {
     border-radius: 50px;
-    border: 1px solid #5a7561;
+    border: 1px solid #5a7561;    
+}
+.registro-form .form-control:focus {
+    border-radius: 50px;
+    border: 2px solid #526958;
 
 }
 
@@ -103,4 +107,14 @@
 .close:focus {
     color: black;
     text-decoration: none;
+}
+
+.formualrio__error{
+    font-size: 9.5px;
+    margin-bottom: 0;
+    display: none;
+}
+.formualrio__error-activo{
+    display: block;
+    color: red;
 }
