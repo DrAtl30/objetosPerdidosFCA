@@ -6,7 +6,7 @@ class Usuario(models.Model):
     id_usuario = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
     apellidos = models.CharField(max_length=100)
-    correo_institucional = models.CharField(unique=True, max_length=150)
+    correo_institucional = models.CharField(max_length=150)
     contrasena = models.TextField()
     rol = models.CharField(max_length=50)
 

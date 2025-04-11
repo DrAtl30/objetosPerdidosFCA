@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //expresiones regulares para hacer validaciones
     const expresiones = {
-        usuario: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
-        password: /^.{8,15}$/, // 8 a 15 digitos.
-        correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-        numCuenta: /^\d{7,7}$/,
+      usuario: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
+      password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/, // 8 a 15 digitos.
+      correo: /^[a-zA-Z0-9_.+-]+@alumno\.uaemex\.mx$/,
+      numCuenta: /^\d{7,7}$/,
     };
 
     const campos = {
@@ -80,9 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async (e) =>{//event = e
         e.preventDefault();
 
-        console.log("recibiendo la data");
         if (campos.name && campos.last__name && campos.numCuenta && campos.email && campos.pass) {
-            console.log("recibiendo la data");
             const obtenData = {
               nombre: document.getElementById("nombre").value,
               apellidos: document.getElementById("apellidos").value,
@@ -92,8 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
               contrasena: document.getElementById("password").value,
               rol: "alumno",
             };
-            console.log("se recibio la data");
-            console.log(obtenData);
+
             try {
                 const response = await fetch("/api/registro/", {
                     method: "POST",
@@ -110,9 +107,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 await esperarCierreModal("successModal");
                 window.location.href = "/login/";
             }catch (err) {
-                const mensaje = err?.detalle || "Error al procesar la solicitud.";
+                let mensaje = "Error al precesar la solicitud";
+
+                if (err && typeof err === "object" ) {
+                    const error = Object.values(err)
+                        .flat()
+                        .join("\n");
+                    mensaje = error || mensaje;
+                }
                 mostrarModal(mensaje, "errorModal");
             }
+        }else{
+            mostrarModal("Debe llenar todos los campos", "errorModal");
         }
     })
 

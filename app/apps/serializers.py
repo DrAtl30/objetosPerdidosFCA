@@ -30,7 +30,7 @@ class registroUser(serializers.ModelSerializer):
             "curp",
             "rol",
         ]
-
+        
     def validate_contrasena(self, value):
         if len(value) < 8:
             raise serializers.ValidationError(
@@ -38,12 +38,23 @@ class registroUser(serializers.ModelSerializer):
             )
         return make_password(value)
 
-    def validate_correo_electronico(self, value):
-        # Validar el formato del correo electrónico
-        if Usuario.objects.filter(correo_institucional=value).exists():
-            raise serializers.ValidationError(
-                "El correo electrónico ya está registrado."
-            )
+    def validate_correo_institucional(self, value):
+
+        email_exits = Usuario.objects.filter(correo_institucional=value).first()
+
+        if email_exits:
+            alumno = Alumno.objects.filter(id_usuario = email_exits.id_usuario).first()
+            num_cuenta = alumno.numero_cuenta         
+            raise serializers.ValidationError(f"El correo electrónico {value} ya está registrado con el numero de cuenta {num_cuenta}.")
+        return value
+
+    def validate_num_cuenta(self, value):
+
+        if value:
+            alumno = Alumno.objects.filter(numero_cuenta=value).first()
+            if alumno and alumno.id_usuario:
+                correo = alumno.id_usuario.correo_institucional
+                raise serializers.ValidationError(f"El número de cuenta {value} ya está registrado con el correo {correo}.")
         return value
 
     def create(self,validated_data):
