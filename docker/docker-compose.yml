@@ -23,14 +23,24 @@ services:
       - db
     volumes:
       - ../backend:/app
+      - ${STATIC_GLOBAL}:/app/static
+      - ${STATIC_RESOURCE}:/app/recu
+      - ${STATIC_WWW}:/app/www
     ports:
       - "8000:8000"
     environment:
+      - STATIC_WWW=${STATIC_WWW}
+      - STATIC_RESOURCE=${STATIC_RESOURCE}
+      - STATIC_GLOBAL=${STATIC_GLOBAL}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
+    env_file:
+      - .env
+    command: >
+       sh -c "if [ ! -f manage.py ]; then django-admin startproject project_configs .; fi && python manage.py runserver 0.0.0.0:8000"
     networks:
       - networkop
 networks:
