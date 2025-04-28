@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import JsonResponse, HttpResponseRedirect
 from rest_framework import status
-from .serializers import registroUser
+from .serializers import registroUser, LoginUser
 from django.shortcuts import render
 from datetime import datetime
 import json
@@ -40,4 +40,20 @@ class RegistroView(APIView):
                 {"mensaje": "Registro exitoso"}, status=status.HTTP_201_CREATED
             )
         logger.error(f"Errores del serializer: {serializer.errors}")
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LoginView(APIView):
+    def post(self,request):
+        serializer = LoginUser(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            print("Datos válidos:", data)
+            request.session["usuario_id"] = data["id_usuario"]
+            return Response({
+                'mensaje': 'Inicio de sesión exitoso.',
+                'id_usuario': data['id_usuario'],
+                'nombre': data['nombre'],
+                'correo_institucional': data['correo_institucional'],
+            }, status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

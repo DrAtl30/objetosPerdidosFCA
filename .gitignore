@@ -4,3 +4,4 @@ env/
 out/
 *.puml
 .vscode/
+.env

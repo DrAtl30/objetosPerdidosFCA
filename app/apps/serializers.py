@@ -58,7 +58,6 @@ class registroUser(serializers.ModelSerializer):
         return value
 
     def create(self,validated_data):
-        print("Datos recibidos:", validated_data)  # ← Añade esto
         rol = validated_data.get('rol')
         num_cuenta = validated_data.pop('num_cuenta', None)
         num_empleado = validated_data.pop('num_empleado', None)
@@ -86,3 +85,25 @@ class registroUser(serializers.ModelSerializer):
             )
 
         return user
+
+class LoginUser(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = [
+            'correo_institucional',
+            'contrasena'
+        ]
+
+    def validate(self, data):
+        try:
+            usuario = Usuario.objects.get(correo_institucional = data['correo_institucional'])
+        except Usuario.DoesNotExist:
+            raise serializers.ValidationError("Correo incorrecto.")
+        if not check_password(data["contrasena"], usuario.contrasena):
+            raise serializers.ValidationError("Contraseña incorrecta.")
+
+        return {
+            "id_usuario": usuario.id_usuario,
+            "nombre": usuario.nombre,
+            "correo_institucional": usuario.correo_institucional,
+        }

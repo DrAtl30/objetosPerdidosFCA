@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'apps',
+    'email_service',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +135,19 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Servidor correo
+
+DEFAULT_FROM_EMAIL = config('EMAIL_TEST_USER_GMAIL')
+DEFAULT_FROM_PASSWORD = config('EMAIL_TEST_PASS_GMAIL') #Con office 365 si se puede usar la contraseña
+DEFAULT_HOST_OUTLOOK = "smtp-mail.outlook.com"
+DEFAULT_HOST_OFFICE365 = "smtp.office365.com"
+DEFAULT_HOST_GMAIL = "smtp.gmail.com"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = DEFAULT_HOST_GMAIL  # HOST_OFFICE365 HOST_GMAIL
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = DEFAULT_FROM_EMAIL
+EMAIL_HOST_PASSWORD = DEFAULT_FROM_PASSWORD

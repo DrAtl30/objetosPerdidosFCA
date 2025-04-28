@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from apps import views
 
+from email_service.api.views import EmailAPIView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -15,6 +16,7 @@ urlpatterns = [
     path("registro/", views.user_registro, name="user_registro"),
     path("administrador/", views.home_admin, name="home_admin"),
     
+    path('send-email', EmailAPIView.as_view(), name='send-email')
 ]
 
 if settings.DEBUG:
