@@ -5,6 +5,7 @@ from rest_framework import status
 from .serializers import registroUser, LoginUser
 from django.shortcuts import render
 from datetime import datetime
+from email_service.api.services.email_services import enviar_correo_confirmacion
 import json
 import logging
 
@@ -13,7 +14,10 @@ logger = logging.getLogger(__name__)
 
 
 def home(request):
-    return render(request, "inicio.html")
+    user_name = ''
+    if request.user.is_authenticated:
+        user_name = request.user.nombre  # o request.user.first_name, si usas el modelo User por defecto
+    return render(request, "inicio.html", {'user_name': user_name})
 
 
 def login(request):
@@ -25,28 +29,34 @@ def user_registro(request):
     return render(request, "users/registro.html", {"timestamp": timestamp})
 
 
+def object_registro(request):
+    timestamp = datetime.now().timestamp()
+    return render(request, "registroObjeto.html", {"timestamp": timestamp})
+
+
 def home_admin(request):
     return render(request, "administrador/administrador.html")
 
 
-class RegistroView(APIView):
+class RegistroAlumnoView(APIView):
     def post(self, request, *args, **kwargs):
         logger.info(f"Datos recibidos: {request.data}")
 
-        serializer = registroUser(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+        alumno = registroUser(data=request.data)
+        if alumno.is_valid():
+            email_alumno= alumno.save()
+            enviar_correo_confirmacion(email_alumno)
             return Response(
                 {"mensaje": "Registro exitoso"}, status=status.HTTP_201_CREATED
             )
-        logger.error(f"Errores del serializer: {serializer.errors}")
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        logger.error(f"Errores del serializer: {alumno.errors}")
+        return Response(alumno.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class LoginView(APIView):
+class LoginAlumnoView(APIView):
     def post(self,request):
-        serializer = LoginUser(data=request.data)
-        if serializer.is_valid():
-            data = serializer.validated_data
+        alumno = LoginUser(data=request.data)
+        if alumno.is_valid():
+            data = alumno.validated_data
             print("Datos válidos:", data)
             request.session["usuario_id"] = data["id_usuario"]
             return Response({
@@ -56,4 +66,4 @@ class LoginView(APIView):
                 'correo_institucional': data['correo_institucional'],
             }, status=status.HTTP_200_OK)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(alumno.errors, status=status.HTTP_400_BAD_REQUEST)

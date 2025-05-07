@@ -14,7 +14,7 @@ body, html {
 
 .container {
     flex: 1;
-    max-width: 1350px;
+    max-width: 1600px;
     margin: 0 auto;
     align-items: center;
     padding: 20px;
@@ -32,6 +32,17 @@ body, html {
     margin-right: auto;
 }
 
+.header p {
+    margin: 0;
+    left: 350px;
+    top: 4%;
+    position: absolute;
+    font-size: 25px;
+    margin-right: auto;
+    margin-left: auto;
+
+}
+
 .header h1 {
     margin: 0;
     font-size: 24px;
@@ -39,6 +50,7 @@ body, html {
     margin-left: auto;
 
 }
+
 
 .header .c1 {
     display: flex;
@@ -118,6 +130,11 @@ body, html {
     z-index: 1000;
 }
 
+.filter-panel button{
+    display: block;
+    margin: 0 auto;
+}
+
 .filter-header {
     display: flex;
     justify-content: space-between;
@@ -127,6 +144,8 @@ body, html {
 
 .filter-header h3 {
     margin: 0;
+    text-align: center;
+    flex-grow: 1;
 }
 
 .close-button {
@@ -177,7 +196,7 @@ body, html {
 }
 
 .item-header img {
-    width: 100px;
+    width: 270px;
     height: auto;
     border-radius: 5px;
     margin-right: 20px;

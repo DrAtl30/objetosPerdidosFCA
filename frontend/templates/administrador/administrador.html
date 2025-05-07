@@ -14,7 +14,12 @@
         <div class="container">
             <div class="header">
                 <img src="{% static 'img\logos\escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEMex">
-                <h1>Objetos Pérdidos</h1>
+                {% if request.user.is_authenticated %}
+                    <p>Bienvenido, {{ user_name }}</p>
+                {% else %}
+                    <p>Visitante</p>
+                {% endif %}
+                <h1>Panel de Administración</h1>
                 <div class="c1">
                     <button id="login-button">Cerrar Sesión</button>
                 </div>
@@ -61,7 +66,7 @@
                         <label><input type="radio" name="ordenar-por"> Orden Alfabético (Z-A)</label>
                     </div>
                 </div>
-                <button id="apply-filters">Aplicar Filtros</button>
+                <button id="apply-filters" class="btn btn-success">Aplicar Filtros</button>
             </div>
             <div class="featured">
                 <h2>Destacados</h2>

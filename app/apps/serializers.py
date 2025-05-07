@@ -5,41 +5,32 @@ from django.contrib.auth.hashers import check_password
 from .models import Usuario, Alumno
 
 class registroUser(serializers.ModelSerializer):
-    num_cuenta = serializers.CharField(
-        required=False, allow_null=True, max_length=20, write_only=True
-    )
-    licenciatura = serializers.CharField(
-        required=False, allow_null=True, max_length=100, write_only=True
-    )
-    num_empleado = serializers.CharField(
-        required=False, allow_null=True, max_length=20, write_only=True
-    )
-    curp = serializers.CharField(
-        required=False, allow_null=True, max_length=18, write_only=True
-    )
+    num_cuenta = serializers.CharField(required=False, allow_null=True, max_length=20, write_only=True)
+    licenciatura = serializers.CharField(required=False, allow_null=True, max_length=100, write_only=True)
+    num_empleado = serializers.CharField(required=False, allow_null=True, max_length=20, write_only=True)
+    curp = serializers.CharField(required=False, allow_null=True, max_length=18, write_only=True)
+    
     class Meta:
         model = Usuario
         fields = [
             "nombre",
             "apellidos",
             "correo_institucional",
-            "contrasena",
+            "password",
             "num_cuenta",
             "licenciatura",
             "num_empleado",
             "curp",
             "rol",
         ]
+        extra_kwargs = {"password":{"write_only":True}}
         
-    def validate_contrasena(self, value):
+    def validate_password(self, value):
         if len(value) < 8:
-            raise serializers.ValidationError(
-                "La contraseña debe tener al menos 8 caracteres."
-            )
-        return make_password(value)
+            raise serializers.ValidationError("La contraseña debe tener al menos 8 caracteres.")
+        return value
 
     def validate_correo_institucional(self, value):
-
         email_exits = Usuario.objects.filter(correo_institucional=value).first()
 
         if email_exits:
@@ -63,6 +54,7 @@ class registroUser(serializers.ModelSerializer):
         num_empleado = validated_data.pop('num_empleado', None)
         licenciatura = validated_data.pop('licenciatura', None)
         curp = validated_data.pop('curp', None)
+        password = validated_data.pop('password')
 
         LICENCIATURA_OPCIONES = {
             "Administracion": "Administración",
@@ -73,7 +65,9 @@ class registroUser(serializers.ModelSerializer):
 
         licenciatura_valida = LICENCIATURA_OPCIONES.get(licenciatura, None)
 
-        user = Usuario.objects.create(**validated_data)
+        user = Usuario(**validated_data)
+        user.set_password(password)
+        user.save()
 
         if rol == 'alumno':
             if not licenciatura_valida:
@@ -86,20 +80,16 @@ class registroUser(serializers.ModelSerializer):
 
         return user
 
-class LoginUser(serializers.ModelSerializer):
-    class Meta:
-        model = Usuario
-        fields = [
-            'correo_institucional',
-            'contrasena'
-        ]
+class LoginUser(serializers.Serializer):
+    correo_institucional = serializers.EmailField()
+    password = serializers.CharField()
 
     def validate(self, data):
         try:
             usuario = Usuario.objects.get(correo_institucional = data['correo_institucional'])
         except Usuario.DoesNotExist:
             raise serializers.ValidationError("Correo incorrecto.")
-        if not check_password(data["contrasena"], usuario.contrasena):
+        if not check_password(data["password"], usuario.password):
             raise serializers.ValidationError("Contraseña incorrecta.")
 
         return {

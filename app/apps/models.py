@@ -1,17 +1,69 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 
 
-# Create your models here.
-class Usuario(models.Model):
+class UsuarioManager(BaseUserManager):
+    def create_user(self, correo_institucional, contrasena=None, **extra_fields):
+        if not correo_institucional:
+            raise ValueError("El correo institucional es obligatorio")
+
+        correo_institucional = self.normalize_email(correo_institucional)
+        user = self.model(correo_institucional=correo_institucional, **extra_fields)
+        user.set_password(contrasena)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, correo_institucional, contrasena=None, **extra_fields):
+        extra_fields.setdefault("nombre", "Administrador")
+        extra_fields.setdefault("apellidos", "Sistema")
+        extra_fields.setdefault("rol", "administrador")
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_active", True)
+
+        if extra_fields.get("rol") != "administrador":
+            raise ValueError("El superusuario debe tener el rol 'administrador'.")
+
+        return self.create_user(correo_institucional, contrasena, **extra_fields)
+
+
+class Usuario(AbstractBaseUser, PermissionsMixin):
     id_usuario = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
     apellidos = models.CharField(max_length=100)
-    correo_institucional = models.CharField(max_length=150)
-    contrasena = models.TextField()
+    correo_institucional = models.EmailField(unique=True)
     rol = models.CharField(max_length=50)
 
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+
+    groups = models.ManyToManyField(
+        Group,
+        related_name="usuario_set",
+        blank=True,
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name="usuario_set",
+        blank=True,
+    )
+
+    USERNAME_FIELD = "correo_institucional"
+    REQUIRED_FIELDS = ["nombre", "apellidos", "rol"]
+
+    objects = UsuarioManager()
+
+    def __str__(self):
+        return self.correo_institucional
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        return self.is_superuser
+
     class Meta:
-        managed = False
         db_table = "usuario"
 
 

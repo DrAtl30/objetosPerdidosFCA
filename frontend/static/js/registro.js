@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
               num_cuenta: document.getElementById("numCuenta").value,
               licenciatura: document.getElementById("licenciatura").value,
               correo_institucional: document.getElementById("correo").value,
-              contrasena: document.getElementById("password").value,
+              password: document.getElementById("password").value,
               rol: "alumno",
             };
 

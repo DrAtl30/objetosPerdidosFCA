@@ -1,0 +1,122 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: url('{% static "img/fondo.jpeg" %}') no-repeat center center fixed;
+    background-size: cover;
+}
+.header-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header-container h2 {
+    font-size: 1.8rem;
+    color: #5a7561;
+    font-weight: bold;
+    margin: 0;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.register-object-container {
+    display: flex;
+    flex-direction: column; /* Asegura que el contenido esté en columna */
+    max-width: 800px;
+    width: 100%;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.body-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se ajusten en pantallas pequeñas */
+    gap: 20px; /* Espacio entre la foto y el formulario */
+    align-items: center; /* Centra verticalmente los elementos dentro del contenedor */
+    justify-content: space-between; /* Asegura que los elementos estén distribuidos horizontalmente */
+}
+
+.photo-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #5a7561;
+    border-radius: 8px;
+    min-height: 300px;
+    min-width: 300px;
+    position: relative;
+    cursor: pointer;
+}
+
+.photo-container span {
+    color: #5a7561;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.photo-container input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.form-container {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    color: #5a7561;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Alinea el botón al lado derecho */
+    margin-top: 1rem; /* Espacio superior para separar el botón del formulario */
+}
+
+.btn-primary {
+    background-color: #5a7561;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    width: auto; /* Asegura que el botón no ocupe todo el ancho */
+    text-align: center;
+}
+
+footer {
+    margin-top: auto;
+    width: 100%;
+    background-color: #6e7b68;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', function(){
         const data = {
             correo_institucional:
             document.getElementById("correo_electronico").value.trim(),
-            contrasena: document.getElementById("contrasena").value.trim(),
+            password: document.getElementById("contrasena").value.trim(),
         };
-        if (data.correo_institucional && data.contrasena) {
+        if (data.correo_institucional && data.password) {
             console.log(data);
             try {
                 const response = await fetch("/api/login/", {

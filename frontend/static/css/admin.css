@@ -14,7 +14,7 @@ body, html {
 
 .container {
     flex: 1;
-    max-width: 1350px;
+    max-width: 1600px;
     margin: 0 auto;
     align-items: center;
     padding: 20px;
@@ -35,6 +35,16 @@ body, html {
 .header h1 {
     margin: 0;
     font-size: 24px;
+    margin-right: auto;
+    margin-left: auto;
+
+}
+.header p {
+    margin: 0;
+    left: 350px;
+    top: 4%;
+    position: absolute;
+    font-size: 25px;
     margin-right: auto;
     margin-left: auto;
 
@@ -118,15 +128,22 @@ body, html {
     z-index: 1000;
 }
 
+.filter-panel button {
+    display: block;
+    margin: 0 auto;
+}
+
 .filter-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-bottom: 20px;
 }
 
 .filter-header h3 {
     margin: 0;
+    text-align: center;
+    flex-grow: 1;
 }
 
 .close-button {
@@ -135,6 +152,7 @@ body, html {
     color: black;
     font-size: 24px;
     cursor: pointer;
+    margin-left: auto;
 }
 
 .filter-options {
@@ -187,7 +205,7 @@ body, html {
 }
 
 .item-header img {
-    width: 100px;
+    width: 270px;
     height: auto;
     border-radius: 5px;
     margin-right: 20px;
