@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmación de cuenta</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="mensaje-confirmacion">
+        {% if exito %}
+            <h2 style="color: green;">✔ {{ mensaje }}</h2>
+            <a href="{% url 'login' %}">Inicia sesión</a>
+        {% else %}
+            <h2 style="color: red;">✘ {{ mensaje }}</h2>
+            <a href="{% url 'home' %}">Volver al inicio</a>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,13 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.http import JsonResponse, HttpResponseRedirect
+from django.utils.http import urlsafe_base64_decode
+from django.http import JsonResponse
 from rest_framework import status
 from .serializers import registroUser, LoginUser
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.tokens import default_token_generator
 from datetime import datetime
 from email_service.api.services.email_services import enviar_correo_confirmacion
-import json
-import logging
+import logging, json
+from .models import Usuario
 
 # Create your views here.
 logger = logging.getLogger(__name__)
@@ -16,7 +18,12 @@ logger = logging.getLogger(__name__)
 def home(request):
     user_name = ''
     if request.user.is_authenticated:
-        user_name = request.user.nombre  # o request.user.first_name, si usas el modelo User por defecto
+        user_name = request.user.nombre
+        print(
+            f"Usuario autenticado: {user_name}"
+        )  # Verifica si el usuario está correctamente autenticado
+    else:
+        print("Usuario no autenticado")
     return render(request, "inicio.html", {'user_name': user_name})
 
 
@@ -47,10 +54,42 @@ class RegistroAlumnoView(APIView):
             email_alumno= alumno.save()
             enviar_correo_confirmacion(email_alumno)
             return Response(
-                {"mensaje": "Registro exitoso"}, status=status.HTTP_201_CREATED
+                {"mensaje": "Registro exitoso. Por favor revisa tu correo para confirmar tu cuenta antes de iniciar sesión."}, status=status.HTTP_201_CREATED
             )
         logger.error(f"Errores del serializer: {alumno.errors}")
         return Response(alumno.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ConfirmarCuentaView(APIView):
+    def get(self, request, uidb64, token):
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            alumno = get_object_or_404(Usuario, id_usuario=uid)
+            if default_token_generator.check_token(alumno, token):
+                alumno.is_active = True
+                alumno.save()
+                mensaje = 'Cuenta confirmada correctamente'
+                exito = True
+            else:
+                mensaje = 'Enlace inválido o expirado'
+                exito = False
+        except:
+            mensaje = 'Enlace inválido'
+            exito = False
+        return render(request, 'users/confirmacionCuenta.html', {'mensaje': mensaje, 'exito': exito})
+
+
+def verificar_correo_confirmado(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        email = data.get('correo_institucional')
+        try:
+            user = Usuario.objects.get(correo_institucional = email)
+            return JsonResponse({'confirmado': user.is_active})
+        except Usuario.DoesNotExist:
+            return JsonResponse({"confirmado": False})
+
+    return JsonResponse({"error": 'Metodo no permitido'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 class LoginAlumnoView(APIView):
     def post(self,request):
