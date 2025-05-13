@@ -10,7 +10,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("apps.urls")),
     path("", views.home, name="home"),
-    path("login/", views.login, name="login"),
+    path("login/", views.inicio_session, name="login"),
     path("registro/", views.user_registro, name="user_registro"),
     path("registro-objeto/", views.object_registro, name="object_registro"),
     path("administrador/", views.home_admin, name="home_admin"),

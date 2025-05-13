@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from rest_framework import status
 from .serializers import registroUser, LoginUser
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import login
 from django.contrib.auth.tokens import default_token_generator
 from datetime import datetime
 from email_service.api.services.email_services import enviar_correo_confirmacion
@@ -17,17 +18,14 @@ logger = logging.getLogger(__name__)
 
 def home(request):
     user_name = ''
+    user_lastname = ''
     if request.user.is_authenticated:
         user_name = request.user.nombre
-        print(
-            f"Usuario autenticado: {user_name}"
-        )  # Verifica si el usuario está correctamente autenticado
-    else:
-        print("Usuario no autenticado")
-    return render(request, "inicio.html", {'user_name': user_name})
+        user_lastname = request.user.apellidos
+    return render(request, "inicio.html", {'user_name': user_name, 'user_lastname': user_lastname})
 
 
-def login(request):
+def inicio_session(request):
     return render(request, "inicio_sesion.html")
 
 
@@ -42,7 +40,12 @@ def object_registro(request):
 
 
 def home_admin(request):
-    return render(request, "administrador/administrador.html")
+    admin_name = ""
+    admin_lastname = ""
+    if request.user.is_authenticated:
+        admin_name = request.user.nombre
+        admin_lastname = request.user.apellidos
+    return render(request, "administrador/administrador.html", {'admin_name': admin_name, 'admin_lastname': admin_lastname})
 
 
 class RegistroAlumnoView(APIView):
@@ -96,8 +99,12 @@ class LoginAlumnoView(APIView):
         alumno = LoginUser(data=request.data)
         if alumno.is_valid():
             data = alumno.validated_data
-            print("Datos válidos:", data)
-            request.session["usuario_id"] = data["id_usuario"]
+            try:
+                usuario = Usuario.objects.get(id_usuario=data["id_usuario"])
+                login(request, usuario)
+            except Usuario.DoesNotExist:
+                return Response({"error": "Usuario no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+
             return Response({
                 'mensaje': 'Inicio de sesión exitoso.',
                 'id_usuario': data['id_usuario'],
