@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const expresiones = {
       usuario: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
       password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/, // 8 a 15 digitos.
-      //   correo: /^[a-zA-Z0-9_.+-]+@alumno\.uaemex\.mx$/,
-      correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+      correo: /^[a-zA-Z0-9_.+-]+@alumno\.uaemex\.mx$/,
       numCuenta: /^\d{7,7}$/,
     };
 

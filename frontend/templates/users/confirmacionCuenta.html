@@ -1,20 +1,24 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Confirmación de cuenta</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <div class="mensaje-confirmacion">
-        {% if exito %}
-            <h2 style="color: green;">✔ {{ mensaje }}</h2>
-            <a href="{% url 'login' %}">Inicia sesión</a>
-        {% else %}
-            <h2 style="color: red;">✘ {{ mensaje }}</h2>
-            <a href="{% url 'home' %}">Volver al inicio</a>
-        {% endif %}
+
+{% block title %} Confirmacion de cuenta {% endblock  %}
+
+{% block class %}class="account-confirm"  {% endblock  %}
+
+{% block content %}
+    <div class="account-container">
+        <div class="account-header">
+            <img src="{% static 'img/logos/escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEM">
+        </div>
+
+        <div class="msj-confirm">
+            {% if exito %}
+                <h2 class="msj-si"><i class="bi bi-check-circle text-success"></i> {{ mensaje }}</h2>
+                <a href="{% url 'login' %}" class="btn btn-success">Inicia sesión</a>
+            {% else %}
+                <h2 class="msj-no"><i class="bi bi-x-circle text-danger"></i> {{ mensaje }} </h2>
+                <a href="{% url 'home' %}" class="btn btn-success" >Volver al inicio</a>
+            {% endif %}
+        </div>
     </div>
-</body>
-</html>
+{% endblock  %}

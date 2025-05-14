@@ -70,7 +70,7 @@ class ConfirmarCuentaView(APIView):
             if default_token_generator.check_token(alumno, token):
                 alumno.is_active = True
                 alumno.save()
-                mensaje = 'Cuenta confirmada correctamente'
+                mensaje = 'Cuenta confirmada'
                 exito = True
             else:
                 mensaje = 'Enlace inválido o expirado'

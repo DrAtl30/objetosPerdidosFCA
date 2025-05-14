@@ -17,9 +17,9 @@ services:
       - .env
     build: .
     working_dir: /app  # Establecer el directorio de trabajo correcto
-    command:
-      # sh -c "python manage.py showmigrations | grep '\[ \]'  && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-      python manage.py runserver 0.0.0.0:8000
+    command: > 
+      sh -c "python manage.py showmigrations | grep '\[ \]'  && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+      
     volumes:
       - ./app:/app  # Asegurar que la carpeta "app" se monta correctamente
       - ./frontend:/frontend
