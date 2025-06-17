@@ -26,7 +26,7 @@ def home(request):
 
 
 def inicio_session(request):
-    return render(request, "inicio_sesion.html")
+    return render(request, "users/inicio_sesion.html")
 
 
 def user_registro(request):
@@ -36,7 +36,7 @@ def user_registro(request):
 
 def object_registro(request):
     timestamp = datetime.now().timestamp()
-    return render(request, "registroObjeto.html", {"timestamp": timestamp})
+    return render(request, "administrador/registroObjeto.html", {"timestamp": timestamp})
 
 
 def home_admin(request):

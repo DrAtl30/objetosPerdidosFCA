@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Inicio de Sesión{% endblock  %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/components/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/forms.css' %}">
+{% endblock %}
+
+{% block class-header %}l-header{% endblock  %}
+
+{% block nav-left %}
+    <a href="{% url 'home' %}" class="back-arrow">&larr;</a>
+{% endblock  %}
+{% block nav-center %}
+    <h1 class="title">Inicio de Sesión</h1>
+{% endblock  %}
+
+{% block class-main %}login{% endblock  %}
+
+{% block content-main %}
+    <div class="login-container">
+        <div class="login-header">
+            <img src="{% static 'img\logos\escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEM">
+        </div>
+        <form id="login-form" class="login-form" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="email" class="form-control" id="correo_electronico" name="correo_electronico" placeholder="Correo Electrónico" required>
+            </div>
+            <div class="mb-3 password-group">
+                <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Contraseña" required>
+                <i class="bi bi-eye-slash-fill toggle-password" data-target="contrasena"></i>
+            </div>
+            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            <div class="forgot-password">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+            </div>
+        </form>     
+        <div class="modal" id="errorModal">
+            <div class="modalContent">
+                <span class="close">&times;</span>
+                <p class="modalMessage"></p>
+            </div>   
+        </div>
+        <div class="modal" id="successModal">
+            <div class="modalContent">
+                <span class="close">&times;</span>
+                <p class="modalMessage"></p>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
+
+{% block extra_js %}
+    <script type="module" src="{% static 'js/loginForm.js' %}?v={{ timestamp }}"></script>
+{% endblock  %}

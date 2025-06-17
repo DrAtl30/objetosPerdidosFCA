@@ -1,0 +1,42 @@
+h1, h2, h3, p {
+    color: #001b25;
+}
+.row .item {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    min-height: 220px;
+}
+
+.item-header img {
+    height: auto;
+    width: 300px;
+    max-width: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+.item-body {
+    flex: 1;
+}
+
+.item-body h5 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.item-body p {
+    margin: 5px 0 0;
+}
+
+.item-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}

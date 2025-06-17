@@ -1,6 +1,17 @@
 import { mostrarModal } from "./modals.js";
 import { esperarCierreModal } from "./modals.js";
 
+document.querySelectorAll(".toggle-password").forEach((icon) => {
+  icon.addEventListener("click", () => {
+    const inputId = icon.getAttribute("data-target");
+    const input = document.getElementById(inputId);
+    const isPassword = input.type === "password";
+    input.type = isPassword ? "text" : "password";
+    icon.classList.toggle("bi-eye-fill");
+    icon.classList.toggle("bi-eye-slash-fill");
+  });
+});
+
 document.addEventListener('DOMContentLoaded', function(){
     const csrfTokenLogin = document.querySelector("[name=csrfmiddlewaretoken]");
     const form = document.getElementById("login-form");

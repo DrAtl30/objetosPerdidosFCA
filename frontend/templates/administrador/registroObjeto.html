@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Registrar Objeto{% endblock  %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/pages/registro_objeto.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'css/components/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/forms.css' %}"> {% endcomment %}
+{% endblock %}
+
+{% block class-header %}objR-header{% endblock  %}
+
+{% block nav-left %}
+    <a href="{% url 'home_admin' %}" class="back-arrow">&larr;</a>
+{% endblock  %}
+
+{% block class-main %}obj-register{% endblock  %}
+{% block content-main %}
+    <div class="register-object-container">
+        <!-- Encabezado del contenedor -->
+        <div class="header-container">
+            <h2>Registro de Objeto Perdido</h2>
+        </div>
+        <!-- Contenedor principal para la foto y el formulario -->
+        <div class="body-container">
+            <div class="photo-container" id="photo-container">
+                <span>Arrastra y suelta una foto aquí o haz clic para seleccionar</span>
+                <input type="file" id="photo-input" accept="image/*">
+            </div>
+            <div class="form-container">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Descripción" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fecha" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lugar" class="form-label">Lugar</label>
+                        <select class="form-control" id="lugar" name="lugar" required>
+                            <option value="">Seleccione un lugar</option>
+                            <option value="Sala de Cómputo 1">Sala de Cómputo 1</option>
+                            <option value="Salón 9">Salón 9</option>
+                            <option value="Sala de usos múltiples">Sala de usos múltiples</option>
+                        </select>
+                    </div>
+                    <!-- Contenedor para centrar el botón -->
+                    <div class="button-container">
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock  %}

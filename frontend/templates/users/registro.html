@@ -6,68 +6,79 @@
 
 <!-- CSS específico (opcional, si necesitas estilos adicionales) -->
 {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/components/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/forms.css' %}">
 {% endblock %}
 
-{% block class %}class="registro"{% endblock  %}
-
-<!-- Contenido de la página -->
-{% block content %}
+<!--Header-->
+{% block class-header %}r-header{% endblock  %}
+<!--nav-->
+{% block nav-left %}
 <a href="{% url 'home' %}" class="back-arrow">&larr;</a>
+{% endblock  %}
 
-<div class="registro-container">
-    <div class="registro-header">
-        <img src="{% static 'img/logos/escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEM">
-    </div>
-    <form id="registro-form" class="registro-form" method="post">
-        {%csrf_token%}
+{% block nav-center %}
+<h1 class="title">Registro</h1>
+{% endblock  %}
 
-        <div class="mb-3 form__grupo" id ="g__name" >
-            <input type="text" class="form-control  from__input" id="nombre" placeholder="Nombre" name = "nombre">
-            <p class= "formualrio__error">El nombre solo puede tener letras y espacios </p>
+{% block class-main %}registro{% endblock  %}
+{% block content-main %}
+    <div class="registro-container">
+        <div class="registro-header">
+            <img src="{% static 'img/logos/escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEM">
         </div>
-        <div class="mb-3 form__grupo" id ="g__last__name" >
-            <input type="text" class="form-control from__input" id="apellidos" name="apellidos" placeholder="Apellidos">
-            <p class= "formualrio__error">Los apellidos solo puede tener letras y espacios</p>
+        <form id="registro-form" class="registro-form" method="post">
+            {%csrf_token%}
+    
+            <div class="mb-3 form__grupo" id ="g__name" >
+                <input type="text" class="form-control  from__input" id="nombre" placeholder="Nombre" name = "nombre" required>
+                <p class= "formualrio__error">El nombre solo puede tener letras y espacios </p>
+            </div>
+            <div class="mb-3 form__grupo" id ="g__last__name" >
+                <input type="text" class="form-control from__input" id="apellidos" name="apellidos" placeholder="Apellidos" required>
+                <p class= "formualrio__error">Los apellidos solo puede tener letras y espacios</p>
+            </div>
+            <div class="mb-3 form__grupo" id ="g__numCuenta">
+                <input type="text" class="form-control from__input" id="numCuenta" name="numCuenta" placeholder="Num. Cuenta" required>
+                <p class= "formualrio__error">El numero de cuenta debe tener 7 digitos</p>
+            </div>
+            <div class="mb-3">
+                <select class="form-control" id="licenciatura" name="licenciatura">
+                    <option value="Administracion">Administración</option>
+                    <option value="Contaduria">Contaduría</option>
+                    <option value="Mercadotecnia">Mercadotecnia</option>
+                    <option value="Informatica_Administrativa">Informática Administrativa</option>
+                </select>
+            </div>
+            <div class="mb-3 form__grupo"  id ="g__email">
+                <input type="email" class="form-control from__input" id="correo" placeholder="Correo Institucional" name ="correo" required>
+                <p class= "formualrio__error">El correo debe ser ejemplo@alumno.uaemex.mx</p>
+            </div>
+            <div class="mb-3 form__grupo password-group"  id ="g__pass">
+                <input type="password" class="form-control from__input" id="password" placeholder="Contraseña" name = "password" required>
+                <i class="bi bi-eye-slash-fill toggle-password" data-target="password"></i>
+                <p class="formualrio__error">la contraseña debe ser minimo de 8 digitos</p>
+            </div>
+            <div class="mb-3 form__grupo password-group" id ="g__check__pass">
+                <input type="password" class="form-control from__input" id="check__pass" name="check__pass" placeholder="Confirmar contraseña" required>
+                <p class= "formualrio__error">Ambas contraseñas deben de ser iguales</p>
+                <i class="bi bi-eye-slash-fill toggle-password" data-target="check__pass"></i>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrarse</button>
+        </form>
+        <div class="modal" id="errorModal">
+            <div class="modalContent">
+                <span class="close">&times;</span>
+                <p class="modalMessage"></p>
+            </div>
         </div>
-        <div class="mb-3 form__grupo" id ="g__numCuenta">
-            <input type="text" class="form-control from__input" id="numCuenta" name="numCuenta" placeholder="Num. Cuenta">
-            <p class= "formualrio__error">El numero de cuenta debe tener 7 digitos</p>
-        </div>
-        <div class="mb-3">
-            <select class="form-control" id="licenciatura" name="licenciatura">
-                <option value="Administracion">Administración</option>
-                <option value="Contaduria">Contaduría</option>
-                <option value="Mercadotecnia">Mercadotecnia</option>
-                <option value="Informatica_Administrativa">Informática Administrativa</option>
-            </select>
-        </div>
-        <div class="mb-3 form__grupo"  id ="g__email">
-            <input type="email" class="form-control from__input" id="correo" placeholder="Correo Institucional" name ="correo">
-            <p class= "formualrio__error">El correo debe ser ejemplo@alumno.uaemex.mx</p>
-        </div>
-        <div class="mb-3 form__grupo"  id ="g__pass">
-            <input type="password" class="form-control from__input" id="password" placeholder="Contraseña" name = "password">
-            <p class="formualrio__error">la contraseña debe ser minimo de 8 digitos</p>
-        </div>
-        <div class="mb-3 form__grupo" id ="g__check__pass">
-            <input type="password" class="form-control from__input" id="check__pass" name="check__pass" placeholder="Confirmar contraseña">
-            <p class= "formualrio__error">Ambas contraseñas deben de ser iguales</p>
-        </div>
-        <button type="submit" class="btn btn-primary">Registrarse</button>
-    </form>
-    <div class="modal" id="errorModal">
-        <div class="modalContent">
-            <span class="close">&times;</span>
-            <p class="modalMessage"></p>
+        <div class="modal" id="successModal">
+            <div class="modalContent">
+                <span class="close">&times;</span>
+                <p class="modalMessage"></p>
+            </div>
         </div>
     </div>
-    <div class="modal" id="successModal">
-        <div class="modalContent">
-            <span class="close">&times;</span>
-            <p class="modalMessage"></p>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_js %}

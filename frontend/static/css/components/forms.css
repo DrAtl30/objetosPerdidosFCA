@@ -1,48 +1,55 @@
 /* Contenedor del formulario de registro */
-.registro{
+.r-header, .l-header, .objR-header{
+    background-image: url('../../img/header/pleca-superior-web.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+h1,h2,h3{
+    color: #f4f4f4;
+}
+.registro, .login, .obj-register{
     background-image: url('../../img/backgrounds/fondo.jpeg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    width: 100%;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.registro-container {
+.registro-container , .login-container {
     max-width: 260px;
-    margin: 50px auto;
+    margin: 0 auto;
     padding: 20px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-
 /* Encabezado del formulario de registro */
-.registro-header {
+.registro-header, .login-header {
     text-align: center;
     margin-bottom: 20px;
 }
 
-.registro-header img {
+.registro-header img, .login-header img {
     max-width: 100px;
     margin-bottom: 10px;
 }
 
 /* Campos del formulario */
-.registro-form .form-control {
+.registro-form .form-control, .login-form  .form-control {
     border-radius: 50px;
     border: 1px solid #5a7561;    
 }
-.registro-form .form-control:focus {
+.registro-form .form-control:focus ,.login-form .form-control:focus {
     border-radius: 50px;
     border: 2px solid #526958;
 
 }
 
 /* Botón del formulario */
-.registro-form button {
+.registro-form button,.login-form  button {
     width: 100%;
     background-color: #5a7561;
     color: white;
@@ -50,22 +57,21 @@
     border-radius: 50px;
 }
 
-.registro-form button:hover {
+.registro-form button:hover, .login-form  button:hover {
     background-color: #4a6551;
 }
+
 
 /* Flecha de retroceso */
 .back-arrow {
     font-size: 24px;
-    color: #5a7561;
+    color: white;
     text-decoration: none;
-    position: absolute;
-    top: 20px;
-    left: 20px;
+    margin-left: 10px;
 }
 
 .back-arrow:hover {
-    text-decoration: underline;
+    color: #2C5234;
 }
 
 /* Estilos para el modal */
@@ -117,4 +123,29 @@
 .formualrio__error-activo{
     display: block;
     color: red;
+}
+.forgot-password {
+    text-align: center;
+    margin-top: 15px;
+}
+.forgot-password a {
+    color: #5a7561;
+    text-decoration: none;
+}
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+.password-group {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #5a7561;
+    font-size: 1.2rem;
 }
