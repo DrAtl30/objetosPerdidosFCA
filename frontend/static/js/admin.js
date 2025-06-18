@@ -47,8 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const itemFooter = document.createElement("div");
     itemFooter.className = "item-footer";
     const button = document.createElement("button");
-    button.className = "btn btn-success primary-btn";
-    button.textContent = "Editar";
+    button.className = "btn btn-success";
+    button.textContent = "Editar información";
     itemFooter.appendChild(button);
 
     item.appendChild(itemHeader);

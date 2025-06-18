@@ -1,5 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+    Group,
+    Permission,
+)
 
 
 class UsuarioManager(BaseUserManager):
@@ -72,12 +78,26 @@ class Administrador(models.Model):
     id_usuario = models.OneToOneField(
         "Usuario", models.DO_NOTHING, db_column="id_usuario"
     )
-    num_empleado = models.CharField(unique=True, max_length=20)
-    curp = models.CharField(unique=True, max_length=18)
 
     class Meta:
         managed = False
         db_table = "administrador"
+
+
+class HistorialAdministrativo(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    apellidos = models.CharField(max_length=100)
+    num_empleado = models.CharField(max_length=20)
+    curp = models.CharField(max_length=18)
+    fecha_inicio = models.DateTimeField(auto_now_add=True)
+    fecha_fin = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "historial_administrativo"
+
+    def __str__(self):
+        return f"{self.nombre} {self.apellidos} ({self.num_empleado})"
 
 
 class Alumno(models.Model):
@@ -91,6 +111,7 @@ class Alumno(models.Model):
     class Meta:
         managed = False
         db_table = "alumno"
+
 
 class Comentario(models.Model):
     id_comentario = models.AutoField(primary_key=True)

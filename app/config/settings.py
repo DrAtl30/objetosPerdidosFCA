@@ -22,7 +22,7 @@ FRONTEND_DIR = BASE_DIR.parent / "frontend"
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-gu)6+ixnu#$efdcw&+zs^t9pc@__&f*1)ji(qils6is9u$9t-g'
+SECRET_KEY = "django-insecure-gu)6+ixnu#$efdcw&+zs^t9pc@__&f*1)ji(qils6is9u$9t-g"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -56,7 +56,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
@@ -74,20 +74,20 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'objetos_perdidos_fca',
-        'USER': 'admin',
-        'PASSWORD': 'contrasena',
-        'HOST': 'db',  # Este es el nombre del servicio del contenedor PostgreSQL
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "objetos_perdidos_fca",
+        "USER": "admin",
+        "PASSWORD": "contrasena",
+        "HOST": "db",  # Este es el nombre del servicio del contenedor PostgreSQL
+        "PORT": "5432",
     }
 }
 
@@ -97,16 +97,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -114,9 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "America/Mexico_City"
 
 USE_I18N = True
 
@@ -126,7 +126,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
     FRONTEND_DIR / "static",  # Un nivel más arriba de BASE_DIR
@@ -136,13 +136,15 @@ STATICFILES_DIRS = [
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Servidor correo
 
-DEFAULT_FROM_EMAIL = config('EMAIL_TEST_USER_GMAIL')
-DEFAULT_FROM_PASSWORD = config('EMAIL_TEST_PASS_GMAIL') #Con office 365 si se puede usar la contraseña
+DEFAULT_FROM_EMAIL = config("EMAIL_TEST_USER_GMAIL")
+DEFAULT_FROM_PASSWORD = config(
+    "EMAIL_TEST_PASS_GMAIL"
+)  # Con office 365 si se puede usar la contraseña
 DEFAULT_HOST_OUTLOOK = "smtp-mail.outlook.com"
 DEFAULT_HOST_OFFICE365 = "smtp.office365.com"
 DEFAULT_HOST_GMAIL = "smtp.gmail.com"
@@ -155,11 +157,11 @@ EMAIL_HOST_USER = DEFAULT_FROM_EMAIL
 EMAIL_HOST_PASSWORD = DEFAULT_FROM_PASSWORD
 
 
-FRONTEND_URL = config('FRONTEND_URL') #configurado en el arcvhivo .env
+FRONTEND_URL = config("FRONTEND_URL")  # configurado en el arcvhivo .env
 
 CORS_ALLOWED_ORIGINS = [
     config("FRONTEND_URL"),  # Por ejemplo, http://localhost:3000
 ]
 
 
-AUTH_USER_MODEL = 'apps.Usuario'
+AUTH_USER_MODEL = "apps.Usuario"
