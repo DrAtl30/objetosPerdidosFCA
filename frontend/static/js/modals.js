@@ -1,79 +1,41 @@
 export function mostrarModal(mensaje, modalId) {
-  var modal = document.getElementById(modalId);
+  const modal = document.getElementById(modalId);
   if (!modal) {
     console.error(`No se encontró el modal con ID ${modalId}`);
     return;
   }
 
-  var modalMessage = modal.querySelector(".modalMessage");
+  const modalMessage = modal.querySelector(".modalMessage");
   if (modalMessage) {
     modalMessage.textContent = mensaje;
-  } else {
-    console.warn(
-      `No se encontró el elemento con clase 'modalMessage' dentro de ${modalId}`
-    );
   }
 
   modal.style.display = "flex";
-
-  var closeBtn = modal.querySelector(".close");
-  if (closeBtn) {
-    closeBtn.onclick = function () {
-      modal.style.display = "none";
-    };
-  } else {
-    console.warn(`No se encontró el botón de cierre en ${modalId}`);
-  }
-
-  window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  };
-
-  window.onkeydown = function (event) {
-    if (event.key === "Escape") {
-      modal.style.display = "none";
-    }
-  };
 }
-
 
 export function esperarCierreModal(modalId) {
   return new Promise((resolve) => {
     const modal = document.getElementById(modalId);
     const closeBtn = modal.querySelector(".close");
 
-    // Resuelve la promesa cuando el modal se cierre
-    closeBtn.onclick = () => {
+    function cerrarYResolver() {
       modal.style.display = "none";
+      modal.removeEventListener("click", clickOutsideHandler);
+      document.removeEventListener("keydown", keydownHandler);
+      if (closeBtn) closeBtn.removeEventListener("click", cerrarYResolver);
       resolve();
-    };
+    }
 
-    // También resuelve la promesa si se hace clic fuera del modal
-    window.onclick = (event) => {
-      if (event.target === modal) {
-        modal.style.display = "none";
-        resolve();
-      }
-    };
+    function clickOutsideHandler(event) {
+      if (event.target === modal) cerrarYResolver();
+    }
 
-    // Resuelve la promesa si se presiona la tecla Escape
-    window.onkeydown = (event) => {
-      const escapeKeys = ["Escape", "Esc"];
-      const escapeKeyCodes = [27];
-      const escapeKeyCodesDeprecated = [1, "1"]; // Algunos teclados pueden enviar un código de tecla de escape diferente
+    function keydownHandler(event) {
+      if (event.key === "Escape") cerrarYResolver();
+    }
 
-      if (
-        escapeKeys.includes(event.key) ||
-        escapeKeyCodes.includes(event.keyCode) ||
-        escapeKeyCodesDeprecated.includes(event.keyCode)
-      ) {
-        modal.style.display = "none";
-        resolve();
-      }
-    };
+    if (closeBtn) closeBtn.addEventListener("click", cerrarYResolver);
+    modal.addEventListener("click", clickOutsideHandler);
+    document.addEventListener("keydown", keydownHandler);
   });
 }
-
-

@@ -1,10 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %} Confirmacion de cuenta {% endblock  %}
+{% block title %} Confirmación de cuenta {% endblock  %}
 
-{% block class %}class="account-confirm"  {% endblock  %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/components/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/button.css' %}">
+{% endblock %}
 
+{% block class-header %}ac-header{% endblock  %}
+
+{% block nav-left %}
+    <a href="{% url 'home' %}" >
+        <img class="logo" src="{% static 'img/logos/escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEMex">
+    </a>
+{% endblock  %}
+
+{% block nav-center %}
+<h1 class="title">Cuenta Confirmada</h1>
+{% endblock  %}
+
+{% block class-main %}account-confirm{% endblock  %}
 {% block content-main %}
     <div class="account-container">
         <div class="account-header">
@@ -13,11 +29,11 @@
 
         <div class="msj-confirm">
             {% if exito %}
-                <h2 class="msj-si"><i class="bi bi-check-circle text-success"></i> {{ mensaje }}</h2>
-                <a href="{% url 'login' %}" class="btn btn-success">Inicia sesión</a>
+                <h2 class="msj-si"><i class="bi bi-check-circle text-success"></i>{{ mensaje }}</h2>
+                <a href="{% url 'login' %}" class="btn btn-success primary-btn">Inicia sesión</a>
             {% else %}
-                <h2 class="msj-no"><i class="bi bi-x-circle text-danger"></i> {{ mensaje }} </h2>
-                <a href="{% url 'home' %}" class="btn btn-success" >Volver al inicio</a>
+                <h2 class="msj-no"><i class="bi bi-x-circle text-danger"></i>{{ mensaje }} </h2>
+                <a href="{% url 'home' %}" class="btn btn-success primary-btn" >Volver al inicio</a>
             {% endif %}
         </div>
     </div>

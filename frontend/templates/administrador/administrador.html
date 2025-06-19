@@ -18,7 +18,7 @@
 {% block nav-left %}
     <img class="logo" src="{% static 'img/logos/escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEMex">
     {% if request.user.is_authenticated %}
-        <p class="user"><i class="bi bi-person-circle"></i> {{ user_name }} {{ user_lastname }}</p>
+        <p class="user"><i class="bi bi-person-circle"></i> {{ admin_name }} {{ admin_lastname }}</p>
     {% endif %}
 {% endblock %}
 <!--Nav center-->
@@ -28,7 +28,7 @@
 <!--Nav right-->
 {% block nav-right %}
     {% if request.user.is_authenticated %}
-        <a href=""><button id="login-button" class="primary-btn">Cerrar Sesión</button></a>
+        <button id="logout-button" class="primary-btn">Cerrar Sesión</button>
     {% endif %}
 {% endblock  %}
 
@@ -115,6 +115,18 @@
             </ul>
         </nav>
     </section>
+    <div class="modal" id="errorModal">
+        <div class="modalContent">
+            <span class="close">&times;</span>
+            <p class="modalMessage"></p>
+        </div>   
+    </div>
+    <div class="modal" id="successModal">
+        <div class="modalContent">
+            <span class="close">&times;</span>
+            <p class="modalMessage"></p>
+        </div>
+    </div>
 {% endblock %}
 
 
@@ -134,4 +146,5 @@
         ];
     </script>
     <script src="{% static 'js/admin.js' %}"></script>
+    <script type="module" src="{% static 'js/logout.js' %}?v={{ timestamp }}"></script>
 {% endblock %}

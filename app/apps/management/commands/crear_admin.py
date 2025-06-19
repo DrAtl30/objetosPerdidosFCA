@@ -2,8 +2,9 @@ from django.core.management.base import BaseCommand
 from apps.models import Usuario, Administrador
 from django.db import transaction, IntegrityError
 
+
 class Command(BaseCommand):
-    help = 'Crea un nuevo administrador controladamente'
+    help = "Crea un nuevo administrador controladamente"
 
     def handle(self, *args, **kwargs):
         print("=== Crear nuevo administrador ===")
@@ -24,15 +25,13 @@ class Command(BaseCommand):
                     contrasena=contrasena,
                     nombre=nombre,
                     apellidos=apellidos,
-                    rol='administrador',
+                    rol="administrador",
                     is_superuser=True,
                     is_staff=True,
-                    is_active=True
+                    is_active=True,
                 )
 
-                Administrador.objects.create(
-                    id_usuario=user
-                )
+                Administrador.objects.create(id_usuario=user)
 
                 self.stdout.write("✅ Administrador creado exitosamente.")
 

@@ -2,8 +2,9 @@ from django.core.management.base import BaseCommand
 from apps.models import Usuario
 from getpass import getpass
 
+
 class Command(BaseCommand):
-    help = 'Cambia la contraseña de un administrador'
+    help = "Cambia la contraseña de un administrador"
 
     def handle(self, *args, **kwargs):
         print("=== Cambiar contraseña de administrador ===")
@@ -13,7 +14,7 @@ class Command(BaseCommand):
         try:
             user = Usuario.objects.get(correo_institucional=correo)
 
-            if user.rol != 'administrador':
+            if user.rol != "administrador":
                 self.stderr.write("❌ El usuario existe pero no es un administrador.")
                 return
 

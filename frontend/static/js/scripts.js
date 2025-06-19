@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const img = document.createElement("img");
     img.src = objeto.imagen;
     img.alt = "Foto del objeto";
+    img.className = "objeto-imagen";
     itemHeader.appendChild(img);
 
     const itemBody = document.createElement("div");
