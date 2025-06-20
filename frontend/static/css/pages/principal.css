@@ -11,6 +11,7 @@ h1, h2, h3, p {
     display: flex;
     align-items: center;
     min-height: 220px;
+
 }
 
 .item-header img {
@@ -20,10 +21,14 @@ h1, h2, h3, p {
     object-fit: cover;
     border-radius: 8px;
     margin-right: 20px;
+    background-color: black;
 }
 
 .item-body {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .item-body h5 {
@@ -37,6 +42,6 @@ h1, h2, h3, p {
 
 .item-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     margin-top: 10px;
 }

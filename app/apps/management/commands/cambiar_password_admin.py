@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         print("=== Cambiar contraseña de administrador ===")
 
-        correo = input("Correo institucional: ").strip()
+        correo = input("Correo del administrador: ").strip()
 
         try:
             user = Usuario.objects.get(correo_institucional=correo)
@@ -28,6 +28,9 @@ class Command(BaseCommand):
             user.set_password(nueva_password)
             user.save()
             self.stdout.write("✅ Contraseña actualizada correctamente.")
+
+            with open("ultima_password_admin.txt", "w") as f:
+                f.write(f"{correo}:{nueva_password}")
 
         except Usuario.DoesNotExist:
             self.stderr.write("❌ No se encontró un usuario con ese correo.")

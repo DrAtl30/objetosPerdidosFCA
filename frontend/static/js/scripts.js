@@ -48,13 +48,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const itemFooter = document.createElement("div");
     itemFooter.className = "item-footer";
     const button = document.createElement("button");
-    button.className = "btn btn-success";
+    button.className = "btn btn-success primary-btn";
     button.textContent = "Reclamar";
     itemFooter.appendChild(button);
 
+    itemBody.appendChild(h5);
+    itemBody.appendChild(p);
+    itemBody.appendChild(itemFooter);
+
     item.appendChild(itemHeader);
     item.appendChild(itemBody);
-    item.appendChild(itemFooter);
+
     col.appendChild(item);
     container.appendChild(col);
   });

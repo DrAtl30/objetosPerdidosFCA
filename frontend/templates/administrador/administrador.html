@@ -28,6 +28,7 @@
 <!--Nav right-->
 {% block nav-right %}
     {% if request.user.is_authenticated %}
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
         <button id="logout-button" class="primary-btn">Cerrar Sesión</button>
     {% endif %}
 {% endblock  %}

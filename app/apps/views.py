@@ -4,7 +4,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.http import JsonResponse
 from rest_framework import status
 from .serializers import registroUser, LoginUser
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.tokens import default_token_generator
 from datetime import datetime
@@ -35,11 +35,15 @@ def user_registro(request):
 
 
 def object_registro(request):
+    if not request.user.is_authenticated or request.user.rol != "administrador":
+        return redirect("/")
     timestamp = datetime.now().timestamp()
     return render(request, "administrador/registroObjeto.html", {"timestamp": timestamp})
 
 
 def home_admin(request):
+    if not request.user.is_authenticated or request.user.rol != 'administrador':
+        return redirect('/')
     admin_name = ""
     admin_lastname = ""
     if request.user.is_authenticated:
@@ -110,10 +114,11 @@ class LoginAlumnoView(APIView):
                 'id_usuario': data['id_usuario'],
                 'nombre': data['nombre'],
                 'correo_institucional': data['correo_institucional'],
+                'rol' : usuario.rol
             }, status=status.HTTP_200_OK)
 
         return Response(alumno.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 class LogOutAlumnoView(APIView):
     def post(self, request):
         if request.user.is_authenticated:

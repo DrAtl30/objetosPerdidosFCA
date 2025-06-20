@@ -68,7 +68,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         mostrarModal("Inicio de sesión exitoso", "successModal");
         await esperarCierreModal("successModal");
-        window.location.href = "/";
+        if (result.rol === "administrador") {
+          window.location.href = '/administrador/'
+        } else if (result.rol === "alumno") {
+          window.location.href = "/";
+        }else{
+          mostrarModal("Rol desconocido. Contacta al administrador.", "errorModal");
+        }
       } catch (err) {
         console.error("Error en la solicitud:", err);
 

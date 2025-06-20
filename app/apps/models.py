@@ -86,6 +86,14 @@ class HistorialAdministrativo(models.Model):
     curp = models.CharField(max_length=18)
     fecha_inicio = models.DateTimeField(auto_now_add=True)
     fecha_fin = models.DateTimeField(null=True, blank=True)
+    correo = models.CharField(max_length=100)
+    id_usuario = models.ForeignKey(
+        Usuario,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        db_column="id_usuario",
+    )
 
     class Meta:
         db_table = "historial_administrativo"

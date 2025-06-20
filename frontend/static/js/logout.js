@@ -33,10 +33,12 @@ document.addEventListener("DOMContentLoaded", () => {
             result.mensaje || "No se pudo cerrar sesión.",
             "errorModal"
           );
+          await esperarCierreModal("errorModal");
         }
       } catch (err) {
         console.error("Error cerrando sesión:", err);
         mostrarModal("Error de red al cerrar sesión.", "errorModal");
+        await esperarCierreModal("successModal");
       }
     });
   }

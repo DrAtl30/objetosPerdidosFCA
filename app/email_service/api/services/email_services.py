@@ -25,3 +25,22 @@ def enviar_correo_confirmacion(alumno):
     )
     email.attach_alternative(mensaje_html, "text/html")
     email.send()
+
+def enviar_contraseña_admin(destinatario, correo_admin, contrasena_nueva):
+    asunto = "Acceso a cuenta de administrador"
+    msj = f"""
+    Has sido registrado como administrador del sistema.
+
+    Correo institucional: {correo_admin}
+    Contraseña temporal: {contrasena_nueva}
+
+    Por favor, inicia sesión.
+    """
+
+    email = EmailMultiAlternatives(
+        asunto,
+        msj,
+        settings.EMAIL_HOST_USER,
+        [destinatario],
+    )
+    email.send()

@@ -51,9 +51,13 @@ document.addEventListener("DOMContentLoaded", function () {
     button.textContent = "Editar";
     itemFooter.appendChild(button);
 
+    itemBody.appendChild(h5);
+    itemBody.appendChild(p);
+    itemBody.appendChild(itemFooter);
+
     item.appendChild(itemHeader);
     item.appendChild(itemBody);
-    item.appendChild(itemFooter);
+    
     col.appendChild(item);
     container.appendChild(col);
   });
