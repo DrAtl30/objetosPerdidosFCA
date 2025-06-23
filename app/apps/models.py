@@ -70,11 +70,11 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 class Administrador(models.Model):
     id_admin = models.AutoField(primary_key=True)
     id_usuario = models.OneToOneField(
-        "Usuario", models.DO_NOTHING, db_column="id_usuario"
+        "Usuario", models.DO_NOTHING, db_column="id_usuario", default=51
     )
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = "administrador"
 
 
@@ -86,13 +86,14 @@ class HistorialAdministrativo(models.Model):
     curp = models.CharField(max_length=18)
     fecha_inicio = models.DateTimeField(auto_now_add=True)
     fecha_fin = models.DateTimeField(null=True, blank=True)
-    correo = models.CharField(max_length=100)
+    correo = models.CharField(max_length=100, null=True)
     id_usuario = models.ForeignKey(
         Usuario,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         db_column="id_usuario",
+        default=51
     )
 
     class Meta:
@@ -105,28 +106,28 @@ class HistorialAdministrativo(models.Model):
 class Alumno(models.Model):
     id_alumno = models.AutoField(primary_key=True)
     id_usuario = models.OneToOneField(
-        "Usuario", models.DO_NOTHING, db_column="id_usuario"
+        "Usuario", models.DO_NOTHING, db_column="id_usuario", default=51
     )
     numero_cuenta = models.CharField(unique=True, max_length=20)
     licenciatura = models.CharField(unique=True, max_length=100)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = "alumno"
 
 
 class Comentario(models.Model):
     id_comentario = models.AutoField(primary_key=True)
-    id_usuario = models.ForeignKey("Usuario", models.DO_NOTHING, db_column="id_usuario")
+    id_usuario = models.ForeignKey("Usuario", models.DO_NOTHING, db_column="id_usuario", default=51)
     id_objeto = models.ForeignKey(
-        "Objetoperdido", models.DO_NOTHING, db_column="id_objeto"
+        "Objetoperdido", models.DO_NOTHING, db_column="id_objeto", null=True
     )
     comentario = models.TextField()
     fecha_comentario = models.DateTimeField()
     fecha_edicion = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = "comentario"
 
 
@@ -145,19 +146,19 @@ class Imagenobjeto(models.Model):
     ruta_imagen = models.CharField(max_length=255)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = "imagenobjeto"
 
 
 class Notificacion(models.Model):
     id_notificacion = models.AutoField(primary_key=True)
-    id_usuario = models.ForeignKey("Usuario", models.DO_NOTHING, db_column="id_usuario")
+    id_usuario = models.ForeignKey("Usuario", models.DO_NOTHING, db_column="id_usuario",default=51)
     mensaje = models.TextField()
     fecha_notificacion = models.DateTimeField()
     estado_lectura = models.BooleanField()
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = "notificacion"
 
 
@@ -174,17 +175,18 @@ class Objetoperdido(models.Model):
         db_column="id_usuario_reclamante",
         blank=True,
         null=True,
+        default=1
     )
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = "objetoperdido"
 
 
 class Reporteentrega(models.Model):
     id_reporte = models.AutoField(primary_key=True)
     id_objeto = models.ForeignKey(
-        Objetoperdido, models.DO_NOTHING, db_column="id_objeto"
+        Objetoperdido, models.DO_NOTHING, db_column="id_objeto", null=True
     )
     fecha_hora_entrega = models.DateTimeField()
     id_usuario_reclamante = models.ForeignKey(
@@ -193,10 +195,11 @@ class Reporteentrega(models.Model):
         db_column="id_usuario_reclamante",
         blank=True,
         null=True,
+        default=51
     )
     imagen_evidencia = models.CharField(max_length=255)
     observaciones = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = "reporteentrega"

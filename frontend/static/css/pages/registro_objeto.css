@@ -39,6 +39,10 @@
     justify-content: space-between; 
 }
 
+#photo-input {
+    display: none;
+}
+  
 .photo-container {
     flex: 1;
     display: flex;
@@ -50,8 +54,11 @@
     min-width: 300px;
     position: relative;
     cursor: pointer;
+    background-color: black;
 }
-
+.file{
+    border: none;
+}
 .photo-container span {
     color: #5a7561;
     font-size: 1rem;
