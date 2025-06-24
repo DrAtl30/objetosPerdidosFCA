@@ -1,0 +1,596 @@
+/* ========================================
+   CSS BASE - ESTILOS COMUNES
+   ======================================== */
+
+/* Variables CSS para colores principales */
+:root {
+    --primary-color: #5a7561;
+    --secondary-color: #6e7b68;
+    --primary-hover: #4a6551;
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --border-color: #ccc;
+    --white: #ffffff;
+    --modal-backdrop: rgba(0, 0, 0, 0.5);
+    --footer-overlay: rgba(0, 0, 0, 0.5);
+}
+
+/* Reset y estilos base */
+body, html {
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+}
+
+/* Layout principal */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+    max-width: 1350px;
+    margin: 0 auto;
+    align-items: center;
+    padding: 20px;
+}
+
+/* ========================================
+   HEADER COMÚN
+   ======================================== */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.header img {
+    max-height: 60px;
+    margin-right: auto;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.header .c1 {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.header button {
+    padding: 10px 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--primary-color);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.header button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* ========================================
+   BARRA DE BÚSQUEDA COMÚN
+   ======================================== */
+.search-bar-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 650px;
+    width: 100%;
+}
+
+.search-bar input {
+    flex: 1;
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+}
+
+.search-bar .search-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--primary-color);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.search-bar .search-button:hover {
+    background-color: var(--primary-hover);
+}
+
+.search-bar .search-button i {
+    font-size: 16px;
+}
+
+.search-bar button {
+    padding: 7px 18px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--primary-color);
+    color: var(--white);
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* ========================================
+   PANEL DE FILTROS COMÚN
+   ======================================== */
+.filter-panel {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 800px;
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border-radius: 8px;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter-header h3 {
+    margin: 0;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: var(--primary-color);
+}
+
+.filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.filter-category {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-category h4 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+.filter-category label {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+/* ========================================
+   ITEMS COMUNES
+   ======================================== */
+.featured {
+    margin-bottom: 20px;
+}
+
+.featured h2 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.item {
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.item-header img {
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.item-body {
+    flex: 1;
+}
+
+.item-body h5 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-color);
+}
+
+.item-body p {
+    margin: 5px 0 0;
+    color: var(--text-color);
+}
+
+.item-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+/* ========================================
+   PAGINACIÓN COMÚN
+   ======================================== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    text-decoration: none;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+/* ========================================
+   FORMULARIOS COMUNES
+   ======================================== */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid var(--primary-color);
+    padding: 10px;
+    margin-bottom: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-hover);
+    box-shadow: 0 0 5px rgba(90, 117, 97, 0.3);
+}
+
+.form-label {
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    color: var(--white);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Formularios de login/registro */
+.login-container, .register-object-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-header img {
+    max-width: 100px;
+    margin-bottom: 10px;
+}
+
+.login-form .form-control {
+    border-radius: 50px;
+    border: 1px solid var(--primary-color);
+}
+
+.login-form button {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.login-form button:hover {
+    background-color: var(--primary-hover);
+}
+
+.forgot-password {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.forgot-password a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+.back-arrow {
+    font-size: 24px;
+    color: var(--primary-color);
+    text-decoration: none;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.back-arrow:hover {
+    text-decoration: underline;
+}
+
+/* ========================================
+   MODALES COMUNES
+   ======================================== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--modal-backdrop);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    min-width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+/* ========================================
+   FOOTER COMÚN
+   ======================================== */
+footer {
+    position: relative;
+    background-color: var(--secondary-color);
+    text-align: center;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+}
+
+footer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.footer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--footer-overlay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-text p {
+    color: var(--white);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* ========================================
+   BACKGROUND COMÚN
+   ======================================== */
+.background-image {
+    background: url('../img/fondo.jpeg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* ========================================
+   LAYOUT FLEXIBLE COMÚN
+   ======================================== */
+.flex-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+/* ========================================
+   UTILIDADES COMUNES
+   ======================================== */
+.text-center {
+    text-align: center;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.p-20 {
+    padding: 20px;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.gap-10 {
+    gap: 10px;
+}
+
+.gap-20 {
+    gap: 20px;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .header img,
+    .header h1,
+    .header .c1 {
+        margin: 0;
+    }
+    
+    .search-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .search-bar input {
+        margin-right: 0;
+    }
+    
+    .filter-panel {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    .filter-options {
+        flex-direction: column;
+    }
+    
+    .item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .item-header img {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+    
+    .container {
+        padding: 10px;
+    }
+    
+    .login-container, .register-object-container {
+        margin: 20px auto;
+        max-width: 90%;
+    }
+}
