@@ -22,6 +22,7 @@ urlpatterns = [
     
     path('inicio-sesion', inicio_sesion, name='inicio_sesion'),
     path('inicio', inicio, name='inicio'),
+    path('recuperar-contrasena', recuperar_contrasena, name='recuperar_contrasena'),
     path('administrador', administrador, name='administrador'),
     path('registro-sesion', registro_sesion, name='registro_sesion'),
     path('registro-objeto', registro_objeto, name='registro_objeto'),

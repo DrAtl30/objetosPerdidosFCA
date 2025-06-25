@@ -12,3 +12,7 @@ def registro_sesion(request):
     return render(request, 'users/registro_sesion.html')
 def registro_objeto(request):
     return render(request, 'admin/registro_objeto.html')
+def recuperar_contrasena(request):
+    return render(request, 'recuperarContrasena.html')
+
+

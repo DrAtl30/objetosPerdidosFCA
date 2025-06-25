@@ -1,0 +1,66 @@
+/* ========================================
+   IMPORTAR CSS BASE
+   ======================================== */
+@import url('base.css');
+
+/* ========================================
+   ESTILOS ESPECÍFICOS PARA RECUPERAR CONTRASEÑA
+   ======================================== */
+
+/* Layout específico para recuperar contraseña */
+body {
+    background: url('{% static "img/fondo.jpeg" %}') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Contenedor específico para recuperar contraseña */
+.recuperar-container {
+    max-width: 400px;
+    width: 90%;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin: 0 auto;
+}
+
+.recuperar-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.recuperar-header img {
+    max-width: 80px;
+    margin-bottom: 5px;
+}
+
+.recuperar-header h1 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin: 10px 0;
+}
+
+/* Formulario específico para recuperar contraseña */
+.recuperarForm .form-control {
+    border-radius: 50px;
+    border: 1px solid var(--primary-color);
+    margin-bottom: 0;
+    padding: 0.5rem 1rem;
+    height: calc(2em + 2px);
+}
+
+.recuperarForm button {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    height: 2.5rem;
+}
+
+.recuperarForm button:hover {
+    background-color: var(--primary-hover);
+}
