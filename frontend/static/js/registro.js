@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
   //expresiones regulares para hacer validaciones
   const expresiones = {
     usuario: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
-    password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/, // 8 a 15 digitos.
+    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d\s]).{8,15}$/, // 8 a 15 digitos.
     correo: /^[a-zA-Z0-9_.+-]+@alumno\.uaemex\.mx$/,
     numCuenta: /^\d{7,7}$/,
   };
@@ -60,31 +60,35 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const validaCampo = (expresion, input, campo) => {
-    if (expresion.test(input.value)) {
-      document
-        .querySelector(`#g__${campo} .formualrio__error`)
-        .classList.remove("formualrio__error-activo");
+    const errorElement = document.querySelector(`#g__${campo} .formualrio__error`);
+    if (input.value.trim() === "") {
+      errorElement.classList.remove("formualrio__error-activo");
+      campos[campo] = false;
+    } else if (campo === "pass" && /\s/.test(input.value)) {
+      errorElement.classList.add("formualrio__error-activo");
+      campos[campo] = false;
+    } else if (expresion.test(input.value)) {
+      errorElement.classList.remove("formualrio__error-activo");
       campos[campo] = true;
     } else {
-      document
-        .querySelector(`#g__${campo} .formualrio__error`)
-        .classList.add("formualrio__error-activo");
+      errorElement.classList.add("formualrio__error-activo");
+      campos[campo] = false;
     }
   };
 
   const validarPass = () => {
     const pass1 = document.getElementById("password");
     const pass2 = document.getElementById("check__pass");
+    const errorElement = document.querySelector(`#g__check__pass .formualrio__error`);
 
-    if (pass1.value !== pass2.value) {
-      document
-        .querySelector(`#g__check__pass .formualrio__error`)
-        .classList.add("formualrio__error-activo");
+    if (pass1.value.trim() === "" || pass2.value.trim() === "") {
+      errorElement.classList.remove("formualrio__error-activo");
+      campos["pass"] = false;
+    } else if (pass1.value !== pass2.value) {
+      errorElement.classList.add("formualrio__error-activo");
       campos["pass"] = false;
     } else {
-      document
-        .querySelector(`#g__check__pass .formualrio__error`)
-        .classList.remove("formualrio__error-activo");
+      errorElement.classList.remove("formualrio__error-activo");
       campos["pass"] = true;
     }
   };
@@ -138,9 +142,11 @@ document.addEventListener("DOMContentLoaded", function () {
           mensaje = error || mensaje;
         }
         mostrarModal(mensaje, "errorModal");
+        await esperarCierreModal("errorModal");
       }
     } else {
       mostrarModal("Debe llenar todos los campos", "errorModal");
+      await esperarCierreModal("errorModal");
     }
   });
 });

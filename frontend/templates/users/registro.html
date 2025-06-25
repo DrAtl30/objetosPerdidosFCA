@@ -39,8 +39,8 @@
                 <p class= "formualrio__error">Los apellidos solo puede tener letras y espacios</p>
             </div>
             <div class="mb-3 form__grupo" id ="g__numCuenta">
-                <input type="text" class="form-control from__input" id="numCuenta" name="numCuenta" placeholder="Num. Cuenta" required>
-                <p class= "formualrio__error">El numero de cuenta debe tener 7 digitos</p>
+                <input type="text" class="form-control from__input" id="numCuenta" name="numCuenta" placeholder="Num. Cuenta" pattern="^\d{7,7}$" minlength="7" maxlength="7"  title="Solo deben ser numeros del 0 al 9"  required>
+                <p class= "formualrio__error">El numero de cuenta debe tener 7 digitos positivos [0-9] </p>
             </div>
             <div class="mb-3">
                 <select class="form-control" id="licenciatura" name="licenciatura">
@@ -55,9 +55,9 @@
                 <p class= "formualrio__error">El correo debe ser ejemplo@alumno.uaemex.mx</p>
             </div>
             <div class="mb-3 form__grupo password-group"  id ="g__pass">
-                <input type="password" class="form-control from__input" id="password" placeholder="Contraseña" name = "password" required>
+                <input type="password" class="form-control from__input" id="password" placeholder="Contraseña" name = "password" title="Debe tener de 8 a 15 caracteres, al menos una mayúscula, una minúscula, un número y un carácter especial. No debe contener espacios." minlength="8" maxlength="15"  required>
                 <i class="bi bi-eye-slash-fill toggle-password" data-target="password"></i>
-                <p class="formualrio__error">la contraseña debe ser minimo de 8 digitos</p>
+                <p class="formualrio__error">La contraseña debe tener entre 8 y 15 caracteres, al menos una mayúscula, una minúscula, un número y un carácter especial. No debe contener espacios.</p>
             </div>
             <div class="mb-3 form__grupo password-group" id ="g__check__pass">
                 <input type="password" class="form-control from__input" id="check__pass" name="check__pass" placeholder="Confirmar contraseña" required>
