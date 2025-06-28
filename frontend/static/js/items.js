@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const container = document.getElementById("objetos-perdidos-container");
   const pagination = document.getElementById("pagination");
-  const itemsPerPage = 12;
+  const itemsPerPage = 9;//aqui se configura el numero de elementos que se muestran en el inicio del usuario
   let currentPage = 1;
 
   if (typeof objetosPerdidos === "undefined" || !Array.isArray(objetosPerdidos)) {

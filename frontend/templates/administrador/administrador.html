@@ -103,7 +103,7 @@
     </section>
     <section class="pagination-container">
         <nav aria-label="Paginación de objetos perdidos">
-            <ul class="pagination justify-content-center">
+            <ul class="pagination justify-content-center" id="pagination">
                 <li class="page-item disabled">
                     <a class="page-link primary-btn" href="#" tabindex="-1">Anterior</a>
                 </li>
@@ -116,18 +116,6 @@
             </ul>
         </nav>
     </section>
-    <div class="modal" id="errorModal">
-        <div class="modalContent">
-            <span class="close">&times;</span>
-            <p class="modalMessage"></p>
-        </div>   
-    </div>
-    <div class="modal" id="successModal">
-        <div class="modalContent">
-            <span class="close">&times;</span>
-            <p class="modalMessage"></p>
-        </div>
-    </div>
 {% endblock %}
 
 
@@ -143,9 +131,18 @@
             { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 6', descripcion: 'Descripción del objeto perdido 6', fecha: '2025-03-11' },
             { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 7', descripcion: 'Descripción del objeto perdido 7', fecha: '2025-03-13' },
             { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 8', descripcion: 'Descripción del objeto perdido 8', fecha: '2025-03-12' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 9', descripcion: 'Descripción del objeto perdido 9', fecha: '2025-03-11' }
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 9', descripcion: 'Descripción del objeto perdido 9', fecha: '2025-03-11' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 10', descripcion: 'Descripción del objeto perdido 10', fecha: '2025-03-11' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 11', descripcion: 'Descripción del objeto perdido 11', fecha: '2025-03-13' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 12', descripcion: 'Descripción del objeto perdido 12', fecha: '2025-03-12' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 13', descripcion: 'Descripción del objeto perdido 13', fecha: '2025-03-11' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 14', descripcion: 'Descripción del objeto perdido 14', fecha: '2025-03-11' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 15', descripcion: 'Descripción del objeto perdido 15', fecha: '2025-03-13' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 16', descripcion: 'Descripción del objeto perdido 16', fecha: '2025-03-12' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 17', descripcion: 'Descripción del objeto perdido 17', fecha: '2025-03-11' }
         ];
     </script>
-    <script src="{% static 'js/admin.js' %}"></script>
+    <script src="{% static 'js/items.js' %}"></script>
+    <script src="{% static 'js/filter.js' %}"></script>
     <script type="module" src="{% static 'js/logout.js' %}?v={{ timestamp }}"></script>
 {% endblock %}

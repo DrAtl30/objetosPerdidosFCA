@@ -4,6 +4,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/pages/registro_objeto.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/slider.css' %}">
 {% endblock %}
 
 {% block class-header %}objR-header{% endblock  %}
@@ -19,15 +20,22 @@
         <div class="header-container">
             <h2>Registro de Objeto Perdido</h2>
         </div>
-        <!-- Contenedor principal para la foto y el formulario -->
-        <div class="body-container">
-            <div class="photo-container file" id="photo-container">
-                <span>Arrastra y suelta una foto aquí o haz clic para seleccionar</span>
-                <input type="file" id="photo-input" accept="image/*" multiple>
-            </div>
-            <div class="form-container">
-                <form id="reg-obj-form" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
+        <form id="reg-obj-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="body-container">
+                <div class="photo-container file" id="photo-container">
+                    <span id="no-img-msj">Arrastra y suelta una foto aquí o haz clic para seleccionar</span>
+                    <input type="file" name="photo" id="photo-input" accept="image/*" multiple>
+
+                    <div class="slider-wrapper hidden">
+                        <div class="carruseles"></div>
+                        <div class="btn-left"><i class="bi bi-caret-left-fill"></i></div>
+                        <div class="btn-right"><i class="bi bi-caret-right-fill"></i></div>
+                    </div>
+                    
+                </div>
+                <div class="form-container">
+                        
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
@@ -53,11 +61,12 @@
                     <div class="button-container">
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 {% endblock  %}
 {% block extra_js %}
-    <script src="{% static 'js/registro_objeto.js' %}"></script>
+    <script type="module" src="/static/js/registro_objeto.js"></script>
+    {% comment %} <script src="{% static 'js/slider.js' %}"></script> {% endcomment %}
 {% endblock %}

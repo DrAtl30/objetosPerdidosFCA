@@ -116,18 +116,7 @@
             </ul>
         </nav>
     </section>
-    <div class="modal" id="errorModal">
-        <div class="modalContent">
-            <span class="close">&times;</span>
-            <p class="modalMessage"></p>
-        </div>   
-    </div>
-    <div class="modal" id="successModal">
-        <div class="modalContent">
-            <span class="close">&times;</span>
-            <p class="modalMessage"></p>
-        </div>
-    </div>
+    
 {% endblock  %}
 {% block extra_js %}
     <script>
@@ -151,6 +140,7 @@
             { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 17', descripcion: 'Descripción del objeto perdido 17', fecha: '2025-03-11' }
         ];
     </script>
-    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/items.js' %}"></script>
+    <script src="{% static 'js/filter.js' %}"></script>
     <script type="module" src="{% static 'js/logout.js' %}?v={{ timestamp }}"></script>
 {% endblock %}
