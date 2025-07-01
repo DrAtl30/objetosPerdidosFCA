@@ -167,8 +167,11 @@ CORS_ALLOWED_ORIGINS = [
 
 AUTH_USER_MODEL = "apps.Usuario"
 
-#Expiracion de la sesion despues de 24 hrs (Para usuario con rol = 'alumno')
+# Expiracion de la sesion despues de 24 hrs (Para usuario con rol = 'alumno')
 SESSION_COOKIE_AGE =  60 * 60 * 24 #24 horas en segundos
 
-#Expirar sesion tras cerrar el navegador
+# Expirar sesion tras cerrar el navegador
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")

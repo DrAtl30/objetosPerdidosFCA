@@ -2,10 +2,10 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 
-from .models import Usuario, Alumno
+from .models import Usuario, Alumno, Objetoperdido, Imagenobjeto
 
 
-class registroUser(serializers.ModelSerializer):
+class RegistroUser(serializers.ModelSerializer):
     num_cuenta = serializers.CharField(
         required=False, allow_null=True, max_length=20, write_only=True
     )
@@ -117,3 +117,55 @@ class LoginUser(serializers.Serializer):
             "nombre": usuario.nombre,
             "correo_institucional": usuario.correo_institucional,
         }
+
+# Registro de objetos
+ESTADO_OBJETO = [
+    ("registrado", "Registrado"),
+    ("publicado", "Publicado"),
+    ("reclamado", "Reclamado"),
+    ("entregado", "Entregado"),
+    ("no reclamado", "No reclamado"),
+]
+
+class RegistroObjeto(serializers.ModelSerializer):
+    estado_objeto = serializers.ChoiceField(choices=ESTADO_OBJETO)
+    imagenes = serializers.ListField(
+        child = serializers.ImageField(),
+        write_only = True,
+        required = True,
+        error_messages = {
+            'required': 'Se requiere al menos una imagen del objeto.',
+            'blank': 'No se pueden subir el objeto sin evidencia.'
+        }
+    )
+    class Meta:
+        model = Objetoperdido
+        fields = [
+            'nombre',
+            'descripcion',
+            'fecha_perdida',
+            'lugar_perdida',
+            'estado_objeto',
+            'imagenes',
+        ]
+    
+    def validate_imagenes(self, value):
+        if not value:
+            raise serializers.ValidationError("Debes subir al menos una imagen")
+        return value
+    
+    def create(self, validate_data):
+        imagenes = validate_data.pop('imagenes')
+        
+        objeto = Objetoperdido.objects.create(
+            **validate_data,
+            id_usuario_reclamante =  None
+        )
+        
+        for imagen in imagenes:
+            Imagenobjeto.objects.create(
+                id_objeto = objeto,
+                ruta_imagen = imagen
+            )
+            
+        return objeto

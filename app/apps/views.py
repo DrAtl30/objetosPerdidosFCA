@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.utils.http import urlsafe_base64_decode
 from django.http import JsonResponse
 from rest_framework import status
-from .serializers import registroUser, LoginUser
+from .serializers import RegistroUser, LoginUser, RegistroObjeto
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.tokens import default_token_generator
@@ -35,8 +36,8 @@ def user_registro(request):
 
 
 def object_registro(request):
-    if not request.user.is_authenticated or request.user.rol != "administrador":
-        return redirect("/")
+    # if not request.user.is_authenticated or request.user.rol != "administrador":
+    #     return redirect("/")
     timestamp = datetime.now().timestamp()
     return render(request, "administrador/registroObjeto.html", {"timestamp": timestamp})
 
@@ -56,7 +57,7 @@ class RegistroAlumnoView(APIView):
     def post(self, request, *args, **kwargs):
         logger.info(f"Datos recibidos: {request.data}")
 
-        alumno = registroUser(data=request.data)
+        alumno = RegistroUser(data=request.data)
         if alumno.is_valid():
             email_alumno= alumno.save()
             enviar_correo_confirmacion(email_alumno)
@@ -126,3 +127,25 @@ class LogOutAlumnoView(APIView):
             return Response({"mensaje": "Sesión cerrada correctamente."}, status=status.HTTP_200_OK)
         else:
             return Response({"mensaje": "No hay sesión activa."}, status=status.HTTP_400_BAD_REQUEST)
+
+# Registro de objeto
+class RegistroObjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if not request.user.is_authenticated or request.user.rol != "administrador":
+            return Response(
+                {"error": "No tienes permiso para realizar esta acción."},
+                status = status.HTTP_403_FORBIDDEN
+            )
+
+        registroObj = RegistroObjeto(data=request.data, context={'request':request})
+
+        if registroObj.is_valid():
+            registroObj.save()
+            return Response(
+                {"message": "Objeto registrado correctamente."},
+                status = status.HTTP_201_CREATED
+            )
+        print("Errores del serializer:", registroObj.errors)
+        return Response(registroObj.errors, status = status.HTTP_400_BAD_REQUEST)

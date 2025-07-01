@@ -143,11 +143,11 @@ class Imagenobjeto(models.Model):
         blank=True,
         null=True,
     )
-    ruta_imagen = models.CharField(max_length=255)
+    ruta_imagen = models.ImageField(upload_to="objetos/")
 
     class Meta:
         # managed = False
-        db_table = "imagenobjeto"
+        db_table = "imagen_objeto"
 
 
 class Notificacion(models.Model):
@@ -163,12 +163,20 @@ class Notificacion(models.Model):
 
 
 class Objetoperdido(models.Model):
+    ESTADO_OBJETO = [
+        ('registrado','Registrado'),
+        ('publicado','Publicado'),
+        ('reclamado','Reclamado'),
+        ('entregado','Entregado'),
+        ('no reclamado','No reclamado'),
+    ]
+    
     id_objeto = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
     fecha_perdida = models.DateField()
     lugar_perdida = models.CharField(max_length=255)
-    estado_objeto = models.CharField(max_length=50)
+    estado_objeto = models.CharField(max_length=50, choices=ESTADO_OBJETO)
     id_usuario_reclamante = models.ForeignKey(
         "Usuario",
         models.DO_NOTHING,
@@ -180,7 +188,7 @@ class Objetoperdido(models.Model):
 
     class Meta:
         # managed = False
-        db_table = "objetoperdido"
+        db_table = "objeto_perdido"
 
 
 class Reporteentrega(models.Model):
@@ -202,4 +210,4 @@ class Reporteentrega(models.Model):
 
     class Meta:
         # managed = False
-        db_table = "reporteentrega"
+        db_table = "reporte_entrega"
