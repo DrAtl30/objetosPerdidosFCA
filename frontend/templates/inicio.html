@@ -120,25 +120,7 @@
 {% endblock  %}
 {% block extra_js %}
     <script>
-        const objetosPerdidos = [
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 1', descripcion: 'Descripción del objeto perdido 1', fecha: '2025-03-16' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 2', descripcion: 'Descripción del objeto perdido 2', fecha: '2025-03-15' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 3', descripcion: 'Descripción del objeto perdido 3', fecha: '2025-03-14' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 4', descripcion: 'Descripción del objeto perdido 4', fecha: '2025-03-13' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 5', descripcion: 'Descripción del objeto perdido 5', fecha: '2025-03-12' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 6', descripcion: 'Descripción del objeto perdido 6', fecha: '2025-03-11' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 7', descripcion: 'Descripción del objeto perdido 7', fecha: '2025-03-13' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 8', descripcion: 'Descripción del objeto perdido 8', fecha: '2025-03-12' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 9', descripcion: 'Descripción del objeto perdido 9', fecha: '2025-03-11' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 10', descripcion: 'Descripción del objeto perdido 10', fecha: '2025-03-11' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 11', descripcion: 'Descripción del objeto perdido 11', fecha: '2025-03-13' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 12', descripcion: 'Descripción del objeto perdido 12', fecha: '2025-03-12' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 13', descripcion: 'Descripción del objeto perdido 13', fecha: '2025-03-11' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 14', descripcion: 'Descripción del objeto perdido 14', fecha: '2025-03-11' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 15', descripcion: 'Descripción del objeto perdido 15', fecha: '2025-03-13' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 16', descripcion: 'Descripción del objeto perdido 16', fecha: '2025-03-12' },
-            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 17', descripcion: 'Descripción del objeto perdido 17', fecha: '2025-03-11' }
-        ];
+        const objetosPerdidos = {{ objetos_json|safe }};
     </script>
     <script src="{% static 'js/items.js' %}"></script>
     <script src="{% static 'js/filter.js' %}"></script>

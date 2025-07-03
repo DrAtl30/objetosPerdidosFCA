@@ -58,7 +58,7 @@ class Command(BaseCommand):
                 correo_guardado, password_guardada = line.strip().split(":")
 
             if correo_guardado == user_admin.correo_institucional:
-                enviar_contraseña_admin(correo, user_admin.correo_institucional, password_guardada)
+                enviar_contraseña_admin(historial, user_admin.correo_institucional, password_guardada)
                 self.stdout.write(self.style.SUCCESS(f"📩 Contraseña enviada  del correo {user_admin.correo_institucional} al correo {correo}."))
                 os.remove("ultima_password_admin.txt")
             else:

@@ -134,7 +134,7 @@ class Comentario(models.Model):
 class Imagenobjeto(models.Model):
     id_imagen = models.AutoField(primary_key=True)
     id_objeto = models.ForeignKey(
-        "Objetoperdido", models.DO_NOTHING, db_column="id_objeto", blank=True, null=True
+        "Objetoperdido", models.DO_NOTHING, db_column="id_objeto", blank=True, null=True, related_name="imagenes"
     )
     id_reporte = models.ForeignKey(
         "Reporteentrega",
@@ -147,7 +147,7 @@ class Imagenobjeto(models.Model):
 
     class Meta:
         # managed = False
-        db_table = "imagen_objeto"
+        db_table = "imagenobjeto"
 
 
 class Notificacion(models.Model):
@@ -188,7 +188,7 @@ class Objetoperdido(models.Model):
 
     class Meta:
         # managed = False
-        db_table = "objeto_perdido"
+        db_table = "objetoperdido"
 
 
 class Reporteentrega(models.Model):
@@ -210,4 +210,4 @@ class Reporteentrega(models.Model):
 
     class Meta:
         # managed = False
-        db_table = "reporte_entrega"
+        db_table = "reporteentrega"

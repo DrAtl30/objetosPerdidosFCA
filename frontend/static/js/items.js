@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const itemsPerPage = 9;//aqui se configura el numero de elementos que se muestran en el inicio del usuario
   let currentPage = 1;
 
-  if (typeof objetosPerdidos === "undefined" || !Array.isArray(objetosPerdidos)) {
+  if (typeof objetosPerdidos === "undefined" || !Array.isArray(objetosPerdidos)||objetosPerdidos.length === 0) {
     container.innerHTML = `<h1 style="text-align:center; width:100%;">No hay objetos para mostrar</h1>`;
     if (pagination) pagination.style.display = "none";
     return;

@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
       formData.append("descripcion", descripcion);
       formData.append("fecha_perdida", fecha);
       formData.append("lugar_perdida", lugar);
-      formData.append("estado_objeto", "registrado");
+      formData.append("estado_objeto", "publicado");
 
       imagenesSeleccionadas.forEach((imagen) =>
         formData.append("imagenes", imagen)

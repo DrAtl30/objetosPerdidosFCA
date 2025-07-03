@@ -95,7 +95,7 @@ class RegistroUser(serializers.ModelSerializer):
                 licenciatura=licenciatura_valida,
             )
 
-        return user
+        return user, password
 
 
 class LoginUser(serializers.Serializer):
