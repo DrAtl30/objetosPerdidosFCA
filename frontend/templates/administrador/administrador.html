@@ -13,30 +13,31 @@
 {% endblock %}
 
 <!-- Header -->
-
+{% block class-header %}header-nav{% endblock  %}
 <!-- Nav-left-->
 {% block nav-left %}
     <img class="logo" src="{% static 'img/logos/escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEMex">
     {% if request.user.is_authenticated %}
-        <p class="user"><i class="bi bi-person-circle"></i> {{ admin_name }} {{ admin_lastname }}</p>
+        <p class="name-user"><i class="bi bi-person-circle"></i> {{ admin_name }} {{ admin_lastname }}</p>
     {% endif %}
 {% endblock %}
 <!--Nav center-->
 {% block nav-center %}
-    <h1>Panel de Administración</h1>
+    <h1 class="admin-title">Panel de Administración</h1>
 {% endblock  %}
 <!--Nav right-->
 {% block nav-right %}
     {% if request.user.is_authenticated %}
+        <a href="{% url 'home' %}"><button class="primary-btn home"><i class="bi bi-house-door-fill"></i></button></a>
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-        <button id="logout-button" class="primary-btn">Cerrar Sesión</button>
+        <button id="logout-button" class="primary-btn">Sign Out</button>
     {% endif %}
 {% endblock  %}
 
 <!--Main-->
 {% block content-main %}
     <section class="admin-controls">
-        <nav class="navbar navbar-expand-lg navbar-dark nav-centrado ">
+        <nav class="navbar navbar-expand-lg navbar-dark nav-centrado main-nav">
             <div class="nav-wrapper">
                 <!-- Izquierda -->
                 <div class="nav-section izquierda">
@@ -44,11 +45,19 @@
                 </div>
 
                 <!-- Centro -->
-                <div class="nav-section center">
+                <div class="nav-section centro">
+                    
+                </div>
+
+
+                <!-- Derecha -->
+                <div class="nav-section derecha admin">
                     <div class="search-bar">
-                        <input type="text" placeholder="Buscar">
-                        <button class="search-button primary-btn"><i class="fas fa-search"></i></button>
-                        <button id="filter-button" class="primary-btn">Filtros</button>
+                        <input type="text" placeholder="Buscar" class="hidden-input">
+                        <button class="primary-btn search-btn"><i class="fas fa-search"></i></button>
+                        <button id="filter-button" class="primary-btn filter-btn">
+                            <i class="bi bi-filter"></i> <span class="filter-text">Filtros</span>
+                        </button>
                     </div>
     
                     <div id="filter-panel" class="filter-panel">
@@ -88,18 +97,39 @@
                         </div>
                         <button id="apply-filters" class="btn btn-success primary-btn">Aplicar Filtros</button>
                     </div>
-                </div>
 
-
-                <!-- Derecha -->
-                <div class="nav-section derecha">
-                    <a href="{% url 'object_registro' %}" class="primary-btn">Agregar Objeto</a>
+                    <a href="{% url 'object_registro' %}" class="primary-btn add-obj">
+                        <i class="bi bi-plus-circle-fill icono"></i> <span class="add-text">Add</span>
+                    </a>
                 </div>
             </div>
         </nav>
     </section>
-    <section class="row" id="objetos-perdidos-container">
-        <!-- Los paneles de objetos perdidos se generarán aquí mediante JavaScript -->
+    <section class="items_grid" id="objetos-perdidos-container">
+        <div class="item">
+            <div class="item-header">
+              <img src="{% static '/img/logos/escudo.png'%}" alt="Objeto 1">
+            </div>
+            <div class="item-body">
+              <h5>Objeto perdido 1</h5>
+              <p>Descripción breve del objeto.</p>
+            </div>
+            <div class="item-footer">
+              <button class="btn btn-success primary-btn">Reclamar</button>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-header">
+              <img src="{% static '/img/logos/escudo.png'%}" alt="Objeto 1">
+            </div>
+            <div class="item-body">
+              <h5>Objeto perdido 2</h5>
+              <p>Descripción breve del objeto.</p>
+            </div>
+            <div class="item-footer">
+              <button class="btn btn-success primary-btn">Reclamar</button>
+            </div>
+          </div>
     </section>
     <section class="pagination-container">
         <nav aria-label="Paginación de objetos perdidos">
@@ -121,10 +151,10 @@
 
 
 {% block extra_js %}
-    <script>
+    {% comment %} <script>
         const objetosPerdidos = {{ objetos_json|safe }};
-    </script>
-    <script src="{% static 'js/items.js' %}"></script>
+    </script> {% endcomment %}
+    {% comment %} <script src="{% static 'js/items.js' %}"></script> {% endcomment %}
     <script src="{% static 'js/filter.js' %}"></script>
     <script type="module" src="{% static 'js/logout.js' %}?v={{ timestamp }}"></script>
 {% endblock %}

@@ -1,21 +1,48 @@
 .primary-btn{
-    padding: 10px 20px;
+    min-width: 90px;
+    padding: 5px 15px;
     border-radius: 5px;
     border: none;
     background-color: #5a7561;
     color: white;
     margin-left: auto;
+    text-align: center;
 }
 .primary-btn:hover{
     background-color: #157347;
-    padding: 10px 20px;
+    padding: 5px 15px;
     border-radius: 5px;
     border: none;
-
     color: white;
     margin-left: auto;
-
+    text-align: center;
 }
 .primary-btn.home{
     margin: 5px;
+}
+
+.primary-btn.search-btn {
+    min-width: 30px;
+    margin: 5px;
+}
+
+.primary-btn.filter-btn {
+    margin: 5px;
+}
+
+.primary-btn.add-obj .icono {
+    display: none;
+}
+
+@media screen and (max-width: 700px) {
+    .primary-btn.filter-btn, .primary-btn.add-obj {
+        min-width: 30px;
+        margin: 5px;
+    }
+    .add-text{
+        display: none;
+    }
+    .primary-btn.add-obj .icono {
+        display: block;
+    }
 }

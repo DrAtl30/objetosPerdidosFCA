@@ -7,7 +7,7 @@ from rest_framework import status
 from .serializers import RegistroUser, LoginUser, RegistroObjeto
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
-from django.contrib.auth.tokens import default_token_generator
+from .tokens import custom_token_generator
 from datetime import datetime
 from email_service.api.services.email_services import enviar_correo_confirmacion
 import logging, json
@@ -107,7 +107,7 @@ class ConfirmarCuentaView(APIView):
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
             alumno = get_object_or_404(Usuario, id_usuario=uid)
-            if default_token_generator.check_token(alumno, token):
+            if custom_token_generator.check_token(alumno, token):
                 alumno.is_active = True
                 alumno.save()
                 mensaje = 'Cuenta confirmada'

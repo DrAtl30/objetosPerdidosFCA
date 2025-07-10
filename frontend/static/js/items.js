@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const itemsPerPage = 9;//aqui se configura el numero de elementos que se muestran en el inicio del usuario
   let currentPage = 1;
 
-  if (typeof objetosPerdidos === "undefined" || !Array.isArray(objetosPerdidos)||objetosPerdidos.length === 0) {
+  // ||objetosPerdidos.length === 0
+  if (typeof objetosPerdidos === "undefined" || !Array.isArray(objetosPerdidos)) {
     container.innerHTML = `<h1 style="text-align:center; width:100%;">No hay objetos para mostrar</h1>`;
     if (pagination) pagination.style.display = "none";
     return;
@@ -19,11 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const objetosPagina = objetosPerdidos.slice(start, end);
 
     objetosPagina.forEach((objeto) => {
-      const col = document.createElement("div");
-      col.className = "col-md-4";
-
       const item = document.createElement("div");
-      item.className = "item d-flex";
+      item.className = "item";
 
       const itemHeader = document.createElement("div");
       itemHeader.className = "item-header";
@@ -49,8 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       itemBody.append(h5, p, itemFooter);
       item.append(itemHeader, itemBody);
-      col.appendChild(item);
-      container.appendChild(col);
+      container.appendChild(item);
     });
   }
 

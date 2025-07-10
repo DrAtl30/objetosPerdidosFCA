@@ -13,11 +13,11 @@
 
 
 <!--Header-->
-
+{% block class-header %}header-nav{% endblock  %}
 {% block nav-left %}
     <img class="logo" src="{% static 'img/logos/escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEMex">
     {% if request.user.is_authenticated %}
-        <p><i class="bi bi-person-circle"></i> {{ user_name }} {{ user_lastname }}</p>
+        <p class="name-user"><i class="bi bi-person-circle"></i> {{ user_name }} {{ user_lastname }}</p>
     {% endif %}
 {% endblock  %}
 
@@ -27,17 +27,20 @@
 
 {% block nav-right %}
     {% if request.user.is_authenticated %}
+        {% if request.user.is_staff%}
+            <a href="{% url 'home_admin' %}"><button class="primary-btn home"><i class="bi bi-house-gear-fill"></i></button></a>
+        {% endif %}
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-        <button id="logout-button" class="primary-btn home">Cerrar Sesión</button>
+        <button id="logout-button" class="primary-btn home">Sign Out</button>
     {% else %}
-        <a href="{% url 'login' %}"><button id="login-button" class="primary-btn home">Iniciar Sesión</button></a>
-        <a href="{% url 'user_registro' %}"><button id="register-button" class="primary-btn home">Registrarse</button></a>
+        <a href="{% url 'login' %}"><button id="login-button" class="primary-btn home">Sign In</button></a>
+        <a href="{% url 'user_registro' %}"><button id="register-button" class="primary-btn home">Sign Up</button></a>
     {% endif %}
 {% endblock  %}
 
 {% block content-main %}
     <section class="admin-controls">
-        <nav class="navbar navbar-expand-lg navbar-dark nav-centrado ">
+        <nav class="navbar navbar-expand-lg navbar-dark nav-centrado main-nav">
             <div class="nav-wrapper">
                 <!-- Izquierda -->
                 <div class="nav-section izquierda">
@@ -45,11 +48,17 @@
                 </div>
 
                 <!-- Centro -->
-                <div class="nav-section center">
+                <div class="nav-section centro">
+                </div>
+
+                <!-- Derecha -->
+                <div class="nav-section derecha">
                     <div class="search-bar">
-                        <input type="text" placeholder="Buscar">
-                        <button class="search-button primary-btn"><i class="fas fa-search"></i></button>
-                        <button id="filter-button" class="primary-btn">Filtros</button>
+                        <input type="text" placeholder="Buscar" class="hidden-input">
+                        <button class="primary-btn search-btn"><i class="fas fa-search"></i></button>
+                        <button id="filter-button" class="primary-btn filter-btn">
+                            <i class="bi bi-filter"></i> <span class="filter-text">Filtros</span>
+                        </button>
                     </div>
 
                     <div id="filter-panel" class="filter-panel">
@@ -90,16 +99,34 @@
                         <button id="apply-filters" class="btn btn-success primary-btn">Aplicar Filtros</button>
                     </div>
                 </div>
-
-
-                <!-- Derecha -->
-                <div class="nav-section derecha">
-                </div>
             </div>
         </nav>
     </section>
-    <section class="row" id="objetos-perdidos-container">
-        <!-- Los paneles de objetos perdidos se generarán aquí mediante JavaScript -->
+    <section class="items_grid" id="objetos-perdidos-container">
+        <div class="item">
+            <div class="item-header">
+              <img src="{% static '/img/logos/escudo.png'%}" alt="Objeto 1">
+            </div>
+            <div class="item-body">
+              <h5>Objeto perdido 1</h5>
+              <p>Descripción breve del objeto.</p>
+            </div>
+            <div class="item-footer">
+              <button class="btn btn-success primary-btn">Reclamar</button>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-header">
+              <img src="{% static '/img/logos/escudo.png'%}" alt="Objeto 1">
+            </div>
+            <div class="item-body">
+              <h5>Objeto perdido 2</h5>
+              <p>Descripción breve del objeto.</p>
+            </div>
+            <div class="item-footer">
+              <button class="btn btn-success primary-btn">Reclamar</button>
+            </div>
+          </div>
     </section>
     <section class="pagination-container">
         <nav aria-label="Paginación de objetos perdidos">
@@ -120,9 +147,28 @@
 {% endblock  %}
 {% block extra_js %}
     <script>
-        const objetosPerdidos = {{ objetos_json|safe }};
+        const objetosPerdidos1 = {{ objetos_json|safe }};
+        const objetosPerdidos2 = [
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 1', descripcion: 'Descripción del objeto perdido 1', fecha: '2025-03-16' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 2', descripcion: 'Descripción del objeto perdido 2', fecha: '2025-03-15' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 3', descripcion: 'Descripción del objeto perdido 3', fecha: '2025-03-14' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 4', descripcion: 'Descripción del objeto perdido 4', fecha: '2025-03-13' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 5', descripcion: 'Descripción del objeto perdido 5', fecha: '2025-03-12' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 6', descripcion: 'Descripción del objeto perdido 6', fecha: '2025-03-11' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 7', descripcion: 'Descripción del objeto perdido 7', fecha: '2025-03-13' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 8', descripcion: 'Descripción del objeto perdido 8', fecha: '2025-03-12' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 9', descripcion: 'Descripción del objeto perdido 9', fecha: '2025-03-11' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 10', descripcion: 'Descripción del objeto perdido 10', fecha: '2025-03-11' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 11', descripcion: 'Descripción del objeto perdido 11', fecha: '2025-03-13' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 12', descripcion: 'Descripción del objeto perdido 12', fecha: '2025-03-12' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 13', descripcion: 'Descripción del objeto perdido 13', fecha: '2025-03-11' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 14', descripcion: 'Descripción del objeto perdido 14', fecha: '2025-03-11' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 15', descripcion: 'Descripción del objeto perdido 15', fecha: '2025-03-13' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 16', descripcion: 'Descripción del objeto perdido 16', fecha: '2025-03-12' },
+            { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 17', descripcion: 'Descripción del objeto perdido 17', fecha: '2025-03-11' }
+        ];
     </script>
-    <script src="{% static 'js/items.js' %}"></script>
-    <script src="{% static 'js/filter.js' %}"></script>
+    {% comment %} <script src="{% static 'js/items.js' %}"></script> {% endcomment %}
+    <script src="{% static 'js/filter.js' %}"></script> 
     <script type="module" src="{% static 'js/logout.js' %}?v={{ timestamp }}"></script>
 {% endblock %}
