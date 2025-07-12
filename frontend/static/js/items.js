@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const container = document.getElementById("objetos-perdidos-container");
   const pagination = document.getElementById("pagination");
-  const itemsPerPage = 9;//aqui se configura el numero de elementos que se muestran en el inicio del usuario
+  const itemsPerPage = 8;//aqui se configura el numero de elementos que se muestran en el inicio del usuario
   let currentPage = 1;
 
   // ||objetosPerdidos.length === 0
@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
       h5.textContent = objeto.titulo;
       const p = document.createElement("p");
       p.textContent = objeto.descripcion;
+      itemBody.append(h5, p)
 
       const itemFooter = document.createElement("div");
       itemFooter.className = "item-footer";
@@ -45,8 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
       button.textContent = "Reclamar";
       itemFooter.appendChild(button);
 
-      itemBody.append(h5, p, itemFooter);
-      item.append(itemHeader, itemBody);
+      item.append(itemHeader, itemBody,itemFooter);
       container.appendChild(item);
     });
   }

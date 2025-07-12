@@ -114,7 +114,7 @@ class ConfirmarCuentaView(APIView):
                 exito = True
             else:
                 mensaje = 'Enlace inválido o expirado'
-                exito = False
+                exito = False   
         except:
             mensaje = 'Enlace inválido'
             exito = False

@@ -103,30 +103,6 @@
         </nav>
     </section>
     <section class="items_grid" id="objetos-perdidos-container">
-        <div class="item">
-            <div class="item-header">
-              <img src="{% static '/img/logos/escudo.png'%}" alt="Objeto 1">
-            </div>
-            <div class="item-body">
-              <h5>Objeto perdido 1</h5>
-              <p>Descripción breve del objeto.</p>
-            </div>
-            <div class="item-footer">
-              <button class="btn btn-success primary-btn">Reclamar</button>
-            </div>
-          </div>
-          <div class="item">
-            <div class="item-header">
-              <img src="{% static '/img/logos/escudo.png'%}" alt="Objeto 1">
-            </div>
-            <div class="item-body">
-              <h5>Objeto perdido 2</h5>
-              <p>Descripción breve del objeto.</p>
-            </div>
-            <div class="item-footer">
-              <button class="btn btn-success primary-btn">Reclamar</button>
-            </div>
-          </div>
     </section>
     <section class="pagination-container">
         <nav aria-label="Paginación de objetos perdidos">
@@ -147,7 +123,7 @@
 {% endblock  %}
 {% block extra_js %}
     <script>
-        const objetosPerdidos1 = {{ objetos_json|safe }};
+        const objetosPerdidos = {{ objetos_json|safe }};
         const objetosPerdidos2 = [
             { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 1', descripcion: 'Descripción del objeto perdido 1', fecha: '2025-03-16' },
             { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 2', descripcion: 'Descripción del objeto perdido 2', fecha: '2025-03-15' },
@@ -168,7 +144,7 @@
             { imagen: '{% static "img/backgrounds/fondo.jpeg" %}', titulo: 'Objeto perdido 17', descripcion: 'Descripción del objeto perdido 17', fecha: '2025-03-11' }
         ];
     </script>
-    {% comment %} <script src="{% static 'js/items.js' %}"></script> {% endcomment %}
+    <script src="{% static 'js/items.js' %}"></script> 
     <script src="{% static 'js/filter.js' %}"></script> 
     <script type="module" src="{% static 'js/logout.js' %}?v={{ timestamp }}"></script>
 {% endblock %}
