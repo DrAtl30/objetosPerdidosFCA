@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework.authtoken",
     "apps",
     "email_service",
     "corsheaders",
@@ -179,3 +180,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 CSRF_TRUSTED_ORIGINS = [
     'https://*.ngrok-free.app'
 ]
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'HTTPS')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}

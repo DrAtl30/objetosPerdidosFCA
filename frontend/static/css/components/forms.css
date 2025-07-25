@@ -63,52 +63,12 @@
 .back-arrow:hover {
     color: #2C5234;
 }
-
-/* Estilos para el modal */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.modalContent {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    min-width: 300px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    position: relative;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    cursor: pointer;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-}
-
 .formualrio__error{
     font-size: 9.5px;
     margin-bottom: 0;
     display: none;
+    margin-top: 5px;
+    padding-right: 25px;
 }
 .formualrio__error-activo{
     display: block;
@@ -126,11 +86,15 @@
     text-decoration: underline;
 }
 
-.password-group {
+.input__pass{
     position: relative;
 }
+.input__pass input{
+    width: 100%;
+    padding-right: 2.5rem;
+}
 
-.toggle-password {
+.input__pass .toggle-password {
     position: absolute;
     top: 50%;
     right: 15px;
@@ -138,4 +102,5 @@
     cursor: pointer;
     color: #5a7561;
     font-size: 1.2rem;
+    z-index: 2;
 }

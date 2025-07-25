@@ -82,6 +82,7 @@ class RegistroUser(serializers.ModelSerializer):
 
         user = Usuario(**validated_data)
         user.set_password(password)
+        user.is_active = False
         user.save()
 
         if rol == "alumno":
@@ -127,45 +128,66 @@ ESTADO_OBJETO = [
     ("no reclamado", "No reclamado"),
 ]
 
+class ImagenSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='id_imagen', read_only=True)
+    ruta_imagen = serializers.ImageField(read_only=True)
+    class Meta:
+        model = Imagenobjeto  # o como se llame tu modelo de imagen
+        fields = ['id', 'ruta_imagen']
+
 class RegistroObjeto(serializers.ModelSerializer):
-    estado_objeto = serializers.ChoiceField(choices=ESTADO_OBJETO)
-    imagenes = serializers.ListField(
-        child = serializers.ImageField(),
-        write_only = True,
-        required = True,
-        error_messages = {
+    estado_objeto = serializers.ChoiceField(choices=Objetoperdido.ESTADO_OBJETO)
+    imagenes = ImagenSerializer(many=True, read_only=True)  # lectura de imágenes relacionadas
+
+    # Campo para subir imágenes, solo escritura
+    imagenes_upload = serializers.ListField(
+        child=serializers.ImageField(),
+        write_only=True,
+        required=True,
+        error_messages={
             'required': 'Se requiere al menos una imagen del objeto.',
             'blank': 'No se pueden subir el objeto sin evidencia.'
         }
     )
+
     class Meta:
         model = Objetoperdido
         fields = [
+            'id_objeto',
             'nombre',
             'descripcion',
             'fecha_perdida',
             'lugar_perdida',
             'estado_objeto',
             'imagenes',
+            'imagenes_upload',
         ]
-    
-    def validate_imagenes(self, value):
+
+    def validate_imagenes_upload(self, value):
         if not value:
             raise serializers.ValidationError("Debes subir al menos una imagen")
         return value
-    
-    def create(self, validate_data):
-        imagenes = validate_data.pop('imagenes')
-        
-        objeto = Objetoperdido.objects.create(
-            **validate_data,
-            id_usuario_reclamante =  None
-        )
-        
+
+    def create(self, validated_data):
+        imagenes = validated_data.pop('imagenes_upload')
+        objeto = Objetoperdido.objects.create(**validated_data, id_usuario_reclamante=None)
+
         for imagen in imagenes:
-            Imagenobjeto.objects.create(
-                id_objeto = objeto,
-                ruta_imagen = imagen
-            )
-            
+            Imagenobjeto.objects.create(id_objeto=objeto, ruta_imagen=imagen)
+
         return objeto
+
+    def update(self, instance, validated_data):
+        imagenes = validated_data.pop('imagenes_upload', None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        if imagenes is not None:
+            # Si quieres reemplazar las imágenes, primero elimínalas:
+            instance.imagenes.all().delete()
+            for imagen in imagenes:
+                Imagenobjeto.objects.create(id_objeto=instance, ruta_imagen=imagen)
+
+        return instance
+

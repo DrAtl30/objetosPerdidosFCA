@@ -6,3 +6,4 @@ out/
 .vscode/
 .env
 app/media/objetos/
+ngrok.py

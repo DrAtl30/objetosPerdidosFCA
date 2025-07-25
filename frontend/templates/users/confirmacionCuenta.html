@@ -29,10 +29,25 @@
 
         <div class="msj-confirm">
             {% if exito %}
-                <h2 class="msj-si"><i class="bi bi-check-circle text-success"></i>{{ mensaje }}</h2>
+                <h2><i class="bi bi-check-circle text-success"></i></h2>
+                <h2 class="msj-si">{{ mensaje }}</h2>
+            {% else %}
+                <i class="bi bi-x-circle text-danger"></i>
+                <h2 class="msj-no">{{ mensaje }}</h2>
+            {% endif %}
+        </div>
+        <div class="btns">
+            {% if exito %}
                 <a href="{% url 'login' %}" class="btn btn-success primary-btn">Inicia sesión</a>
             {% else %}
-                <h2 class="msj-no"><i class="bi bi-x-circle text-danger"></i>{{ mensaje }} </h2>
+                {% if uid %}
+                    <form action="{% url 'reenviar_confirmacion' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="uid" value="{{uid}}">
+                        <button type="submit" class="btn btn-success primary-btn">Reenviar correo</button>
+                    </form>
+                {% endif %}
+
                 <a href="{% url 'home' %}" class="btn btn-success primary-btn" >Volver al inicio</a>
             {% endif %}
         </div>

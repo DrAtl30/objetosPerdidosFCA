@@ -21,6 +21,17 @@
     margin: 5px;
 }
 
+.primary-btn.sign{
+    background-color: white;
+    color: #5a7561;
+    font-size: 1.2rem;
+}
+.primary-btn.sign:hover{
+    background-color: #DED9D9;
+    color: #157347;
+}
+
+
 .primary-btn.search-btn {
     min-width: 30px;
     margin: 5px;
@@ -30,19 +41,41 @@
     margin: 5px;
 }
 
-.primary-btn.add-obj .icono {
+.primary-btn .filter-text{
+    font-size: 13px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.primary-btn.add-obj .icono, .primary-btn.comment .icono {
     display: none;
 }
 
+.primary-btn.edit,.primary-btn.hidden, .primary-btn.delete{
+    min-width: 30px;
+    margin: 5px;
+}
+
 @media screen and (max-width: 700px) {
-    .primary-btn.filter-btn, .primary-btn.add-obj {
+    .primary-btn.sign{
+        background-color: white;
+        color: #5a7561;
+        font-size: 1.5rem;
+        padding: 5px;
+    }
+    .primary-btn.sign:hover{
+        background-color: white;
+        color: #157347;
+    }
+    .primary-btn.filter-btn, .primary-btn.add-obj,.primary-btn.sign, .primary-btn.comment {
         min-width: 30px;
         margin: 5px;
     }
-    .add-text{
+    .add-text, .comment-text{
         display: none;
     }
-    .primary-btn.add-obj .icono {
+    .primary-btn.add-obj .icono, .primary-btn.comment .icono {
         display: block;
     }
 }

@@ -36,30 +36,39 @@
     align-items: center;
 }
 
+.name-user {
+    font-size: 1.25rem;
+    color: #333;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.name-user i {
+    font-size: 1.5em;
+    color: #444;
+}
 
 @media screen and (max-width: 700px) {
-    /* header */
-    .header-nav h1{
-        font-size: 20px;
-        letter-spacing: 1;
-    }
+
     .header-nav .admin-title{
-        font-size: 20px;
+        font-size: 18px;
         letter-spacing: 0;
     }
     .header-nav .nav-section.izquierda {
         flex-direction: column; /* apila los elementos verticalmente */
         align-items: flex-start; /* opcional: alinea a la izquierda */
     }
-    .header-nav .nav-section.centro {
-        text-align: center;
-    }
     
     .header-nav .name-user {
         margin-top:10px; /* para separación */
-        font-size: 12px;
+        font-size: 1.05rem;
         font-weight: bold;
-        color: blueviolet;
+    }
+    .header-nav .name-user i {
+        font-size: 1.15rem;
     }
     .header-nav .nav-section.derecha {
         flex-direction: column; /* apila los elementos verticalmente */

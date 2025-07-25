@@ -7,8 +7,12 @@
 </head>
 <body>
     <h2 style="color: #2c3e50;">¡Bienvenido al Sistema de Objetos Perdidos de la Facultad de Contaduría y Administración!</h2>
-    <p>Hola <strong>{{nombre_alumno}} {{apellidos_alumno}}</strong></p> 
-    <p>Tu contraseña es: <strong> {{password}} </strong></p>
+    <p>Hola <strong>{{nombre_alumno}} {{apellidos_alumno}}</strong></p>
+    {% if password %}
+        <p>Tu contraseña es: <strong> {{password}} </strong></p>
+    {% else %}
+        <p>Usa la contraseña que ya se te ha enviado anteriormente</p>
+    {% endif %}
     <p><small>No compartas tus credenciales con nadie</small></p>
     <p>Por favor haz clic en el siguiente enlace para confirmar tu cuenta:</p>
     <a href="{{ url_confirmacion }}" style="display:inline-block;padding:10px 20px;background-color:#198754;color:white;text-decoration:none;border-radius:5px;font-weight:bold;">Confirmar cuenta</a>

@@ -1,0 +1,268 @@
+:root {
+    --modal-backdrop: rgba(0, 0, 0, 0.5);
+    --modal-radius: 8px;
+    --modal-padding: 1.5rem;
+    --modal-max-width: min(90%, 420px);
+    --modal-info-max-width: min(85%, 900px);
+    --modal-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    --modal-font-size: 1rem;
+
+    /* Colores de estado */
+    --modal-success: #198754; /* verde bootstrap-ish */
+    --modal-error: #dc3545; /* rojo bootstrap-ish */
+    --modal-neutral: #0d6efd; /* azul */
+}
+
+/* Contenedor overlay */
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--modal-backdrop);
+    z-index: 1000;
+}
+
+/* Clase que muestra el modal (úsala en JS en lugar de style.display) */
+.modal.is-open {
+    display: flex;
+    animation: modal-fade 150ms ease-out forwards;
+}
+
+/* Caja de contenido */
+.modalContent {
+    position: relative;
+    background-color: blue;
+    padding: var(--modal-padding);
+    border-radius: var(--modal-radius);
+    width: auto;
+    max-width: var(--modal-max-width);
+    text-align: center;
+    box-shadow: var(--modal-shadow);
+    font-size: var(--modal-font-size);
+    animation: modal-scale 150ms ease-out both;
+    overflow-wrap: anywhere;
+}
+
+#info_objeto .modalContent {
+    width: 100%;
+    max-width: var(--modal-info-max-width);
+    height: 90%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Variante: barra superior por estado */
+.modalContent::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    background: var(--modal-neutral);
+}
+
+.modal--success .modalContent::before {
+    background: var(--modal-success);
+}
+
+.modal--error .modalContent::before {
+    background: var(--modal-error);
+}
+.modal--confirmacion .modalContent::before {
+    background: var(--modal-error);
+}
+
+/* Botón cerrar */
+.close,
+.modal__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    line-height: 1;
+    font-size: 28px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.close:hover,
+.close:focus,
+.modal__close:hover,
+.modal__close:focus {
+    color: #000;
+    text-decoration: none;
+    outline: none;
+}
+
+.close:focus-visible,
+.modal__close:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+/* Mensaje */
+.modalMessage {
+    margin: 0;
+    margin-top: 1.25rem;
+    line-height: 1.4;
+}
+
+.modalHeader,
+.modalMain,
+.modalFooter {
+    width: 100%;
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+}
+.modalHeader {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: white;
+}
+
+.modalMain {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: .5rem;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+}
+
+.modalMain .img {
+    flex: 0 0 30rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 22.5rem;
+    height: 28.125rem;
+    overflow: hidden;
+    margin: 1rem;
+}
+
+.modalMain .data {
+    flex:  1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: .5rem;
+    overflow-wrap: break-word;
+    color: #333;
+}
+.modalMain .data .nameInfo {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #111;
+}
+.modalMain .data .descInfo,.modalMain .data .lugarInfo,.modalMain .data .fechaInfo {
+    margin: 0;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+.modalMain .data strong {
+    color: #444;
+}
+
+.modalFooter {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.modalComentario {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 500px;
+    margin-left: auto;
+}
+.modalComentario textarea{
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: .25rem;
+    font-size: 1rem;
+    resize: none;
+    min-height: 2rem;
+    outline-offset: 2px;
+    transition: border-color 0.2s ease-in-out;
+}
+.modalComentario textarea:focus {
+    border-color: var(--modal-neutral);
+    box-shadow: 0 0 5px var(--modal-neutral);
+}
+
+/* Animaciones */
+@keyframes modal-fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes modal-scale {
+    from {
+        transform: scale(0.96) translateY(-4px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Respeto a usuarios sin animaciones */
+@media (prefers-reduced-motion: reduce) {
+    .modal.is-open,
+    .modalContent {
+        animation: none !important;
+    }
+}
+
+/* Modo oscuro básico */
+@media (prefers-color-scheme: dark) {
+    .modalContent {
+        background-color: white;
+        color: #170a0a;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+    }
+    .close,
+    .modal__close {
+        color: #ccc;
+    }
+    .close:hover,
+    .close:focus {
+        color: #000;
+    }
+}
+@media screen and (max-width: 700px) {
+
+    .modalMain .img {
+        max-width: 19.5rem;
+        height: 25.125rem;
+    }
+}

@@ -1,17 +1,16 @@
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from apps.tokens import custom_token_generator
+from django.core.signing import TimestampSigner
 
 
-def enviar_correo_confirmacion(alumno,password):
-    token = custom_token_generator.make_token(alumno)
-    uid = urlsafe_base64_encode(force_bytes(alumno.id_usuario))
+def enviar_correo_confirmacion(alumno,password=None):
+    signer = TimestampSigner()
+    a_id = alumno.id_usuario 
+    uid = signer.sign(str(a_id))
     nombre = alumno.nombre
     apellidos = alumno.apellidos
-    url_confirmacion = f"{settings.FRONTEND_URL}/api/confirmar-cuenta/{uid}/{token}/"
+    url_confirmacion = f"{settings.FRONTEND_URL}/api/confirmar-cuenta/{uid}"
 
     asunto = "Confirma tu cuenta"
     mensaje_html = render_to_string(

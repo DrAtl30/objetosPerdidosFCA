@@ -7,17 +7,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    
 }
 
 .account-container {
     position: relative;
-    width: 350px;
-    height: 350px;
+    width: 90%;
+    max-width: 350px;
+    min-height: 350px;
     margin: 0 auto;
     padding: 20px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .account-header {
@@ -31,12 +36,16 @@
 }
 
 .msj-confirm{
-    width: 350;
+    width: 100%;
     margin: 0 auto;
-    padding: 10px 20px;
-    border-radius: 4px;
+    padding: 10px;
     text-align: center;
 }
+.msj-confirm i{
+    font-size: 40px;
+}
+
+
 
 .msj-si{
     color: #198754;
@@ -45,9 +54,14 @@
 .msj-no{
     color: #dc3545;
 }
+.btns{
+    text-align: center;
+    margin-top: auto;
+}
 
-.msj-confirm a{
-    position: absolute;
-    bottom: 50px;
-    transform: translateX(-50%);
+.btns a, button{
+    display: block;
+    margin: 10px auto;
+    width: fit-content;
+    max-width: 90%;
 }

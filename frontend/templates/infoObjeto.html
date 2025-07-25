@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba</title>
+    <link rel="stylesheet" href="../static/css/components/slider.css">
+    <link rel="stylesheet" href="../static/css/components/button.css">
+    <link rel="stylesheet" href="../static/css/prueba.css">
+</head>
+<body>
+    <div id="info_objeto" class="modal modal--info" role="dialog" aria-modal="true" aria-live="assertive">
+        <div class="modalContent">
+            <section class="modalHeader">
+                <h2 class="modalMessage">Informacion del Objeto</h2>
+                <button class="modal__close close" aria-label="Cerrar">&times;</button>
+            </section>
+            <section class="modalMain">
+                <div class="slider-wrapper hidden">
+                    <div class="carruseles">
+                        <section class="slider-section">
+                            <img src="../static/img/default.png" alt="" srcset="">
+                        </section>
+                        <section class="slider-section">
+                            <img src="../static/img/default.png" alt="" srcset="">
+                        </section>
+                        <section class="slider-section">
+                            <img src="../static/img/default.png" alt="" srcset="">
+                        </section>
+                    </div>
+                    <div class="btn-left"><i class="bi bi-caret-left-fill"></i></div>
+                    <div class="btn-right"><i class="bi bi-caret-right-fill"></i></div>
+                </div>
+                <div class="data">
+                    <p><strong>Nombre:</strong> <span id="objetoNombre"></span></p>
+                    <p><strong>Descripcion:</strong> <span id="objetoDescripcion"></span></p>
+                    <p><strong>Ubicacion:</strong> <span id="objetoLugar"></span></p>
+                    <p><strong>Fecha encontrado:</strong> <span id="objetoFecha"></span></p>
+
+                </div>
+
+                <button id="btnReclamar" class="primary-btn">Reclamar</button>
+            </section>
+            <section class="modalFooter">
+                <div class="modalComentario">
+                    <input type="text" placeholder="Comentario" >
+                    <button id="btnComentar" class="secondary-btn">Comentar</button>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

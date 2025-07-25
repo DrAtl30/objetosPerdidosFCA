@@ -12,18 +12,20 @@
     <link rel="stylesheet" href="{% static 'css/components/button.css' %}">
 {% endblock %}
 
+{% block vista %}vista-admin{% endblock  %}
+
 <!-- Header -->
 {% block class-header %}header-nav{% endblock  %}
 <!-- Nav-left-->
 {% block nav-left %}
     <img class="logo" src="{% static 'img/logos/escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEMex">
     {% if request.user.is_authenticated %}
-        <p class="name-user"><i class="bi bi-person-circle"></i> {{ admin_name }} {{ admin_lastname }}</p>
+        <p class="name-user"><i class="bi bi-person-circle"></i>{{ admin_name }}</p>
     {% endif %}
 {% endblock %}
 <!--Nav center-->
 {% block nav-center %}
-    <h1 class="admin-title">Panel de Administración</h1>
+    <h1 class="title">Panel de Administración</h1>
 {% endblock  %}
 <!--Nav right-->
 {% block nav-right %}
@@ -127,13 +129,11 @@
     </section>
 {% endblock %}
 
-
-
 {% block extra_js %}
     <script>
         const objetosPerdidos = {{ objetos_json|safe }};
     </script>
-    <script src="{% static 'js/items.js' %}"></script>
+    <script type="module" src="{% static 'js/items.js' %}"></script> 
     <script src="{% static 'js/filter.js' %}"></script>
     <script type="module" src="{% static 'js/logout.js' %}?v={{ timestamp }}"></script>
 {% endblock %}

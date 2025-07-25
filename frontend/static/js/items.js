@@ -1,118 +1,126 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const container = document.getElementById("objetos-perdidos-container");
-  const pagination = document.getElementById("pagination");
-  const itemsPerPage = 8;//aqui se configura el numero de elementos que se muestran en el inicio del usuario
-  let currentPage = 1;
+import {
+    renderPage,
+    renderPagination,
+    updatePaginationStates,
+} from './renderObjeto.js';
+import { editar, toggleOcultar, eliminar } from './accionesObjeto.js';
+let objetosVisibles = [];
+let ocultos = [];
+let objetosFiltrados = [];
 
-  // ||objetosPerdidos.length === 0
-  if (typeof objetosPerdidos === "undefined" || !Array.isArray(objetosPerdidos)) {
-    container.innerHTML = `<h1 style="text-align:center; width:100%;">No hay objetos para mostrar</h1>`;
-    if (pagination) pagination.style.display = "none";
-    return;
-  }
+document.addEventListener('DOMContentLoaded', function () {
+    const isAdmin = document.body.classList.contains('vista-admin');
+    const container = document.getElementById('objetos-perdidos-container');
+    const pagination = document.getElementById('pagination');
+    const itemsPerPage = 8;
+    let currentPage = 1;
+    let totalPages;
 
-  const totalPages = Math.ceil(objetosPerdidos.length / itemsPerPage);
+    fetch('/api/objetos')
+        .then((response) => response.json())
+        .then((data) => {
+            objetosVisibles = data || [];
 
-  function renderPage(page) {
-    container.innerHTML = "";
-    const start = (page - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    const objetosPagina = objetosPerdidos.slice(start, end);
+            if (isAdmin) {
+                fetch('/api/obtener_ocultos')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        ocultos = data.ocultos || [];
+                        renderAll();
+                    });
+            } else {
+                ocultos = [];
+                renderAll();
+            }
+        })
+        .catch(() => {
+            // manejar error
+        });
 
-    objetosPagina.forEach((objeto) => {
-      const item = document.createElement("div");
-      item.className = "item";
+    function renderAll() {
+        if (!isAdmin) {
+            // filtra los objetos que NO están ocultos
+            objetosFiltrados = objetosVisibles.filter(
+                (obj) => !ocultos.includes(Number(obj.id_objeto))
+            );
+        } else {
+            // admin ve todos
+            objetosFiltrados = objetosVisibles;
+        }
 
-      const itemHeader = document.createElement("div");
-      itemHeader.className = "item-header";
-      const img = document.createElement("img");
-      img.src = objeto.imagen;
-      img.alt = "Foto del objeto";
-      img.className = "objeto-imagen";
-      itemHeader.appendChild(img);
-
-      const itemBody = document.createElement("div");
-      itemBody.className = "item-body";
-      const h5 = document.createElement("h5");
-      h5.textContent = objeto.titulo;
-      const p = document.createElement("p");
-      p.textContent = objeto.descripcion;
-      itemBody.append(h5, p)
-
-      const itemFooter = document.createElement("div");
-      itemFooter.className = "item-footer";
-      const button = document.createElement("button");
-      button.className = "btn btn-success primary-btn";
-      button.textContent = "Reclamar";
-      itemFooter.appendChild(button);
-
-      item.append(itemHeader, itemBody,itemFooter);
-      container.appendChild(item);
-    });
-  }
-
-  function renderPagination() {
-    pagination.innerHTML = "";
-
-    const liPrev = document.createElement("li");
-    liPrev.className = "page-item";
-    liPrev.innerHTML = `<a class="page-link primary-btn" href="#">Anterior</a>`;
-    pagination.appendChild(liPrev);
-
-    for (let i = 1; i <= totalPages; i++) {
-      const li = document.createElement("li");
-      li.className = "page-item";
-      if (i === currentPage) li.classList.add("active");
-
-      li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-      pagination.appendChild(li);
+        if (objetosFiltrados.length === 0) {
+            container.classList.remove('items_grid');
+            container.innerHTML = `<h1 class="mensaje-vacio">No hay objetos para mostrar</h1>`;
+            if (pagination) pagination.style.display = 'none';
+            return;
+        } else {
+            if (pagination) pagination.style.display = '';
+            container.classList.add('items_grid');
+        }
+        totalPages = Math.ceil(objetosFiltrados.length / itemsPerPage);
+        renderPage(
+            objetosFiltrados,
+            container,
+            currentPage,
+            itemsPerPage,
+            ocultos,
+            isAdmin,
+            { editar, toggleOcultar, eliminar: handleEliminar }
+        );
+        renderPagination(pagination, totalPages, currentPage);
+        updatePaginationStates(pagination, totalPages, currentPage);
     }
 
-    const liNext = document.createElement("li");
-    liNext.className = "page-item";
-    liNext.innerHTML = `<a class="page-link primary-btn" href="#">Siguiente</a>`;
-    pagination.appendChild(liNext);
+    async function handleEliminar(id) {
+        const exito = await eliminar(id);
+        if (!exito) return;
 
-    updatePaginationStates();
-  }
+        // Actualiza la lista global quitando el objeto eliminado
+        objetosVisibles = objetosVisibles.filter((obj) => obj.id_objeto !== id);
 
-  function updatePaginationStates() {
-    const pageItems = pagination.querySelectorAll(".page-item");
-    const prev = pageItems[0];
-    const next = pageItems[pageItems.length - 1];
+        // Vuelve a filtrar según ocultos y rol admin
+        if (!isAdmin) {
+            objetosFiltrados = objetosVisibles.filter(
+                (obj) => !ocultos.includes(Number(obj.id_objeto))
+            );
+        } else {
+            objetosFiltrados = objetosVisibles;
+        }
 
-    prev.classList.toggle("disabled", currentPage === 1);
-    next.classList.toggle("disabled", currentPage === totalPages);
+        // Recalcula totalPages, y ajusta currentPage si es necesario
+        totalPages = Math.ceil(objetosFiltrados.length / itemsPerPage);
+        if (currentPage > totalPages)
+            currentPage = totalPages > 0 ? totalPages : 1;
 
-    pageItems.forEach((item, index) => {
-      const link = item.querySelector(".page-link");
-      if (link && !isNaN(link.textContent)) {
-        const pageNum = parseInt(link.textContent);
-        item.classList.toggle("active", pageNum === currentPage);
-      }
-    });
-  }
-
-  pagination.addEventListener("click", function (e) {
-    e.preventDefault();
-    const target = e.target;
-    if (!target.classList.contains("page-link")) return;
-
-    const text = target.textContent.trim();
-
-    if (text === "Anterior" && currentPage > 1) {
-      currentPage--;
-    } else if (text === "Siguiente" && currentPage < totalPages) {
-      currentPage++;
-    } else if (!isNaN(text)) {
-      currentPage = parseInt(text);
+        // Renderiza todo
+        renderAll();
     }
 
-    renderPage(currentPage);
-    renderPagination();
-  });
+    pagination.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = e.target;
+        if (!target.classList.contains('page-link')) return;
 
-  // Inicializar
-  renderPage(currentPage);
-  renderPagination();
+        const text = target.textContent.trim();
+
+        if (text === 'Anterior' && currentPage > 1) {
+            currentPage--;
+        } else if (text === 'Siguiente' && currentPage < totalPages) {
+            currentPage++;
+        } else if (!isNaN(text)) {
+            currentPage = parseInt(text);
+        }
+
+        renderPage(
+            objetosFiltrados,
+            container,
+            currentPage,
+            itemsPerPage,
+            ocultos,
+            isAdmin,
+            { editar, toggleOcultar, eliminar: handleEliminar }
+        );
+        renderPagination(pagination, totalPages, currentPage);
+        updatePaginationStates(pagination, totalPages, currentPage);
+    });
 });

@@ -13,8 +13,10 @@ urlpatterns = [
     path("login/", views.inicio_session, name="login"),
     path("registro/", views.user_registro, name="user_registro"),
     path("registro-objeto/", views.object_registro, name="object_registro"),
+    path("editar-objeto/<int:id_objeto>", views.object_registro, name="editar_objeto"),
     path("administrador/", views.home_admin, name="home_admin"),
     path("send-email", EmailAPIView.as_view(), name="send-email"),
+    path("prueba/", views.prueba, name="prueba"),
 ]
 
 if settings.DEBUG:

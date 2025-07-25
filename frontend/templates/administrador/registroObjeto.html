@@ -25,36 +25,41 @@
             <div class="body-container">
                 <div class="photo-container file" id="photo-container">
                     <span id="no-img-msj">Arrastra y suelta una foto aquí o haz clic para seleccionar</span>
-                    <input type="file" name="photo" id="photo-input" accept="image/*" multiple>
+                    <input type="file" name="imagenes_upload" id="photo-input" accept="image/*" multiple>
 
-                    <div class="slider-wrapper hidden">
-                        <div class="carruseles"></div>
+                    <div class="slider-wrapper hiddenSlider">
+                        <div class="carruseles">
+                            {% for img in imagenes %}
+                                <img src="{{ img.ruta_imagen.url }}" alt="Imagen del objeto" class="img-prev">
+                            {% endfor %}
+                        </div>
                         <div class="btn-left"><i class="bi bi-caret-left-fill"></i></div>
                         <div class="btn-right"><i class="bi bi-caret-right-fill"></i></div>
                     </div>
-                    
                 </div>
                 <div class="form-container">
-                        
+                    {% if objeto %}
+                        <input type="hidden" id="id_objeto" name="id_objeto" value="{{ objeto.id_objeto }}">
+                    {% endif %}
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="{{ objeto.nombre|default:'' }}"required>
                     </div>
                     <div class="mb-3">
-                        <label for="descripcion" class="form-label">Descripción</label>
-                        <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Descripción" rows="3" required></textarea>
+                        <label for="descripcion" class="form-label">Descripción </label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Descripción (máximo 300 carcateres)" rows="3" maxlength="300" required>{{ objeto.descripcion|default:'' }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label for="fecha" class="form-label">Fecha</label>
-                        <input type="date" class="form-control" id="fecha" name="fecha" required>
+                        <input type="date" class="form-control" id="fecha" name="fecha" value="{{ objeto.fecha_perdida|date:'Y-m-d' }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="lugar" class="form-label">Lugar</label>
                         <select class="form-control" id="lugar" name="lugar" required>
                             <option value="">Seleccione un lugar</option>
-                            <option value="Sala de Cómputo 1">Sala de Cómputo 1</option>
-                            <option value="Salón 9">Salón 9</option>
-                            <option value="Sala de usos múltiples">Sala de usos múltiples</option>
+                            <option value="Sala de Cómputo 1" {% if objeto.lugar_perdida == 'Sala de Cómputo 1' %}selected{% endif %}>Sala de Cómputo 1</option>
+                            <option value="Salón 9" {% if objeto.lugar_perdida == 'Salón 9' %}selected{% endif %}>Salón 9</option>
+                            <option value="Sala de usos múltiples" {% if objeto.lugar_perdida == 'Sala de usos múltiples' %}selected{% endif %}>Sala de usos múltiples</option>
                         </select>
                     </div>
                     <!-- Contenedor para centrar el botón -->
@@ -67,6 +72,17 @@
     </div>
 {% endblock  %}
 {% block extra_js %}
+    {% if objeto and objeto.imagenes.all %}
+        <script>
+            const imagenesExistentes = [
+                {% for img in objeto.imagenes.all %}
+                    "{{ img.ruta_imagen.url }}"{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            ];
+        </script>
+    {% else %}
+        <script>const imagenesExistentes = [];</script>
+    {% endif %}
+
     <script type="module" src="/static/js/registro_objeto.js"></script>
-    {% comment %} <script src="{% static 'js/slider.js' %}"></script> {% endcomment %}
 {% endblock %}

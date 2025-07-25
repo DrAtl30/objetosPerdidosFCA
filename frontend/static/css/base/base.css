@@ -45,6 +45,12 @@ main {
     padding: 20px;
 }
 
+.title{
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
 footer{
     background-image: url('../../img/footer/pleca-con-hexagonos-LARGA.jpg');
     background-repeat: no-repeat;
@@ -73,4 +79,11 @@ footer{
     font-size: 18px;
     font-weight: bold;
     letter-spacing: 2px;
+}
+
+@media screen and (max-width: 700px) {
+    .title{
+        font-size: 1.2rem;
+        letter-spacing: 0;
+    }
 }

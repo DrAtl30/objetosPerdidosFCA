@@ -5,15 +5,19 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/components/nav.css' %}">
     <link rel="stylesheet" href="{% static 'css/components/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/button.css' %}">
 {% endblock %}
 
-{% block class-header %}l-header header-nav{% endblock  %}
+{% block class-header %}l-header{% endblock  %}
 
 {% block nav-left %}
-    <a href="{% url 'home' %}" class="back-arrow">&larr;</a>
+    <a href="{% url 'home' %}" class="back-arrow"><i class="bi bi-arrow-left-circle-fill"></i></a>
 {% endblock  %}
 {% block nav-center %}
     <h1 class="title">Inicio de Sesión</h1>
+{% endblock  %}
+{% block nav-right %}
+    <a href="{% url 'user_registro' %}" class="btn primary-btn sign"><i class="bi bi-person-fill-add"></i></a>
 {% endblock  %}
 
 {% block class-main %}login{% endblock  %}
@@ -29,8 +33,10 @@
                 <input type="email" class="form-control" id="correo_electronico" name="correo_electronico" placeholder="Correo Electrónico" required>
             </div>
             <div class="mb-3 password-group">
-                <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Contraseña" required>
-                <i class="bi bi-eye-slash-fill toggle-password" data-target="contrasena"></i>
+                <div class="input__pass">
+                    <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Contraseña" required>
+                    <i class="bi bi-eye-slash-fill toggle-password" data-target="contrasena"></i>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
             <div class="forgot-password">

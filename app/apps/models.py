@@ -134,7 +134,7 @@ class Comentario(models.Model):
 class Imagenobjeto(models.Model):
     id_imagen = models.AutoField(primary_key=True)
     id_objeto = models.ForeignKey(
-        "Objetoperdido", models.DO_NOTHING, db_column="id_objeto", blank=True, null=True, related_name="imagenes"
+        "Objetoperdido", on_delete=models.CASCADE, db_column="id_objeto", blank=True, null=True, related_name="imagenes"
     )
     id_reporte = models.ForeignKey(
         "Reporteentrega",
