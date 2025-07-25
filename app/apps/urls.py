@@ -14,11 +14,8 @@ urlpatterns = [
     path("confirmar-cuenta/<suid>",ConfirmarCuentaView.as_view(),name="confirma-cuenta"),
     path("reenviar_confirmacion",ReenviarCorreoConfirmacion.as_view(),name="reenviar_confirmacion"),
     path("verificarCorreoConfirmado/",verificar_correo_confirmado,name="verificarCorreoConfirmado"),
-    # path("registro-objeto/", RegistroObjetoView.as_view(), name="registro_objeto"),
-    # path("editar-objeto/<int:id_objeto>", RegistroObjetoView.as_view(), name="editar_objeto"),
     path("toggle_ocultar/",toggle_ocultar_objeto,name="toggle_ocultar_objeto"),
     path("obtener_ocultos/",obtener_ocultos,name="obtener_ocultos"),
-    # path("eliminar_objeto/<int:id_objeto>",eliminar_objeto,name="eliminar_objeto"),
     
     path("", include(router.urls)),
 ]

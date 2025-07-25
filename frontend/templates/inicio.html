@@ -123,12 +123,7 @@
     
 {% endblock  %}
 {% block extra_js %}
-    <script>
-        
 
-        const objetosPerdidos = {{ objetos_json|safe }};
-    </script>
-    <script type="module" src="{% static 'js/modalprueba.js' %}"></script>
     <script type="module" src="{% static 'js/items.js' %}"></script> 
     <script src="{% static 'js/filter.js' %}"></script> 
     <script type="module" src="{% static 'js/logout.js' %}?v={{ timestamp }}"></script>

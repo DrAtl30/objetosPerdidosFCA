@@ -17,7 +17,7 @@ from .models import Usuario, Objetoperdido,Imagenobjeto
 # Create your views here.
 logger = logging.getLogger(__name__)
 def prueba(request):
-    return render(request, 'infoObjeto.html')
+    return render(request, 'base.html')
 
 def home(request):
     user_name = ''
@@ -207,7 +207,7 @@ class LogOutAlumnoView(APIView):
 class ObjetoPerdidoViewSet(ModelViewSet):
     queryset = Objetoperdido.objects.all()
     serializer_class = RegistroObjeto
-    # permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     
     def get_queryset(self):
         user = self.request.user
@@ -226,8 +226,8 @@ class ObjetoPerdidoViewSet(ModelViewSet):
             return Objetoperdido.objects.exclude(id_objeto__in=ocultos)
     
     def create(self, request, *args, **kwargs):
-        # if request.user.rol != 'administrador':
-        #     return Response({'error': 'No tienes permiso para realizar esta acción'}, status=status.HTTP_403_FORBIDDEN)
+        if request.user.rol != 'administrador':
+            return Response({'error': 'No tienes permiso para realizar esta acción'}, status=status.HTTP_403_FORBIDDEN)
         
         serializer = self.get_serializer(data=request.data, context={'request':request})
         serializer.is_valid(raise_exception=True)
