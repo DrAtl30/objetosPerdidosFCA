@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from apps.models import Usuario, Administrador
 from django.db import transaction, IntegrityError
+import re
 
 
 class Command(BaseCommand):
@@ -12,7 +13,23 @@ class Command(BaseCommand):
         correo = input("Correo institucional: ").strip()
         nombre = input("Nombre(s): ").strip()
         apellidos = input("Apellidos: ").strip()
-        contrasena = input("Contraseña: ").strip()
+        
+        while True:
+            contrasena = input("Contraseña: ")
+
+            if len(contrasena)< 8 :
+                self.stdout.write(self.style.WARNING("La contraseña debe se mayor a 8 caracteres"))
+                continue
+            if not re.search(r'[A-Z]',contrasena):
+                self.stdout.write(self.style.WARNING("Debes tener al menos una caracter en mayúsculas"))
+                continue
+            if not re.search(r'[a-z]', contrasena):
+                self.stdout.write(self.style.WARNING("Debes tener al menos un carácter en minúsculas"))
+                continue
+            if not re.search(r'[\W_]', contrasena):
+                self.stdout.write(self.style.WARNING("Debes tener al menos un carácter especial"))
+                continue
+            break
 
         try:
             with transaction.atomic():

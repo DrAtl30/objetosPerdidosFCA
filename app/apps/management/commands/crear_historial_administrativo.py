@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = "Crea un nuevo registro en HistorialAdministrativo de forma interactiva"
 
     def handle(self, *args, **kwargs):
-        self.stdout.write("=== Crear nuevo historial administrativo ===")
+        self.stdout.write("\n=== Crear nuevo historial administrativo ===\n")
 
         administdores = Administrador.objects.select_related("id_usuario").all()
 
@@ -16,14 +16,20 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR("❌ No hay administradores registrados."))
             return
 
-        self.stdout.write("Seleccione una cuenta de administrador")
+        self.stdout.write("Seleccione un número de las cuentas dispoibles de perfil administrador")
+        self.stdout.write("Seleccione '0' para cancelar\n ")
         for idx, admin in enumerate(administdores, start=1):
             usuario = admin.id_usuario
             self.stdout.write(f"{idx}. {usuario.nombre} {usuario.apellidos} ({usuario.correo_institucional})")
 
         while True:
+            
             try:
-                selection = int(input("Seleccione una cuenta de administrador: "))
+                selection = int(input("Espero tus indicaciones: "))
+                if selection == 0:
+                    self.stdout.write(self.style.SUCCESS("\n Retornar al menú \n"))
+                    return
+                
                 if 1 <= selection <= len(administdores):
                     admin_select = administdores[selection - 1]
                     user_admin = admin_select.id_usuario
@@ -35,8 +41,39 @@ class Command(BaseCommand):
 
         nombre = input("Nombre(s): ").strip()
         apellidos = input("Apellidos: ").strip()
-        num_empleado = input("Número de empleado: ").strip()
-        curp = input("CURP: ").strip()
+        
+        while True:
+            num_empleado = input("Número de empleado (máx, 7 caracteres): ").strip()
+
+            if len(num_empleado) ==0:
+                self.stdout.write(self.style.WARNING("Debes escribir un número de empleado"))
+                continue
+            if not num_empleado.isdigit():
+                self.stdout.write(self.style.WARNING("Solo se aceptan números naturales"))     
+                continue
+            if len(num_empleado) > 7:
+                self.stdout.write(self.style.WARNING("Demasiado largo, deben de ser 7 dígitos"))     
+                continue
+
+            if len(num_empleado)!= 7:
+                self.stdout.write(self.style.WARNING("Deben de ser 7 dígitos, si no los tiene agrege ceros a la izquierda"))
+                continue
+            break
+
+        
+        while True:
+            curp = input("CURP: ").strip().upper()
+            if len(curp) == 0 :
+                self.stdout.write(self.style.WARNING("Debe de ingresar una CURP"))
+                continue
+            if not curp.isalnum():
+                self.stdout.write(self.style.WARNING("La CURP solo se compone de números y letras"))
+                continue
+            if len(curp)!=18:
+                self.stdout.write(self.style.WARNING("La CURP debe tener exactamente 18 carácteres"))
+                continue
+            break
+
         correo = input("Correo: ").strip()
 
         historial = HistorialAdministrativo.objects.create(

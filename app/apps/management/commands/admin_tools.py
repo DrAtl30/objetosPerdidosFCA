@@ -20,10 +20,10 @@ class Command(BaseCommand):
         while True:
             self.stdout.write("\n--- Menú para administrar cuenta Administrador ---")
             self.stdout.write("1 - Crear Administrador")
-            self.stdout.write("2 - Cambiar contraseña del Administrador")
-            self.stdout.write("3 - Ver Historial Administrativo")
-            self.stdout.write("4 - Historial Administrativo")
-            self.stdout.write("5 - Actualizar Historial Administrativo")
+            self.stdout.write("2 - Cambiar contraseña de un Administrador")
+            self.stdout.write("3 - Consultar historial del Administrador")
+            self.stdout.write("4 - Vincular usuario a perfil de Administrador")
+            self.stdout.write("5 - Desvincular usuario del perfil de Administrador")
             self.stdout.write("q - Salir")
 
             eleccion = input("Selecciona una opción: ").strip()
