@@ -7,3 +7,6 @@ out/
 .env
 app/media/objetos/
 ngrok.py
+*.log
+logs/
+debug.log

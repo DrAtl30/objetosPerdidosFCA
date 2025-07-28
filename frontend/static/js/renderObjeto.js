@@ -2,9 +2,7 @@ import {mostrarInfoObjetoModal} from './mostrarInfoObjeto.js'
 export function renderPage(objetosVisibles,container,currentPage,itemsPerPage,ocultos,isAdmin,accionesHandlers) {
     container.innerHTML = '';
     const ocultosNumeros = ocultos.map((o) => Number(o));
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    const objetosPagina = objetosVisibles.slice(start, end);
+    const objetosPagina = objetosVisibles;
 
     if (objetosPagina.length === 0) {
         container.classList.remove('items_grid');

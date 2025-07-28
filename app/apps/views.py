@@ -3,16 +3,18 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
-from django.http import JsonResponse
+from django.http import JsonResponse,  QueryDict
 from rest_framework import status
 from .serializers import RegistroUser, LoginUser, RegistroObjeto
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
-from datetime import datetime
+from django.utils import timezone
+from datetime import datetime, timedelta
 from email_service.api.services.email_services import enviar_correo_confirmacion
 import logging, json, os
 from .models import Usuario, Objetoperdido,Imagenobjeto
+
 
 # Create your views here.
 logger = logging.getLogger(__name__)
@@ -25,7 +27,6 @@ def home(request):
     if request.user.is_authenticated:
         user_name = request.user.nombre
         user_lastname = request.user.apellidos
-
     ocultos=[]
     ocultos_json = os.path.join(os.path.dirname(__file__), "../media/ocultos.json")
     try:
@@ -221,9 +222,36 @@ class ObjetoPerdidoViewSet(ModelViewSet):
         ocultos = [int(o) for o in ocultos]
         
         if user.is_authenticated and user.rol == 'administrador':
-            return Objetoperdido.objects.all()
+            queryset = Objetoperdido.objects.all()
         else:
-            return Objetoperdido.objects.exclude(id_objeto__in=ocultos)
+            queryset = Objetoperdido.objects.exclude(id_objeto__in=ocultos)
+
+        now = timezone.now()
+        fecha_param = self.request.query_params.get("fecha")
+        filtros_fecha = {
+            'last-hour': lambda qs: qs.filter(fecha_carga__gte=now-timedelta(hours=1)),
+            'hoy': lambda qs: qs.filter(fecha_carga__date=now.date()),
+            'this-week': lambda qs: qs.filter(fecha_carga__gte=(now-timedelta(days=now.weekday())).date()),
+            'this-month': lambda qs: qs.filter(fecha_carga__year=now.year, fecha_carga__month=now.month),
+            'this-year': lambda qs: qs.filter(fecha_carga__year=now.year),
+        }
+        
+        if fecha_param in filtros_fecha:
+            queryset = filtros_fecha[fecha_param](queryset)
+            
+        orden_param = self.request.query_params.get("orden")
+        orden_map = {
+            "recientes": "-fecha_carga",
+            "antiguos": "fecha_carga",
+            "a-z": "nombre",
+            "z-a": "-nombre",
+        }
+        if orden_param in orden_map:
+            queryset = queryset.order_by(orden_map[orden_param])
+        else:
+            queryset = queryset.order_by("-fecha_carga")
+
+        return queryset 
     
     def create(self, request, *args, **kwargs):
         if request.user.rol != 'administrador':
@@ -252,17 +280,18 @@ class ObjetoPerdidoViewSet(ModelViewSet):
         instance.estado_objeto = request.data.get('estado_objeto', instance.estado_objeto)
         instance.save()
         
-        urls_enviadas = request.data.getlist('imagenes_existentes')
-        rutas_actuales = [img.ruta_imagen.url for img in instance.imagenes.all()]
+        if isinstance(request.data, QueryDict) and 'imagenes_existentes' in request.data:
+            urls_enviadas = request.data.getlist('imagenes_existentes')
+            rutas_actuales = [img.ruta_imagen.url for img in instance.imagenes.all()]
         
-        for img in instance.imagenes.all():
-            if img.ruta_imagen.url not in urls_enviadas:
-                if img.ruta_imagen and os.path.isfile(img.ruta_imagen.path):
-                    os.remove(img.ruta_imagen.path)
-                img.delete()
-        
-        for archivo in request.FILES.getlist('imagenes_upload'):
-            Imagenobjeto.objects.create(id_objeto=instance, ruta_imagen=archivo)
+            for img in instance.imagenes.all():
+                if img.ruta_imagen.url not in urls_enviadas:
+                    if img.ruta_imagen and os.path.isfile(img.ruta_imagen.path):
+                        os.remove(img.ruta_imagen.path)
+                    img.delete()
+            
+            for archivo in request.FILES.getlist('imagenes_upload'):
+                Imagenobjeto.objects.create(id_objeto=instance, ruta_imagen=archivo)
 
         return Response({"message": "Objeto actualizado correctamente"}, status=status.HTTP_200_OK)
     

@@ -4,97 +4,25 @@ import {
     updatePaginationStates,
 } from './renderObjeto.js';
 import { editar, toggleOcultar, eliminar } from './accionesObjeto.js';
+
 let objetosVisibles = [];
 let ocultos = [];
 let objetosFiltrados = [];
+const itemsPerPage = 8;
+let currentPage = 1;
+let totalPages;
 
-document.addEventListener('DOMContentLoaded', function () {
-    const isAdmin = document.body.classList.contains('vista-admin');
-    const container = document.getElementById('objetos-perdidos-container');
-    const pagination = document.getElementById('pagination');
-    const itemsPerPage = 8;
-    let currentPage = 1;
-    let totalPages;
+let container;
+let pagination;
+let isAdmin;
 
-    fetch('/api/objetos')
-        .then((response) => response.json())
-        .then((data) => {
-            objetosVisibles = data || [];
+document.addEventListener('DOMContentLoaded', async function () {
+    isAdmin = document.body.classList.contains('vista-admin');
+    container = document.getElementById('objetos-perdidos-container');
+    pagination = document.getElementById('pagination');
 
-            if (isAdmin) {
-                fetch('/api/obtener_ocultos')
-                    .then((response) => response.json())
-                    .then((data) => {
-                        ocultos = data.ocultos || [];
-                        renderAll();
-                    });
-            } else {
-                ocultos = [];
-                renderAll();
-            }
-        })
-        .catch(() => {
-            // manejar error
-        });
-
-    function renderAll() {
-        if (!isAdmin) {
-            // filtra los objetos que NO están ocultos
-            objetosFiltrados = objetosVisibles.filter(
-                (obj) => !ocultos.includes(Number(obj.id_objeto))
-            );
-        } else {
-            // admin ve todos
-            objetosFiltrados = objetosVisibles;
-        }
-
-        if (objetosFiltrados.length === 0) {
-            container.classList.remove('items_grid');
-            container.innerHTML = `<h1 class="mensaje-vacio">No hay objetos para mostrar</h1>`;
-            if (pagination) pagination.style.display = 'none';
-            return;
-        } else {
-            if (pagination) pagination.style.display = '';
-            container.classList.add('items_grid');
-        }
-        totalPages = Math.ceil(objetosFiltrados.length / itemsPerPage);
-        renderPage(
-            objetosFiltrados,
-            container,
-            currentPage,
-            itemsPerPage,
-            ocultos,
-            isAdmin,
-            { editar, toggleOcultar, eliminar: handleEliminar }
-        );
-        renderPagination(pagination, totalPages, currentPage);
-        updatePaginationStates(pagination, totalPages, currentPage);
-    }
-
-    async function handleEliminar(id) {
-        const exito = await eliminar(id);
-        if (!exito) return;
-
-        // Actualiza la lista global quitando el objeto eliminado
-        objetosVisibles = objetosVisibles.filter((obj) => obj.id_objeto !== id);
-
-        // Vuelve a filtrar según ocultos y rol admin
-        if (!isAdmin) {
-            objetosFiltrados = objetosVisibles.filter(
-                (obj) => !ocultos.includes(Number(obj.id_objeto))
-            );
-        } else {
-            objetosFiltrados = objetosVisibles;
-        }
-
-        // Recalcula totalPages, y ajusta currentPage si es necesario
-        totalPages = Math.ceil(objetosFiltrados.length / itemsPerPage);
-        if (currentPage > totalPages)
-            currentPage = totalPages > 0 ? totalPages : 1;
-
-        // Renderiza todo
-        renderAll();
-    }
+    await cargarOcultos(); // primero cargamos ocultos (si aplica)
+    await cargarObjetos(1);
 
     pagination.addEventListener('click', function (e) {
         e.preventDefault();
@@ -104,23 +32,103 @@ document.addEventListener('DOMContentLoaded', function () {
         const text = target.textContent.trim();
 
         if (text === 'Anterior' && currentPage > 1) {
-            currentPage--;
+            cargarObjetos(currentPage - 1);
         } else if (text === 'Siguiente' && currentPage < totalPages) {
-            currentPage++;
+            cargarObjetos(currentPage + 1);
         } else if (!isNaN(text)) {
-            currentPage = parseInt(text);
+            cargarObjetos(parseInt(text));
         }
-
-        renderPage(
-            objetosFiltrados,
-            container,
-            currentPage,
-            itemsPerPage,
-            ocultos,
-            isAdmin,
-            { editar, toggleOcultar, eliminar: handleEliminar }
-        );
-        renderPagination(pagination, totalPages, currentPage);
-        updatePaginationStates(pagination, totalPages, currentPage);
     });
 });
+
+async function cargarObjetos(pagina = 1) {
+    try {
+        const res = await fetch(`/api/objetos/?page=${pagina}`);
+        if (res.ok) {
+            const data = await res.json();
+            objetosVisibles = data.results || [];
+            totalPages = Math.ceil(data.count / itemsPerPage);
+            currentPage = pagina;
+
+            renderAll();
+        }
+    } catch (error) {
+        console.error('Error cargando objetos:', error);
+    }
+}
+
+async function cargarOcultos() {
+    if (!isAdmin) return;
+    try {
+        const res = await fetch('/api/obtener_ocultos/', {
+            credentials: 'include',
+        });
+        if (res.ok) {
+            const data = await res.json();
+            ocultos = data.ocultos || [];
+        }
+    } catch (error) {
+        console.error('Error cargando objetos ocultos:', error);
+    }
+}
+
+async function handleEliminar(id) {
+    const exito = await eliminar(id);
+    if (!exito) return;
+
+    objetosVisibles = objetosVisibles.filter((obj) => obj.id_objeto !== id);
+
+    if (!isAdmin) {
+        objetosFiltrados = objetosVisibles.filter(
+            (obj) => !ocultos.includes(Number(obj.id_objeto))
+        );
+    } else {
+        objetosFiltrados = objetosVisibles;
+    }
+
+    totalPages = Math.ceil(objetosFiltrados.length / itemsPerPage);
+    if (currentPage > totalPages) currentPage = totalPages > 0 ? totalPages : 1;
+
+    cargarObjetos(currentPage);
+}
+
+function renderAll() {
+    objetosFiltrados = objetosVisibles;
+
+    if (objetosFiltrados.length === 0) {
+        container.classList.remove('items_grid');
+        container.innerHTML = `<h1 class="mensaje-vacio">No hay objetos para mostrar</h1>`;
+        if (pagination) pagination.style.display = 'none';
+        return;
+    } else {
+        if (pagination) pagination.style.display = '';
+        container.classList.add('items_grid');
+    }
+
+    renderPage(
+        objetosFiltrados,
+        container,
+        currentPage,
+        itemsPerPage,
+        ocultos,
+        isAdmin,
+        { editar, toggleOcultar, eliminar: handleEliminar }
+    );
+    renderPagination(pagination, totalPages, currentPage);
+    updatePaginationStates(pagination, totalPages, currentPage);
+}
+
+export async function cargarObjetosConFiltros(url) {
+    try {
+        const res = await fetch(url);
+        if (res.ok) {
+            const data = await res.json();
+            objetosVisibles = data.results || [];
+            totalPages = Math.ceil(data.count / itemsPerPage);
+            currentPage = 1; // Reinicia a la primera página
+            renderAll();
+        }
+    } catch (error) {
+        console.error('Error al aplicar filtros:', error);
+    }
+}

@@ -90,10 +90,10 @@
 
                             <div class="filter-category">
                                 <h4>Ordenar por</h4>
-                                <label><input type="radio" name="ordenar-por"> Más recientes</label>
-                                <label><input type="radio" name="ordenar-por"> Más antiguos</label>
-                                <label><input type="radio" name="ordenar-por"> Orden Alfabético (A-Z)</label>
-                                <label><input type="radio" name="ordenar-por"> Orden Alfabético (Z-A)</label>
+                                <label><input type="radio" name="ordenar-por" value="recientes"> Más recientes</label>
+                                <label><input type="radio" name="ordenar-por" value="antiguos"> Más antiguos</label>
+                                <label><input type="radio" name="ordenar-por" value="a-z"> Orden Alfabético (A-Z)</label>
+                                <label><input type="radio" name="ordenar-por" value="z-a"> Orden Alfabético (Z-A)</label>
                             </div>
                         </div>
                         <button id="apply-filters" class="btn btn-success primary-btn">Aplicar Filtros</button>
@@ -125,6 +125,6 @@
 {% block extra_js %}
 
     <script type="module" src="{% static 'js/items.js' %}"></script> 
-    <script src="{% static 'js/filter.js' %}"></script> 
+    <script type="module" src="{% static 'js/filter.js' %}"></script> 
     <script type="module" src="{% static 'js/logout.js' %}?v={{ timestamp }}"></script>
 {% endblock %}

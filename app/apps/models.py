@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
+from django.utils import timezone
 
 
 class UsuarioManager(BaseUserManager):
@@ -177,6 +178,7 @@ class Objetoperdido(models.Model):
     fecha_perdida = models.DateField()
     lugar_perdida = models.CharField(max_length=255)
     estado_objeto = models.CharField(max_length=50, choices=ESTADO_OBJETO)
+    fecha_carga = models.DateTimeField(auto_now_add=True)
     id_usuario_reclamante = models.ForeignKey(
         "Usuario",
         models.DO_NOTHING,
