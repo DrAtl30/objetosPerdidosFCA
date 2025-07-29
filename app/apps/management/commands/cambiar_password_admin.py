@@ -8,8 +8,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         print("=== Cambiar contraseña de administrador ===")
+        print("Colocar '0' para retornar al menú")
 
         correo = input("Correo del administrador: ").strip()
+
+        if correo == 0:
+            return
 
         try:
             user = Usuario.objects.get(correo_institucional=correo)
