@@ -54,7 +54,7 @@
                 <!-- Derecha -->
                 <div class="nav-section derecha">
                     <div class="search-bar">
-                        <input type="text" placeholder="Buscar" class="hidden-input">
+                        <input type="text" placeholder="Buscar" class="hidden-input" id="search-input">
                         <button class="primary-btn search-btn"><i class="fas fa-search"></i></button>
                         <button id="filter-button" class="primary-btn filter-btn">
                             <i class="bi bi-filter"></i> <span class="filter-text">Filtros</span>
@@ -124,7 +124,8 @@
 {% endblock  %}
 {% block extra_js %}
 
-    <script type="module" src="{% static 'js/items.js' %}"></script> 
+    <script type="module" src="{% static 'js/items.js' %}"></script>
+    <script type="module" src="{% static 'js/search.js' %}"></script>
     <script type="module" src="{% static 'js/filter.js' %}"></script> 
     <script type="module" src="{% static 'js/logout.js' %}?v={{ timestamp }}"></script>
 {% endblock %}

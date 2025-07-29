@@ -10,6 +10,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.utils import timezone
+from django.db.models import Q
 from datetime import datetime, timedelta
 from email_service.api.services.email_services import enviar_correo_confirmacion
 import logging, json, os
@@ -27,30 +28,8 @@ def home(request):
     if request.user.is_authenticated:
         user_name = request.user.nombre
         user_lastname = request.user.apellidos
-    ocultos=[]
-    ocultos_json = os.path.join(os.path.dirname(__file__), "../media/ocultos.json")
-    try:
-        with open(ocultos_json, 'r') as f:
-            data = json.load(f)
-            ocultos = data.get('ocultos', [])
-    except FileNotFoundError:
-        ocultos = []
 
-    objetos = Objetoperdido.objects.filter(estado_objeto='publicado').exclude(id_objeto__in=ocultos).prefetch_related('imagenes').order_by('-fecha_perdida')
-
-    objetos_json = []
-    for objeto in objetos:
-        imagenes = objeto.imagenes.all()
-        first_img = imagenes[0].ruta_imagen.url if imagenes else "/static/img/default.webp"
-        objetos_json.append({
-            'id': objeto.id_objeto,
-            'titulo': objeto.nombre,
-            'descripcion': objeto.descripcion,
-            'fecha': objeto.fecha_perdida.strftime("%Y-%m-%d"),
-            'imagen': first_img
-        })
-
-    return render(request, "inicio.html", {'user_name': user_name, 'user_lastname': user_lastname, 'objetos_json':objetos_json})
+    return render(request, "inicio.html", {'user_name': user_name, 'user_lastname': user_lastname})
 
 
 def inicio_session(request):
@@ -81,28 +60,7 @@ def home_admin(request):
         admin_name = request.user.nombre
         admin_lastname = request.user.apellidos
 
-    objetos = Objetoperdido.objects.prefetch_related("imagenes").order_by(
-        "-fecha_perdida"
-    )
-
-    objetos_json = []
-
-    for objeto in objetos:
-        imagenes = objeto.imagenes.all()
-        first_img = (
-            imagenes[0].ruta_imagen.url if imagenes else "/static/img/default.webp"
-        )
-
-        objetos_json.append(
-            {
-                "id": objeto.id_objeto,
-                "titulo": objeto.nombre,
-                "descripcion": objeto.descripcion,
-                "fecha": objeto.fecha_perdida.strftime("%Y-%m-%d"),
-                "imagen": first_img,
-            }
-        )
-    return render(request, "administrador/administrador.html", {'admin_name': admin_name, 'admin_lastname': admin_lastname, 'objetos_json':objetos_json})
+    return render(request, "administrador/administrador.html", {'admin_name': admin_name, 'admin_lastname': admin_lastname})
 
 
 class RegistroAlumnoView(APIView):
@@ -250,6 +208,14 @@ class ObjetoPerdidoViewSet(ModelViewSet):
             queryset = queryset.order_by(orden_map[orden_param])
         else:
             queryset = queryset.order_by("-fecha_carga")
+            
+        busqueda = self.request.query_params.get("search")
+        if busqueda:
+            queryset = queryset.filter(
+                Q(nombre__icontains = busqueda) |
+                Q(descripcion__icontains = busqueda) |
+                Q(lugar_perdida__icontains = busqueda)
+            )
 
         return queryset 
     

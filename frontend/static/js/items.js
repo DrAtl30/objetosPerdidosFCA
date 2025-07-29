@@ -16,10 +16,21 @@ let container;
 let pagination;
 let isAdmin;
 
+let lastQueryURL = '/api/objetos/?page=1'; 
+
 document.addEventListener('DOMContentLoaded', async function () {
     isAdmin = document.body.classList.contains('vista-admin');
     container = document.getElementById('objetos-perdidos-container');
     pagination = document.getElementById('pagination');
+
+    const params = new URLSearchParams(window.location.search);
+    const queryString = params.toString();
+    if (queryString) {
+        const url = `/api/objetos/?page=1&${queryString}`;
+        await cargarObjetosConFiltros(url);
+    } else {
+        await cargarObjetos(1);
+    }
 
     await cargarOcultos(); // primero cargamos ocultos (si aplica)
     await cargarObjetos(1);
@@ -43,7 +54,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 async function cargarObjetos(pagina = 1) {
     try {
-        const res = await fetch(`/api/objetos/?page=${pagina}`);
+        const newUrl = new URL(lastQueryURL, window.location.origin);
+        newUrl.searchParams.set('page', pagina);
+        const res = await fetch(newUrl);
         if (res.ok) {
             const data = await res.json();
             objetosVisibles = data.results || [];
@@ -119,6 +132,7 @@ function renderAll() {
 }
 
 export async function cargarObjetosConFiltros(url) {
+    lastQueryURL = url;
     try {
         const res = await fetch(url);
         if (res.ok) {
@@ -132,3 +146,31 @@ export async function cargarObjetosConFiltros(url) {
         console.error('Error al aplicar filtros:', error);
     }
 }
+
+export function construirUrl(){
+    const search = document.getElementById('search-input').value.trim();
+    const fecha = document.querySelector('input[name="fecha-carga"]:checked')?.value || '';
+    const orden = document.querySelector('input[name="ordenar-por"]:checked')?.value || '';
+
+    const params = new URLSearchParams();
+
+    if (search) params.set('search', search);
+    if (fecha) params.set('fecha', fecha);
+    if (orden) params.set('orden', orden);
+
+    return params.toString();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const search = params.get('search');
+    const fecha = params.get('fecha');
+    const orden = params.get('orden');
+
+    if (search) document.getElementById('search-input').value = search;
+    if (fecha) document.querySelector(`input[name="fecha-carga"][value="${fecha}"]`)?.click();
+    if (orden) document.querySelector(`input[name="ordenar-por"][value="${orden}"]`)?.click();
+
+    const url = `/api/objetos/?page=1&${params.toString()}`;
+    cargarObjetosConFiltros(url);
+});

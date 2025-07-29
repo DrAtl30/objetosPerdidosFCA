@@ -177,17 +177,3 @@ class RegistroObjeto(serializers.ModelSerializer):
 
         return objeto
 
-    # def update(self, instance, validated_data):
-    #     imagenes = validated_data.pop('imagenes_upload', None)
-    #     for attr, value in validated_data.items():
-    #         setattr(instance, attr, value)
-    #     instance.save()
-
-    #     if imagenes is not None:
-    #         # Si quieres reemplazar las imágenes, primero elimínalas:
-    #         instance.imagenes.all().delete()
-    #         for imagen in imagenes:
-    #             Imagenobjeto.objects.create(id_objeto=instance, ruta_imagen=imagen)
-
-    #     return instance
-
