@@ -33,7 +33,7 @@
 /* Caja de contenido */
 .modalContent {
     position: relative;
-    background-color: blue;
+    background-color: Lavender;
     padding: var(--modal-padding);
     border-radius: var(--modal-radius);
     width: auto;
