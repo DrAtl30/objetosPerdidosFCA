@@ -36,8 +36,8 @@ def enviar_contraseña_admin(historial, correo_admin, contrasena_nueva):
     nombre = historial.nombre
     apellidos = historial.apellidos
     asunto = "Acceso a cuenta de administrador"
-    msj_html = render_to_string(
-        "administrador/sendPassword.hmtl",{
+    mensaje_html = render_to_string(
+        "administrador/sendPassword.html",{
             "nombre_admin": nombre,
             "apellidos_admin": apellidos,
             "email_admin": correo_admin,
@@ -57,6 +57,7 @@ def enviar_contraseña_admin(historial, correo_admin, contrasena_nueva):
         asunto,
         msj,
         settings.EMAIL_HOST_USER,
-        [destinatario],
+        [destino],
     )
+    email.attach_alternative(mensaje_html, "text/html")
     email.send()
