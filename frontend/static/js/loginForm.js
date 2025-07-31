@@ -47,13 +47,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     throw new Error('Error al verificar el correo');
 
                 const verificacionData = await verificacion.json();
+                
+                if (!verificacionData.existe) {
+                    mostrarModal(
+                        'Este correo no esta registro en el Sistema de Objetos Perdidos FCA. Registrate antes de inciar sesión',
+                        'errorModal'
+                    );
+                    await esperarCierreModal('errorModal',3000);
+                    return;
+                }
 
                 if (!verificacionData.confirmado) {
                     mostrarModal(
                         'Tu correo aún no ha sido confirmado. Verifica tu bandeja de entrada.',
                         'errorModal'
                     );
-                    await esperarCierreModal('errorModal');
+                    await esperarCierreModal('errorModal',3000);
                     return;
                 }
 

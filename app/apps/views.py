@@ -126,9 +126,9 @@ def verificar_correo_confirmado(request):
         email = data.get('correo_institucional')
         try:
             user = Usuario.objects.get(correo_institucional = email)
-            return JsonResponse({'confirmado': user.is_active})
+            return JsonResponse({'existe':True,'confirmado': user.is_active})
         except Usuario.DoesNotExist:
-            return JsonResponse({"confirmado": False})
+            return JsonResponse({'existe':False,"confirmado": False})
 
     return JsonResponse({"error": 'Metodo no permitido'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -196,7 +196,19 @@ class ObjetoPerdidoViewSet(ModelViewSet):
         
         if fecha_param in filtros_fecha:
             queryset = filtros_fecha[fecha_param](queryset)
-            
+        
+        estado_param = self.request.query_params.get("estado")
+        estado = {
+            'reclamado': 'reclamado',
+            'publicado': 'publicado',
+            'entregado': 'entregado',
+            'no-reclamado': 'no reclamado'
+        }
+        
+        if estado_param in estado:
+            estado_valor = estado_param.replace('-',' ')
+            queryset = queryset.filter(estado_objeto__iexact=estado_valor)
+        
         orden_param = self.request.query_params.get("orden")
         orden_map = {
             "recientes": "-fecha_carga",
