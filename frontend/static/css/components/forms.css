@@ -1,5 +1,5 @@
 .registro, .login, .obj-register{
-    background-image: url('../../img/backgrounds/fondo.jpeg');
+    background-image: var(--background-main);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -11,7 +11,7 @@
     max-width: 260px;
     margin: 0 auto;
     padding: 20px;
-    background-color: white;
+    background-color: var(--color-principal);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -30,38 +30,25 @@
 /* Campos del formulario */
 .registro-form .form-control, .login-form  .form-control {
     border-radius: 50px;
-    border: 1px solid #5a7561;    
+    border: 1px solid var(--color-btn-primary);    
 }
 .registro-form .form-control:focus ,.login-form .form-control:focus {
     border-radius: 50px;
-    border: 2px solid #526958;
+    border: 2px solid var(--color-btn-primary-hover);
 
-}
-
-/* Botón del formulario */
-.registro-form button,.login-form  button {
-    width: 100%;
-    background-color: #5a7561;
-    color: white;
-    border: none;
-    border-radius: 50px;
-}
-
-.registro-form button:hover, .login-form  button:hover {
-    background-color: #4a6551;
 }
 
 
 /* Flecha de retroceso */
 .back-arrow {
     font-size: 24px;
-    color: white;
+    color: var(--color-text);
     text-decoration: none;
     margin-left: 10px;
 }
 
 .back-arrow:hover {
-    color: #2C5234;
+    color: var(--color-principal);
 }
 .formualrio__error{
     font-size: 9.5px;
@@ -72,14 +59,14 @@
 }
 .formualrio__error-activo{
     display: block;
-    color: red;
+    color: var(--color-text-w);
 }
 .forgot-password {
     text-align: center;
     margin-top: 15px;
 }
 .forgot-password a {
-    color: #5a7561;
+    color: var(--color-btn-primary);
     text-decoration: none;
 }
 .forgot-password a:hover {
@@ -100,7 +87,7 @@
     right: 15px;
     transform: translateY(-50%);
     cursor: pointer;
-    color: #5a7561;
+    color: var(--color-btn-primary);
     font-size: 1.2rem;
     z-index: 2;
 }

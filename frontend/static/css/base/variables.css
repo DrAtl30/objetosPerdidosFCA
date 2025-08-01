@@ -1,0 +1,32 @@
+
+:root {
+    /* Colores */
+    --color-principal: #f7f9f9;
+    --color-titulo-osucuro: #001b25;
+    --color-titulo-claro: #f4f4f4;
+    --color-btn-primary:  #62856c;
+    --color-btn-primary-hover:  #2C5234; 
+    --color-text: #fff;
+    --color-success: #198754;
+    --color-warning: #dc3545;
+    --color-neutral: #0d6efd;
+    --color-border: #ccc;
+    --color-btn-close: #000;
+
+    /* Fuentes */
+    --fuente-titulo: 'Calibri', sans-serif;
+
+    /* Fondos Header-Main-Footer */
+    --background-header: url('../../img/header/pleca-superior-web.jpg');
+    --background-main: url('../../img/backgrounds/fondo.jpeg');
+    --background-footer: url('../../img/footer/pleca-con-hexagonos-LARGA.jpg');
+
+    --modal-backdrop: rgba(0, 0, 0, 0.5);
+    --modal-radius: 8px;
+    --modal-padding: 1.5rem;
+    --modal-max-width: min(90%, 420px);
+    --modal-info-max-width: min(85%, 900px);
+    --modal-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    --modal-font-size: 1rem;
+
+}

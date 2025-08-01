@@ -1,9 +1,9 @@
 .r-header, .l-header, .objR-header,.ac-header{
-    background-image: url('../../img/header/pleca-superior-web.jpg');
+    background-image: var(--background-header);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
 }
 h1,h2,h3{
-    color: #f4f4f4;
+    color: var(--color-titulo-claro);
 }

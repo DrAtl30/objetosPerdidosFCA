@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const expresiones = {
         usuario: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
         password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d\s]).{8,15}$/, // 8 a 15 digitos.
-        correo: /^[a-zA-Z0-9_.+-]+@gmail.com$/,
+        correo: /^[a-zA-Z0-9_.+-]+@(gmail\.com|alumno\.uaemex\.mx|maildrop\.cc|devdigs\.com)$/,
         numCuenta: /^\d{7,7}$/,
     };
 
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     data.mensaje || 'Registro exitoso',
                     'successModal'
                 );
-                await esperarCierreModal('successModal');
+                await esperarCierreModal('successModal',3000);
                 window.location.href = '/login/';
             } catch (err) {
                 let mensaje = 'Error al precesar la solicitud';

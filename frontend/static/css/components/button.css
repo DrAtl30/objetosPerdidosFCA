@@ -1,34 +1,36 @@
-.primary-btn{
+.primary-btn {
     min-width: 90px;
     padding: 5px 15px;
     border-radius: 5px;
     border: none;
-    background-color: #5a7561;
-    color: white;
+    background-color: var(--color-btn-primary);
+    color: var(--color-text);
     margin-left: auto;
     text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
-.primary-btn:hover{
-    background-color: #157347;
-    padding: 5px 15px;
-    border-radius: 5px;
-    border: none;
-    color: white;
-    margin-left: auto;
-    text-align: center;
+.primary-btn:hover {
+    background-color: var(--color-btn-primary-hover);
 }
+
+.primary-btn:focus {
+    outline: 2px solid var(--color-btn-primary-hover);
+    outline-offset: 2px;
+}
+
 .primary-btn.home{
     margin: 5px;
 }
 
 .primary-btn.sign{
-    background-color: white;
-    color: #5a7561;
+    background-color: var(--color-principal);
+    color: var(--color-btn-primary);
     font-size: 1.2rem;
 }
 .primary-btn.sign:hover{
     background-color: #DED9D9;
-    color: #157347;
+    color: var(--color-btn-primary-hover);
 }
 
 
@@ -59,14 +61,8 @@
 
 @media screen and (max-width: 700px) {
     .primary-btn.sign{
-        background-color: white;
-        color: #5a7561;
         font-size: 1.5rem;
         padding: 5px;
-    }
-    .primary-btn.sign:hover{
-        background-color: white;
-        color: #157347;
     }
     .primary-btn.filter-btn, .primary-btn.add-obj,.primary-btn.sign, .primary-btn.comment {
         min-width: 30px;

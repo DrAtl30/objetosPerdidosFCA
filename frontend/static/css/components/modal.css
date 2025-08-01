@@ -1,18 +1,3 @@
-:root {
-    --modal-backdrop: rgba(0, 0, 0, 0.5);
-    --modal-radius: 8px;
-    --modal-padding: 1.5rem;
-    --modal-max-width: min(90%, 420px);
-    --modal-info-max-width: min(85%, 900px);
-    --modal-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-    --modal-font-size: 1rem;
-
-    /* Colores de estado */
-    --modal-success: #198754; /* verde bootstrap-ish */
-    --modal-error: #dc3545; /* rojo bootstrap-ish */
-    --modal-neutral: #0d6efd; /* azul */
-}
-
 /* Contenedor overlay */
 .modal {
     position: fixed;
@@ -33,7 +18,7 @@
 /* Caja de contenido */
 .modalContent {
     position: relative;
-    background-color: Lavender;
+    background-color: var(--color-principal);
     padding: var(--modal-padding);
     border-radius: var(--modal-radius);
     width: auto;
@@ -65,18 +50,18 @@
     width: 100%;
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
-    background: var(--modal-neutral);
+    background: var(--color-neutral);
 }
 
 .modal--success .modalContent::before {
-    background: var(--modal-success);
+    background: var(--color-success);
 }
 
 .modal--error .modalContent::before {
-    background: var(--modal-error);
+    background: var(--color-warning);
 }
 .modal--confirmacion .modalContent::before {
-    background: var(--modal-error);
+    background: var(--color-warning);
 }
 
 /* Botón cerrar */
@@ -132,7 +117,7 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    background-color: white;
+    background-color: var(--color-principal);
 }
 
 .modalMain {
@@ -179,7 +164,7 @@
     font-size: 1rem;
 }
 .modalMain .data strong {
-    color: #444;
+    color: var(--color-titulo-oscuro);
 }
 
 .modalFooter {
@@ -202,7 +187,7 @@
 .modalComentario textarea{
     flex: 1;
     padding: 0.5rem 0.75rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-border);
     border-radius: .25rem;
     font-size: 1rem;
     resize: none;
@@ -211,8 +196,8 @@
     transition: border-color 0.2s ease-in-out;
 }
 .modalComentario textarea:focus {
-    border-color: var(--modal-neutral);
-    box-shadow: 0 0 5px var(--modal-neutral);
+    border-color: var(--color-neutral);
+    box-shadow: 0 0 5px var(--color-neutral);
 }
 
 /* Animaciones */

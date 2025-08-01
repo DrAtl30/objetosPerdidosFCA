@@ -10,3 +10,5 @@ ngrok.py
 *.log
 logs/
 debug.log
+__pycache__/
+*.pyc
