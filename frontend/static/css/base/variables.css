@@ -1,32 +1,47 @@
-
 :root {
-    /* Colores */
-    --color-principal: #f7f9f9;
-    --color-titulo-osucuro: #001b25;
-    --color-titulo-claro: #f4f4f4;
-    --color-btn-primary:  #62856c;
-    --color-btn-primary-hover:  #2C5234; 
-    --color-text: #fff;
-    --color-success: #198754;
-    --color-warning: #dc3545;
-    --color-neutral: #0d6efd;
-    --color-border: #ccc;
-    --color-btn-close: #000;
+  /* 🎨 COLORES BASE */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray: #ccc;
+  --color-background: #fcfcfc;
 
-    /* Fuentes */
-    --fuente-titulo: 'Calibri', sans-serif;
+  /* 🔤 TEXTO */
+  --color-text-dark: #001b25;
+  --color-text-light: var(--color-white);
 
-    /* Fondos Header-Main-Footer */
-    --background-header: url('../../img/header/pleca-superior-web.jpg');
-    --background-main: url('../../img/backgrounds/fondo.jpeg');
-    --background-footer: url('../../img/footer/pleca-con-hexagonos-LARGA.jpg');
+  /* ✅ SEMÁNTICA */
+  --color-success: #198754;
+  --color-error: #d32f2f;
+  --color-info: #0d6efd;
+  --color-warning: #ffc107;
 
-    --modal-backdrop: rgba(0, 0, 0, 0.5);
-    --modal-radius: 8px;
-    --modal-padding: 1.5rem;
-    --modal-max-width: min(90%, 420px);
-    --modal-info-max-width: min(85%, 900px);
-    --modal-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-    --modal-font-size: 1rem;
+  --color-error-hover: #b23c23;
+  --color-info-hover: #1565c0;
+  --color-warning-hover: #edb50a;
 
+  /* 🔘 BOTONES (primario y secundario) */
+  --color-button-primary: #62856c;
+  --color-button-primary-hover: #2c5234;
+
+  --color-button-secondary: var(--color-white);
+  --color-button-secondary-hover: var(--color-gray);
+
+  --color-button-close: var(--color-black);
+
+  /* 📚 TIPOGRAFÍA */
+  --font-title: 'Calibri', sans-serif;
+
+  /* 🪟 MODAL */
+  --modal-backdrop: rgba(0, 0, 0, 0.5);
+  --modal-radius: 8px;
+  --modal-padding: 1.5rem;
+  --modal-max-width: min(90%, 420px);
+  --modal-info-max-width: min(85%, 900px);
+  --modal-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  --modal-font-size: 1rem;
+
+  /* 🖼️ FONDOS */
+  --background-header: url('../../img/header/pleca-superior-web.jpg');
+  --background-main: url('../../img/backgrounds/fondo.jpeg');
+  --background-footer: url('../../img/footer/pleca-con-hexagonos-LARGA.jpg');
 }

@@ -3,19 +3,21 @@
     padding: 5px 15px;
     border-radius: 5px;
     border: none;
-    background-color: var(--color-btn-primary);
-    color: var(--color-text);
+    background-color: var(--color-button-primary);
+    color: var(--color-text-light);
     margin-left: auto;
     text-align: center;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 .primary-btn:hover {
-    background-color: var(--color-btn-primary-hover);
+    background-color: var(--color-button-primary-hover);
+    color: var(--color-text-light);
 }
 
 .primary-btn:focus {
-    outline: 2px solid var(--color-btn-primary-hover);
+    outline: 2px solid var(--color-button-primary-hover);
+    background-color: var(--color-button-primary-hover);
     outline-offset: 2px;
 }
 
@@ -24,12 +26,12 @@
 }
 
 .primary-btn.sign{
-    background-color: var(--color-principal);
-    color: var(--color-btn-primary);
+    background-color: var(--color-button-secondary);
+    color: var(--color-button-primary);
     font-size: 1.2rem;
 }
 .primary-btn.sign:hover{
-    background-color: #DED9D9;
+    background-color: var(--color-button-secondary-hover);
     color: var(--color-btn-primary-hover);
 }
 
@@ -52,6 +54,40 @@
 
 .primary-btn.add-obj .icono, .primary-btn.comment .icono {
     display: none;
+}
+
+.primary-btn.edit{
+    background-color: var(--color-info);
+}
+.primary-btn.change{
+    background-color: var(--color-warning);
+}
+.primary-btn.delete{
+    background-color: var(--color-error);
+}
+.primary-btn.edit:hover{
+    background-color: var(--color-info-hover);
+}
+.primary-btn.change:hover{
+    background-color: var(--color-warning-hover);
+}
+.primary-btn.delete:hover{
+    background-color: var(--color-error-hover);
+}
+.primary-btn.edit:focus{
+    outline: 2px solid var(--color-info-hover);
+    background-color: var(--color-info-hover);
+    outline-offset: 2px;
+}
+.primary-btn.change:focus{
+    outline: 2px solid var(--color-warning-hover);
+    background-color: var(--color-warning-hover);
+    outline-offset: 2px;
+}
+.primary-btn.delete:focus{
+    outline: 2px solid var(--color-error-hover);
+    background-color: var(--color-error-hover);
+    outline-offset: 2px;
 }
 
 .primary-btn.edit,.primary-btn.hidden, .primary-btn.delete{

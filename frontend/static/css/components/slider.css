@@ -40,8 +40,8 @@
 
 .btn-left:hover,
 .btn-right:hover{
-    background-color: #333333d4;
-    color: #fff;
+    background-color: var(--color-text-dark);
+    color: var(--color-text-light);
 }
 
 .btn-left{
@@ -56,7 +56,7 @@
     top: 9px;
     right: 7px;
     background-color: rgba(255, 0, 0, 0.7);
-    color: white;
+    color: var(--color-text-light);
     border: none;
     border-radius: 50%;
     font-size: 1rem;

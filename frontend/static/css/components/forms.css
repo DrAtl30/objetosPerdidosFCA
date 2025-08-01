@@ -11,7 +11,7 @@
     max-width: 260px;
     margin: 0 auto;
     padding: 20px;
-    background-color: var(--color-principal);
+    background-color: var(--color-background);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -30,7 +30,7 @@
 /* Campos del formulario */
 .registro-form .form-control, .login-form  .form-control {
     border-radius: 50px;
-    border: 1px solid var(--color-btn-primary);    
+    border: 1px solid var(--color-button-primary);    
 }
 .registro-form .form-control:focus ,.login-form .form-control:focus {
     border-radius: 50px;
@@ -42,13 +42,13 @@
 /* Flecha de retroceso */
 .back-arrow {
     font-size: 24px;
-    color: var(--color-text);
+    color: var(--color-text-light);
     text-decoration: none;
     margin-left: 10px;
 }
 
 .back-arrow:hover {
-    color: var(--color-principal);
+    color: var(--color-gray);
 }
 .formualrio__error{
     font-size: 9.5px;
@@ -59,14 +59,14 @@
 }
 .formualrio__error-activo{
     display: block;
-    color: var(--color-text-w);
+    color: var(--color-error);
 }
 .forgot-password {
     text-align: center;
     margin-top: 15px;
 }
 .forgot-password a {
-    color: var(--color-btn-primary);
+    color: var(--color-button-primary);
     text-decoration: none;
 }
 .forgot-password a:hover {
@@ -87,7 +87,7 @@
     right: 15px;
     transform: translateY(-50%);
     cursor: pointer;
-    color: var(--color-btn-primary);
+    color: var(--color-button-primary);
     font-size: 1.2rem;
     z-index: 2;
 }

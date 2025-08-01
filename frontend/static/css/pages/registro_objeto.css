@@ -5,7 +5,7 @@
 
 .header-container h2 {
     font-size: 1.8rem;
-    color: #5a7561;
+    color: var(--color-button-primary);
     font-weight: bold;
     margin: 0;
 }
@@ -23,7 +23,7 @@
     flex-direction: column;
     justify-content: center;
     max-width: 650px;
-    background-color: #fff;
+    background-color: var(--color-background);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -47,7 +47,7 @@
     display: block;
     justify-content: center;
     align-items: center;
-    border: 2px dashed #5a7561;
+    border: 2px dashed var(--color-button-primary);
     border-radius: 8px;
     width: 100%;
     max-width: 300px;
@@ -62,7 +62,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #5a7561;
+    color: var(--color-button-primary);
     font-size: 1rem;
     text-align: center;
     pointer-events: none;
@@ -86,7 +86,7 @@
 }
 
 .form-label {
-    color: #5a7561;
+    color: var(--color-button-primary);
     font-weight: 500;
     margin-bottom: 0.5rem;
 }
@@ -100,14 +100,6 @@
     display: flex;
     justify-content: center;
     margin-top: 1rem; 
-}
-.btn-primary {
-    background-color: #5a7561;
-    border: none;
-    border-radius: 8px;
-    padding: 0.5rem 1rem;
-    width: auto; 
-    text-align: center;
 }
 
 @media screen and (max-width: 700px) {

@@ -6,8 +6,8 @@
     transform: translate(-50%, -50%);
     width: 80%;
     max-width: 800px;
-    background-color: var(--color-principal);
-    border: 1px solid var(--color-border);
+    background-color: var(--color-background);
+    border: 1px solid var(--color-gray);
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
@@ -35,7 +35,7 @@
 .close-button {
     background: none;
     border: none;
-    color: var(--color-btn-close);
+    color: var(--color-button-close);
     font-size: 24px;
     cursor: pointer;
     margin-left: auto;
@@ -54,13 +54,13 @@
 
 .filter-category h4 {
     margin-top: 0;
-    color: var(--color-titulos);
+    color: var(--color-text-dark);
 }
 
 .filter-category label {
     display: block;
     margin-bottom: 10px;
-    color: var(--color-titulos);
+    color: var(--color-text-dark);
 }
 .filters-btn {
     display: flex;

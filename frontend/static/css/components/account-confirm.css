@@ -17,7 +17,7 @@
     min-height: 350px;
     margin: 0 auto;
     padding: 20px;
-    background-color: var(--color-principal);
+    background-color: var(--color-background);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -48,11 +48,11 @@
 
 
 .msj-si{
-    color: var(--color-text-s);
+    color: var(--color-success);
 }
 
 .msj-no{
-    color: var(--color-text-w);
+    color: var(--color-error);
 }
 .btns{
     text-align: center;

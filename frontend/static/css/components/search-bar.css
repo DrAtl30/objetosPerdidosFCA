@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    background-color: #5a7561;
+    background-color: var(--color-button-primary);
 }
 
 .search-bar-wrapper {
@@ -29,7 +29,7 @@
     margin-right: 10px;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-gray);
 }
 
 

@@ -2,15 +2,15 @@
 body, html {
     margin: 0;
     padding: 0;
-    background-color: var(--color-principal);
+    background-color: var(--color-background);
 }
 a{
     text-decoration: none;
 }
 
 h1, h2, h3, .user p {
-    color: var(--color-titulos);
-    font-family: var(--fuente-titulo);
+    color: var(--color-text-light);
+    font-family: var(--font-title);
     font-weight: bold;
     letter-spacing: 5px;
 }
@@ -69,7 +69,7 @@ footer{
     margin: 0 auto;
     padding-left: 20px;
     text-align: center;
-    color: var(--color-text);
+    color: var(--color-text-light);
 }
 .footer-text p {
     margin: 0;
