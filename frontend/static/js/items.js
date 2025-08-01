@@ -151,12 +151,14 @@ export function construirUrl(){
     const search = document.getElementById('search-input').value.trim();
     const fecha = document.querySelector('input[name="fecha-carga"]:checked')?.value || '';
     const orden = document.querySelector('input[name="ordenar-por"]:checked')?.value || '';
+    const estado = document.querySelector('input[name="estado"]:checked')?.value || '';
 
     const params = new URLSearchParams();
 
     if (search) params.set('search', search);
     if (fecha) params.set('fecha', fecha);
     if (orden) params.set('orden', orden);
+    if (estado) params.set('estado', estado);
 
     return params.toString();
 }
@@ -166,10 +168,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const search = params.get('search');
     const fecha = params.get('fecha');
     const orden = params.get('orden');
+    const estado = params.get('estado');
 
     if (search) document.getElementById('search-input').value = search;
     if (fecha) document.querySelector(`input[name="fecha-carga"][value="${fecha}"]`)?.click();
     if (orden) document.querySelector(`input[name="ordenar-por"][value="${orden}"]`)?.click();
+    if (estado) document.querySelector(`input[name="estado"][value="${estado}"]`)?.click();
 
     const url = `/api/objetos/?page=1&${params.toString()}`;
     cargarObjetosConFiltros(url);

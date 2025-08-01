@@ -67,36 +67,27 @@
                             <button id="close-filter-panel" class="close-button">&times;</button>
                         </div>
                         <div class="filter-options">
-                            <div class="filter-category">
-                                <h4>Fecha de carga</h4>
+                            <fieldset class="filter-category">
+                                <legend>Fecha de carga</legend>
                                 <label><input type="radio" name="fecha-carga" value="last-hour"> Última hora</label>
                                 <label><input type="radio" name="fecha-carga" value="hoy"> Hoy</label>
                                 <label><input type="radio" name="fecha-carga" value="this-week"> Esta semana</label>
                                 <label><input type="radio" name="fecha-carga" value="this-month"> Este mes</label>
                                 <label><input type="radio" name="fecha-carga" value="this-year"> Este año</label>
-                            </div>
+                            </fieldset>
                             
-                            <div class="filter-category">
-                                <h4>Estado</h4>
-                                <label><input type="radio" name="estado"> Reclamado</label>
-                                <label><input type="radio" name="estado"> No reclamado</label>
-                            </div>
-
-                            <div class="filter-category">
-                                <h4>Valor</h4>
-                                <label><input type="radio" name="valor"> Poco valioso</label>
-                                <label><input type="radio" name="valor"> Muy valioso</label>
-                            </div>
-
-                            <div class="filter-category">
-                                <h4>Ordenar por</h4>
+                            <fieldset class="filter-category">
+                                <legend>Ordenar por</legend>
                                 <label><input type="radio" name="ordenar-por" value="recientes"> Más recientes</label>
                                 <label><input type="radio" name="ordenar-por" value="antiguos"> Más antiguos</label>
                                 <label><input type="radio" name="ordenar-por" value="a-z"> Orden Alfabético (A-Z)</label>
                                 <label><input type="radio" name="ordenar-por" value="z-a"> Orden Alfabético (Z-A)</label>
-                            </div>
+                            </fieldset>
                         </div>
-                        <button id="apply-filters" class="btn btn-success primary-btn">Aplicar Filtros</button>
+                        <div class="filters-btn">
+                            <button id="apply-filters" class="btn btn-success primary-btn">Aplicar Filtros</button>
+                            <button id="reset-filters" class="btn btn-secondary">Limpiar Filtros</button>
+                        </div>
                     </div>
                 </div>
             </div>
