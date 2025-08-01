@@ -45,11 +45,9 @@ export function renderPage(objetosVisibles,container,currentPage,itemsPerPage,oc
         itemFooter.className = 'item-footer';
         if (!isAdmin) {
             const button = document.createElement('button');
-            button.className = 'btn btn-success primary-btn';
+            button.className = 'primary-btn';
             button.textContent = 'Ver mas';
             button.addEventListener('click', () => {
-                console.log("ola");
-                
                 mostrarInfoObjetoModal(objeto);
             });
             itemFooter.appendChild(button);
@@ -58,7 +56,7 @@ export function renderPage(objetosVisibles,container,currentPage,itemsPerPage,oc
         if (isAdmin) {
             // Botón editar
             const btnEdit = document.createElement('button');
-            btnEdit.className = 'btn btn-success primary-btn edit';
+            btnEdit.className = 'primary-btn edit';
             btnEdit.innerHTML = `<i class="bi bi-pencil-square"></i>`;
             btnEdit.addEventListener('click', () =>
                 window.location.href = `/editar-objeto/${objeto.id_objeto}`
@@ -66,7 +64,7 @@ export function renderPage(objetosVisibles,container,currentPage,itemsPerPage,oc
 
             // Botón ocultar
             const btnHidden = document.createElement('button');
-            btnHidden.className = 'btn btn-success primary-btn hidden';
+            btnHidden.className = 'primary-btn hidden';
             const isHidden = ocultosNumeros.includes(Number(objeto.id_objeto));
             btnHidden.innerHTML = isHidden
                 ? `<i class="bi bi-eye-slash-fill"></i>`
@@ -74,6 +72,9 @@ export function renderPage(objetosVisibles,container,currentPage,itemsPerPage,oc
             btnHidden.title = isHidden
                 ? 'Mostrar en inicio'
                 : 'Ocultar del inicio';
+            if (isHidden) {
+                btnHidden.classList.add('change');
+            }
             btnHidden.addEventListener('click', () =>
                 accionesHandlers.toggleOcultar(
                     objeto.id_objeto,
@@ -85,12 +86,18 @@ export function renderPage(objetosVisibles,container,currentPage,itemsPerPage,oc
                     itemsPerPage,
                     isAdmin,
                     accionesHandlers
-                )
+                ).then((isHidden) => {
+                    if (isHidden) {
+                        btnHidden.classList.add('change');
+                    }else{
+                        btnHidden.classList.remove('change');
+                    }
+                })
             );
 
             // Botón eliminar
             const btnDelete = document.createElement('button');
-            btnDelete.className = 'btn btn-success primary-btn delete';
+            btnDelete.className = 'primary-btn delete';
             btnDelete.innerHTML = `<i class="bi bi-x-circle"></i>`;
             btnDelete.addEventListener('click', () =>
                 accionesHandlers.eliminar(objeto.id_objeto)
@@ -104,7 +111,6 @@ export function renderPage(objetosVisibles,container,currentPage,itemsPerPage,oc
         item.append(itemHeader, itemBody, itemFooter);
         item.addEventListener('click', (e) => {
             if (e.target.closest('button')) return;
-            console.log("hola");
             
             mostrarInfoObjetoModal(objeto);
         });

@@ -5,8 +5,18 @@ export function editar(id) {
     window.location.href = `/api/objeto/editar/${id}`;
 }
 
-export function toggleOcultar(id, btnHidden, ocultos, objetosVisibles, container, currentPage, itemsPerPage, isAdmin, accionesHandlers) {
-    fetch('/api/toggle_ocultar/', {
+export function toggleOcultar(
+    id,
+    btnHidden,
+    ocultos,
+    objetosVisibles,
+    container,
+    currentPage,
+    itemsPerPage,
+    isAdmin,
+    accionesHandlers
+) {
+    return fetch('/api/toggle_ocultar/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -14,31 +24,30 @@ export function toggleOcultar(id, btnHidden, ocultos, objetosVisibles, container
         },
         body: JSON.stringify({ id }),
     })
-    .then((response) => response.json())
-    .then((data) => {
-        if (data.status === 'ok') {
-            const isHidden = data.estado === 'ocultado';
-            const numId = Number(id);
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status === 'ok') {
+                const isHidden = data.estado === 'ocultado';
+                const numId = Number(id);
 
+                if (isHidden) {
+                    if (!ocultos.includes(numId)) ocultos.push(numId);
+                } else {
+                    const index = ocultos.indexOf(numId);
+                    if (index > -1) ocultos.splice(index, 1);
+                }
 
-            if (isHidden) {
-                if(!ocultos.includes(numId)) ocultos.push(numId);
-            } else {
-                const index = ocultos.indexOf(numId);
-                if (index > -1) ocultos.splice(index, 1);
+                btnHidden.innerHTML = isHidden
+                    ? `<i class="bi bi-eye-slash-fill"></i>`
+                    : `<i class="bi bi-eye-fill"></i>`;
+
+                btnHidden.title = isHidden
+                    ? 'Mostrar en inicio'
+                    : 'Ocultar del inicio';
+
+                return isHidden; // ✅ ← devolvemos el estado
             }
-            
-
-            btnHidden.innerHTML = isHidden
-                ? `<i class="bi bi-eye-slash-fill"></i>`
-                : `<i class="bi bi-eye-fill"></i>`;
-
-            btnHidden.title = isHidden
-                ? 'Mostrar en inicio'
-                : 'Ocultar del inicio';
-
-        }
-    });
+        });
 }
 
 
