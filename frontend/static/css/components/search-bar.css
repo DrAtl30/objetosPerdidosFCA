@@ -1,48 +1,70 @@
-.search-bar-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-    background-color: var(--color-button-primary);
-}
-
-.search-bar-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.search-bar {
-    flex: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 650px;
+.search-container {
     width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-.search-bar input {
+.search-wrapper{
+    display: flex;
+    width: 100%;
+    max-width: 650px;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-container {
+    position: relative;
     flex: 1;
-    height: 37px;
-    margin-right: 10px;
-    padding: 10px;
-    border-radius: 5px;
+    min-width: 0;
+}
+
+.search-input{
+    width: 100%; /* ocupa todo el ancho del input-container */
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
+    height: 2.5rem;
+    border-radius: 0.25rem;
+    box-sizing: border-box;
     border: 1px solid var(--color-gray);
+    font-size: 1rem;
+}
+
+.clear-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    display: none;
+}
+
+/* Icono dentro del botón */
+.clear-btn i {
+    font-size: 1rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
 
 @media screen and (max-width: 700px) {
-    
-    .search-bar {
-        justify-content: center;
+
+    .input-container {
+        flex: unset;
+        width: 130px;
     }
-    .search-bar input{
-        display: none;
-    }
-    .search-bar .filter-text{
-        display: none;
+
+    .search-input {
+        width: 100%;
     }
 }

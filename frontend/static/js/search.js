@@ -1,5 +1,23 @@
 import {cargarObjetosConFiltros, construirUrl} from './items.js'
 
+const input = document.getElementById('search-input');
+const clear = document.getElementById('clear-btn');
+
+input.addEventListener('input', () => {
+    if (input.value.trim() != '') {
+        clear.style.display = 'flex'
+    }else{
+        clear.style.display = 'none'
+    }
+});
+
+clear.addEventListener('click', () => {
+    input.value = '';
+    clear.style.display = 'none'
+    input.focus();
+    buscarObjetos();
+});
+
 document.querySelector('.search-btn').addEventListener('click', buscarObjetos);
 document.getElementById('search-input').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
@@ -11,9 +29,10 @@ document.getElementById('search-input').addEventListener('keypress', function (e
 function buscarObjetos(){
     const paramsString = construirUrl();
 
-    const url = `/api/objetos/?page=1&${paramsString}`;;
+    const url = `/api/objetos/?page=1&${paramsString}`;
+    const newUrl = paramsString ? `?${paramsString}` : window.location.pathname;
 
-    window.history.pushState({}, '', `?${paramsString}`);
+    window.history.pushState({}, '', newUrl);
 
     cargarObjetosConFiltros(url);
 }

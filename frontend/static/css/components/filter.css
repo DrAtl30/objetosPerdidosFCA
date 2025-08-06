@@ -1,3 +1,4 @@
+
 .filter-panel {
     display: none;
     position: fixed;
@@ -70,7 +71,9 @@
 }
 
 @media screen and (max-width: 700px) {
-    
+    .filter-container .filter-text{
+        display: none;
+    }
     .filter-panel {
         display: none;
         max-width: 80%;

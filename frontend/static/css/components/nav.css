@@ -50,6 +50,16 @@
     font-size: 1.5em;
     color: #444;
 }
+.nav-section.derecha.principal {
+    gap: 10px; /* separa los elementos */
+}
+
+.search-container,
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
 @media screen and (max-width: 700px) {
 
@@ -79,15 +89,25 @@
     .main-nav .nav-section.izquierda h2{
         letter-spacing:0;
     }
-
     .main-nav .nav-section.izquierda .destacados-text{
         font-size: 20px;
         padding-left: 0px;
         font-weight: bolder;
+        display: none;
     }
+
+    .main-nav .nav-section.centro {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+    }
+
     .main-nav .nav-section.derecha.admin{
         flex-direction: column;
         align-items: flex-end;
         justify-content: center;
+        margin: 0;
+        padding: 0;
     }
 }

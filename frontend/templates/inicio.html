@@ -46,49 +46,54 @@
                 <div class="nav-section izquierda">
                     <h2 class="destacados-text">Destacados</h2>
                 </div>
-
                 <!-- Centro -->
                 <div class="nav-section centro">
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <div class="input-container">
+                                <input type="text" placeholder="Buscar" class="search-input  hidden-input" id="search-input">
+                                <button type="button" id="clear-btn" class="clear-btn" title="Limpiar"><i class="bi bi-x-lg"></i></button>
+                            </div>
+                            <button class="primary-btn search-btn"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Derecha -->
-                <div class="nav-section derecha">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Buscar" class="hidden-input" id="search-input">
-                        <button class="primary-btn search-btn"><i class="fas fa-search"></i></button>
+                <div class="nav-section derecha ">
+                    <div class="filter-container">
                         <button id="filter-button" class="primary-btn filter-btn">
                             <i class="bi bi-filter"></i> <span class="filter-text">Filtros</span>
                         </button>
                     </div>
-
-                    <div id="filter-panel" class="filter-panel">
-                        <div class="filter-header">
-                            <h3>Filtros de búsqueda</h3>
-                            <button id="close-filter-panel" class="close-button">&times;</button>
-                        </div>
-                        <div class="filter-options">
-                            <fieldset class="filter-category">
-                                <legend>Fecha de carga</legend>
-                                <label><input type="radio" name="fecha-carga" value="last-hour"> Última hora</label>
-                                <label><input type="radio" name="fecha-carga" value="hoy"> Hoy</label>
-                                <label><input type="radio" name="fecha-carga" value="this-week"> Esta semana</label>
-                                <label><input type="radio" name="fecha-carga" value="this-month"> Este mes</label>
-                                <label><input type="radio" name="fecha-carga" value="this-year"> Este año</label>
-                            </fieldset>
-                            
-                            <fieldset class="filter-category">
-                                <legend>Ordenar por</legend>
-                                <label><input type="radio" name="ordenar-por" value="recientes"> Más recientes</label>
-                                <label><input type="radio" name="ordenar-por" value="antiguos"> Más antiguos</label>
-                                <label><input type="radio" name="ordenar-por" value="a-z"> Orden Alfabético (A-Z)</label>
-                                <label><input type="radio" name="ordenar-por" value="z-a"> Orden Alfabético (Z-A)</label>
-                            </fieldset>
-                        </div>
-                        <div class="filters-btn">
-                            <button id="apply-filters" class="btn btn-success primary-btn">Aplicar Filtros</button>
-                            <button id="reset-filters" class="btn btn-secondary">Limpiar Filtros</button>
-                        </div>
-                    </div>
+                </div>
+            </div>
+            <div id="filter-panel" class="filter-panel">
+                <div class="filter-header">
+                    <h3>Filtros de búsqueda</h3>
+                    <button id="close-filter-panel" class="close-button">&times;</button>
+                </div>
+                <div class="filter-options">
+                    <fieldset class="filter-category">
+                        <legend>Fecha de carga</legend>
+                        <label><input type="radio" name="fecha-carga" value="last-hour"> Última hora</label>
+                        <label><input type="radio" name="fecha-carga" value="hoy"> Hoy</label>
+                        <label><input type="radio" name="fecha-carga" value="this-week"> Esta semana</label>
+                        <label><input type="radio" name="fecha-carga" value="this-month"> Este mes</label>
+                        <label><input type="radio" name="fecha-carga" value="this-year"> Este año</label>
+                    </fieldset>
+                    
+                    <fieldset class="filter-category">
+                        <legend>Ordenar por</legend>
+                        <label><input type="radio" name="ordenar-por" value="recientes"> Más recientes</label>
+                        <label><input type="radio" name="ordenar-por" value="antiguos"> Más antiguos</label>
+                        <label><input type="radio" name="ordenar-por" value="a-z"> Orden Alfabético (A-Z)</label>
+                        <label><input type="radio" name="ordenar-por" value="z-a"> Orden Alfabético (Z-A)</label>
+                    </fieldset>
+                </div>
+                <div class="filters-btn">
+                    <button id="apply-filters" class="btn btn-success primary-btn">Aplicar Filtros</button>
+                    <button id="reset-filters" class="btn btn-secondary">Limpiar Filtros</button>
                 </div>
             </div>
         </nav>
