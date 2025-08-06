@@ -24,11 +24,11 @@
         <form id="reg-obj-form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="body-container">
-                <div class="photo-container file" id="photo-container">
+                <div class="photo-container" id="photo-container">
                     <span id="no-img-msj">Arrastra y suelta una foto aquí o haz clic para seleccionar</span>
                     <input type="file" name="imagenes_upload" id="photo-input" accept="image/*" multiple>
 
-                    <div class="slider-wrapper hiddenSlider">
+                    <div class="slider-wrapper ">
                         <div class="carruseles">
                             {% for img in imagenes %}
                                 <img src="{{ img.ruta_imagen.url }}" alt="Imagen del objeto" class="img-prev">
@@ -86,4 +86,5 @@
     {% endif %}
 
     <script type="module" src="/static/js/registro_objeto.js"></script>
+    <script src="/static/js/date.js"></script>
 {% endblock %}
