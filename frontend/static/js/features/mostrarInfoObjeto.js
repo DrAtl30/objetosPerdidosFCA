@@ -1,14 +1,33 @@
-import {mostrarModal, esperarCierreModal} from './modals.js';
-import {crearSlider} from './slider.js';
+import {mostrarModal, esperarCierreModal} from '../components/modals.js';
+import {crearSlider} from '../components/slider.js';
 
 export function mostrarInfoObjetoModal(objeto) {
     const modal = document.getElementById('info_objeto');
     if (!modal) return;
+    
+    const descEspecifica = modal.querySelector('#objetoDescripcionEspecifica').parentElement;
+    const hora = modal.querySelector('#objetoHora').parentElement;
+    const who = modal.querySelector('#objetoEncontradoPor').parentElement;
+
+    if ('descripcion_especifica' in objeto) {
+        descEspecifica.style.display = 'block';
+        hora.style.display = 'block';
+        who.style.display = 'block';
+
+        modal.querySelector('#objetoDescripcionEspecifica').textContent = objeto.descripcion_especifica || 'Sin descripción';
+        modal.querySelector('#objetoHora').textContent = objeto.hora_perdida || 'Sin Hora';
+        modal.querySelector('#objetoEncontradoPor').textContent = objeto.encontrado_por || 'Anonimo';
+    } else {
+        descEspecifica.style.display = 'none';
+        hora.style.display = 'none';
+        who.style.display = 'none';
+    }
 
     modal.querySelector('#objetoNombre').textContent = objeto.nombre || 'Sin nombre';
-    modal.querySelector('#objetoDescripcion').textContent = objeto.descripcion || 'Sin descripción';
+    modal.querySelector('#objetoDescripcionGeneral').textContent = objeto.descripcion_general || 'Sin descripción';
     modal.querySelector('#objetoLugar').textContent = objeto.lugar_perdida || 'Sin lugar';
     modal.querySelector('#objetoFecha').textContent = objeto.fecha_perdida || 'Sin fecha';
+
 
     const imgContainer = modal.querySelector('.img');
     imgContainer.innerHTML = '';

@@ -47,9 +47,12 @@
                             </div>
                             <div class="data">
                                 <p class="nameInfo"><span id="objetoNombre"></span></p>
-                                <p class="descInfo"><strong>Descripcion:</strong> <span id="objetoDescripcion"></span></p>
+                                <p class="descInfo"><strong>Descripcion General:</strong> <span id="objetoDescripcionGeneral"></span></p>
+                                <p class="descInfo"><strong>Descripcion Especifica:</strong> <span id="objetoDescripcionEspecifica"></span></p>
                                 <p class="lugarInfo"><strong>Ubicacion:</strong> <span id="objetoLugar"></span></p>
+                                <p class="lugarInfo"><strong>Hora:</strong> <span id="objetoHora"></span></p>
                                 <p class="fechaInfo"><strong>Fecha encontrado:</strong> <span id="objetoFecha"></span></p>
+                                <p class="fechaInfo"><strong>Encontrado por:</strong> <span id="objetoEncontradoPor"></span></p>
                             </div>
                         </section>
                         <section class="modalFooter">
@@ -97,6 +100,7 @@
         </footer>
     </div>
     {% block extra_js %}
+
     {% endblock %}
 </body>
 </html>

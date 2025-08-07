@@ -1,5 +1,5 @@
-import { mostrarModal } from './modals.js';
-import { esperarCierreModal } from './modals.js';
+import { mostrarModal, esperarCierreModal } from '../components/modals.js';
+import {registrarAlumno} from '../api/registro.js'
 
 document.querySelectorAll('.toggle-password').forEach((icon) => {
     icon.addEventListener('click', () => {
@@ -124,21 +124,8 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             try {
-                const response = await fetch('/api/registro/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfTokenRegistro || '',
-                    },
-                    body: JSON.stringify(obtenData),
-                });
-
-                if (!response.ok) throw await response.json();
-                const data = await response.json();
-                mostrarModal(
-                    data.mensaje || 'Registro exitoso',
-                    'successModal'
-                );
+                const data = await registrarAlumno(obtenData, csrfTokenRegistro?.value)
+                mostrarModal(data.mensaje || 'Registro exitoso','successModal');
                 await esperarCierreModal('successModal',3000);
                 window.location.href = '/login/';
             } catch (err) {

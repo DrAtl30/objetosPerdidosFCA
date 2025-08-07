@@ -133,8 +133,8 @@
 {% endblock %}
 
 {% block extra_js %}
-    <script type="module" src="{% static 'js/items.js' %}"></script>
-    <script type="module" src="{% static 'js/search.js' %}"></script>
-    <script type="module" src="{% static 'js/filter.js' %}"></script>
-    <script type="module" src="{% static 'js/logout.js' %}?v={{ timestamp }}"></script>
+    <script type="module" src="{% static 'js/components/items.js' %}"></script>
+    <script type="module" src="{% static 'js/features/search.js' %}"></script>
+    <script type="module" src="{% static 'js/features/filter.js' %}"></script>
+    <script type="module" src="{% static 'js/auth/logout.js' %}?v={{ timestamp }}"></script>
 {% endblock %}

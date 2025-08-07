@@ -1,5 +1,5 @@
-import { mostrarModal } from './modals.js';
-import { esperarCierreModal } from './modals.js';
+import { mostrarModal, esperarCierreModal } from '../components/modals.js';
+import {loginUsuario, verificarCorreoConfirmado} from '../api/auth.js'
 
 document.querySelectorAll('.toggle-password').forEach((icon) => {
     icon.addEventListener('click', () => {
@@ -19,34 +19,13 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const data = {
-            correo_institucional: document
-                .getElementById('correo_electronico')
-                .value.trim(),
+            correo_institucional: document.getElementById('correo_electronico').value.trim(),
             password: document.getElementById('contrasena').value.trim(),
         };
         if (data.correo_institucional && data.password) {
             try {
                 //verificar correo
-                const verificacion = await fetch(
-                    '/api/verificarCorreoConfirmado/',
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': csrfTokenLogin
-                                ? csrfTokenLogin.value
-                                : '',
-                        },
-                        body: JSON.stringify({
-                            correo_institucional: data.correo_institucional,
-                        }),
-                    }
-                );
-
-                if (!verificacion.ok)
-                    throw new Error('Error al verificar el correo');
-
-                const verificacionData = await verificacion.json();
+                const verificacionData =  await verificarCorreoConfirmado(data.correo_institucional, csrfTokenLogin?.value);
                 
                 if (!verificacionData.existe) {
                     mostrarModal(
@@ -66,23 +45,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                const response = await fetch('/api/login/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfTokenLogin
-                            ? csrfTokenLogin.value
-                            : '',
-                    },
-                    body: JSON.stringify(data),
-                });
-
-                if (!response.ok) throw await response.json(); // <- igual que en tu registro
-
-                const result = await response.json(); // <-- No olvidar parsearlo
+                const result = await loginUsuario(data,csrfTokenLogin?.value);
 
                 mostrarModal('Inicio de sesión exitoso', 'successModal');
                 await esperarCierreModal('successModal');
+                console.log(result.rol);
+                
                 if (result.rol === 'administrador') {
                     window.location.href = '/administrador/';
                 } else if (result.rol === 'alumno') {

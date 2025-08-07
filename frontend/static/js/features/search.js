@@ -1,4 +1,4 @@
-import {cargarObjetosConFiltros, construirUrl} from './items.js'
+import {cargarObjetosConFiltros, construirUrl} from '../components/items.js'
 
 const input = document.getElementById('search-input');
 const clear = document.getElementById('clear-btn');

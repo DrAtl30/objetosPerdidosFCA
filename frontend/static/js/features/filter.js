@@ -1,4 +1,4 @@
-import { cargarObjetosConFiltros, construirUrl } from './items.js';
+import { cargarObjetosConFiltros, construirUrl } from '../components/items.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     const filterButton = document.getElementById('filter-button');

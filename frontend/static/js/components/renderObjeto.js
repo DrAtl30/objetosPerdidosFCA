@@ -1,4 +1,8 @@
-import {mostrarInfoObjetoModal} from './mostrarInfoObjeto.js'
+import { esperarCierreModal, mostrarModal } from '../components/modals.js';
+import {mostrarInfoObjetoModal} from '../features/mostrarInfoObjeto.js'
+
+import {obtenerDataObjeto} from '../api/objetos.js'
+
 export function renderPage(objetosVisibles,container,currentPage,itemsPerPage,ocultos,isAdmin,accionesHandlers) {
     container.innerHTML = '';
     const ocultosNumeros = ocultos.map((o) => Number(o));
@@ -34,7 +38,7 @@ export function renderPage(objetosVisibles,container,currentPage,itemsPerPage,oc
         h5.textContent = objeto.nombre || 'Sin título';
         const p = document.createElement('p');
         const maxDescrpcion = 20;
-        let descripcionView =  objeto.descripcion || '';
+        let descripcionView =  objeto.descripcion_general || '';
         if (descripcionView.length > maxDescrpcion) {
             descripcionView =  descripcionView.slice(0,maxDescrpcion) + '...';
         }
@@ -48,7 +52,7 @@ export function renderPage(objetosVisibles,container,currentPage,itemsPerPage,oc
             button.className = 'primary-btn';
             button.textContent = 'Ver mas';
             button.addEventListener('click', () => {
-                mostrarInfoObjetoModal(objeto);
+                obtenerYMostrarData(objeto.id_objeto);
             });
             itemFooter.appendChild(button);
         }
@@ -111,8 +115,7 @@ export function renderPage(objetosVisibles,container,currentPage,itemsPerPage,oc
         item.append(itemHeader, itemBody, itemFooter);
         item.addEventListener('click', (e) => {
             if (e.target.closest('button')) return;
-            
-            mostrarInfoObjetoModal(objeto);
+            obtenerYMostrarData(objeto.id_objeto);
         });
         container.appendChild(item);
     });
@@ -156,4 +159,16 @@ export function updatePaginationStates(pagination, totalPages, currentPage) {
             item.classList.toggle('active', pageNum === currentPage);
         }
     });
+}
+
+async function obtenerYMostrarData(id) {
+    try {
+        const data = await obtenerDataObjeto(id);
+        mostrarInfoObjetoModal(data);
+
+    } catch (error) {
+        console.error(error);
+        mostrarModal('Error al cargar la Informacion del objeto', 'errorModal');
+        await esperarCierreModal('errorModal');
+    }
 }
