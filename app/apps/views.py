@@ -252,10 +252,13 @@ class ObjetoPerdidoViewSet(ModelViewSet):
         
         instance = self.get_object()
         instance.nombre = request.data.get('nombre', instance.nombre)
-        instance.descripcion = request.data.get('descripcion', instance.descripcion)
+        instance.descripcion_general = request.data.get('descripcion_general', instance.descripcion_general)
+        instance.descripcion_especifica = request.data.get('descripcion_especifica', instance.descripcion_especifica)
         instance.fecha_perdida = request.data.get('fecha_perdida', instance.fecha_perdida)
+        instance.hora_perdida = request.data.get('hora_perdida', instance.hora_perdida)
         instance.lugar_perdida = request.data.get('lugar_perdida', instance.lugar_perdida)
         instance.estado_objeto = request.data.get('estado_objeto', instance.estado_objeto)
+        instance.encontrado_por = request.data.get('encontrado_por', instance.encontrado_por)
         instance.save()
         
         if isinstance(request.data, QueryDict) and 'imagenes_existentes' in request.data:
@@ -287,6 +290,33 @@ class ObjetoPerdidoViewSet(ModelViewSet):
 
         objeto.delete()
         return Response({"message": "Objeto e imágenes eliminados correctamente"}, status=status.HTTP_200_OK)
+    
+    def retrieve(self, request, *args, **kwargs):
+        objeto = self.get_object()
+        
+        if request.user.is_authenticated and request.user.rol == 'administrador':
+            data = {
+                'id': objeto.id_objeto,
+                'nombre': objeto.nombre,
+                'descripcion_general': objeto.descripcion_general,
+                'descripcion_especifica': objeto.descripcion_especifica,
+                'hora_perdida': objeto.hora_perdida.strftime('%H:%M') if objeto.hora_perdida else '',
+                'fecha_perdida': objeto.fecha_perdida.strftime('%Y-%m-%d') if objeto.fecha_perdida else '',
+                'lugar_perdida': objeto.lugar_perdida,
+                'estado_objeto': objeto.estado_objeto,
+                'encontrado_por': objeto.encontrado_por,
+                'imagenes': [{'ruta_imagen': img.ruta_imagen.url} for img in objeto.imagenes.all()],
+            }
+        else:
+            data = {
+                'id': objeto.id_objeto,
+                'nombre': objeto.nombre,
+                'descripcion_general': objeto.descripcion_general,
+                'fecha_perdida': objeto.fecha_perdida.strftime('%Y-%m-%d') if objeto.fecha_perdida else '',
+                'lugar_perdida': objeto.lugar_perdida,
+                'imagenes': [{'ruta_imagen': img.ruta_imagen.url} for img in objeto.imagenes.all()],
+            }
+        return Response(data)
 
 def toggle_ocultar_objeto(request):
     if not request.user.is_authenticated or not request.user.is_staff:

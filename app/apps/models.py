@@ -174,11 +174,14 @@ class Objetoperdido(models.Model):
     
     id_objeto = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    descripcion_general = models.TextField()
+    descripcion_especifica = models.TextField()
     fecha_perdida = models.DateField()
+    hora_perdida = models.TimeField()
     lugar_perdida = models.CharField(max_length=255)
     estado_objeto = models.CharField(max_length=50, choices=ESTADO_OBJETO)
     fecha_carga = models.DateTimeField(auto_now_add=True)
+    encontrado_por = models.CharField(max_length=100)
     id_usuario_reclamante = models.ForeignKey(
         "Usuario",
         models.DO_NOTHING,

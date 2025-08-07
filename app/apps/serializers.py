@@ -155,9 +155,12 @@ class RegistroObjeto(serializers.ModelSerializer):
         fields = [
             'id_objeto',
             'nombre',
-            'descripcion',
+            'descripcion_general',
+            'descripcion_especifica',
             'fecha_perdida',
+            'hora_perdida',
             'lugar_perdida',
+            'encontrado_por',
             'estado_objeto',
             'imagenes',
             'imagenes_upload',

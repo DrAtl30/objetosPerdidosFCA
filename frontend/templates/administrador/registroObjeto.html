@@ -47,12 +47,24 @@
                         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="{{ objeto.nombre|default:'' }}"required>
                     </div>
                     <div class="mb-3">
-                        <label for="descripcion" class="form-label">Descripción General</label>
-                        <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Descripción General (máximo 100 carcateres)" rows="3" maxlength="100" required>{{ objeto.descripcion|default:'' }}</textarea>
+                        <label for="encontrado_por" class="form-label">Encontrado por</label>
+                        <input type="text" class="form-control" id="encontrado_por" name="encontrado_por" placeholder="Encontrado por" value="{{ objeto.encontrado_por|default:'' }}"required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion_general" class="form-label">Descripción General</label>
+                        <textarea class="form-control" id="descripcion_general" name="descripcion_general" placeholder="Descripción General (máximo 100 carcateres)" rows="3" maxlength="100" required>{{ objeto.descripcion_general|default:'' }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion_especifica" class="form-label">Descripción Especifica</label>
+                        <textarea class="form-control" id="descripcion_especifica" name="descripcion_especifica" placeholder="Descripción Especifica (máximo 300 carcateres)" rows="3" maxlength="300" required>{{ objeto.descripcion_especifica|default:'' }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label for="fecha" class="form-label">Fecha</label>
                         <input type="date" class="form-control" id="fecha" name="fecha" value="{{ objeto.fecha_perdida|date:'Y-m-d' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hora" class="form-label">Hora</label>
+                        <input type="time" class="form-control" id="hora" name="hora" min="7:00" max="20:00" step="900" value="{{ objeto.hora|time:'H:i' }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="lugar" class="form-label">Lugar</label>
@@ -85,6 +97,6 @@
         <script>const imagenesExistentes = [];</script>
     {% endif %}
 
-    <script type="module" src="/static/js/registro_objeto.js"></script>
-    <script src="/static/js/date.js"></script>
+    <script type="module" src="/static/js/pages/registro_objeto.js"></script>
+    <script src="/static/js/utils/date.js"></script>
 {% endblock %}
