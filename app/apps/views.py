@@ -42,6 +42,8 @@ def user_registro(request):
 
 
 def object_registro(request,id_objeto=None):
+    if not request.user.is_authenticated or request.user.rol != 'administrador':
+        return redirect('/')
     contexto = {}
     if id_objeto is not None:
         objeto = get_object_or_404(Objetoperdido, pk=id_objeto)
