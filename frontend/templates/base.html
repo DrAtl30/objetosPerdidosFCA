@@ -36,59 +36,9 @@
             <div class="container">
                 {% block content-main %}
                 {% endblock %}
-                <div id="info_objeto" class="modal modal--info" role="dialog" aria-modal="true" aria-live="assertive">
-                    <div class="modalContent">
-                        <section class="modalHeader">
-                            <h2 class="modalMessage"></h2>
-                            <button class="modal__close close" aria-label="Cerrar">&times;</button>
-                        </section>
-                        <section class="modalMain">
-                            <div class="img">
-                            </div>
-                            <div class="data">
-                                <p class="nameInfo"><span id="objetoNombre"></span></p>
-                                <p class="descInfo"><strong>Descripcion General:</strong> <span id="objetoDescripcionGeneral"></span></p>
-                                <p class="descInfo"><strong>Descripcion Especifica:</strong> <span id="objetoDescripcionEspecifica"></span></p>
-                                <p class="lugarInfo"><strong>Ubicacion:</strong> <span id="objetoLugar"></span></p>
-                                <p class="lugarInfo"><strong>Hora:</strong> <span id="objetoHora"></span></p>
-                                <p class="fechaInfo"><strong>Fecha encontrado:</strong> <span id="objetoFecha"></span></p>
-                                <p class="fechaInfo"><strong>Encontrado por:</strong> <span id="objetoEncontradoPor"></span></p>
-                            </div>
-                        </section>
-                        <section class="modalFooter">
-                            <button id="btnReclamar" class="primary-btn">Reclamar</button>
-                            <div class="modalComentario">
-                                <textarea name="comentario" id="comentario" placeholder="Comentario"></textarea>
-                                <button id="btnComentar" class="primary-btn comment">
-                                    <i class="bi bi-chat-left-fill icono"></i>
-                                    <span class="comment-text">Comentar</span>
-                                </button>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div id="modalConfirmacion" class="modal modal--confirmacion" role="dialog" aria-modal="true" aria-live="assertive">
-                    <div class="modalContent">
-                        <p class="modalMessage"></p>
-                        <div class="modal-actions">
-                            <button id="btnConfirmarEliminar" class="btn primary-btn eliminar">Eliminar</button>
-                            <button class="modal__close close" aria-label="Cerrar">&times;</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal modal--error" id="errorModal" role="dialog" aria-modal="true" aria-live="assertive">
-                    <div class="modalContent">
-                        <button type="button" class="modal__close close" aria-label="Cerrar">&times;</button>
-                        <p class="modalMessage"></p>
-                    </div>   
-                </div>
-                  
-                <div class="modal modal--success" id="successModal" role="dialog" aria-modal="true" aria-live="polite">
-                    <div class="modalContent">
-                        <button type="button" class="modal__close close" aria-label="Cerrar">&times;</button>
-                        <p class="modalMessage"></p>
-                    </div>
-                </div> 
+                {% block modals %}
+                    {% include 'partials/modals/message.html' %}
+                {% endblock  %}
             </div>
         </main>
         <footer>

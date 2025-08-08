@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
 {% block title %}Inicio{% endblock  %}
 
 {% block extra_css %}
@@ -118,6 +119,11 @@
     </section>
     
 {% endblock  %}
+
+{% block modals %}
+    {% include 'partials/modals/info_objeto.html' %}
+{% endblock  %}
+
 {% block extra_js %}
 
     <script type="module" src="{% static 'js/components/items.js' %}"></script>
