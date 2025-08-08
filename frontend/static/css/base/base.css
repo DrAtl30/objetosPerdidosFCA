@@ -6,6 +6,7 @@ body, html {
 }
 a{
     text-decoration: none;
+    color: var(--color-text-light);
 }
 
 h1, h2, h3, .user p {

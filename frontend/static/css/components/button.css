@@ -21,6 +21,9 @@
     outline-offset: 2px;
 }
 
+.primary-btn.d-btn{
+    padding: 5px 0 ;
+}
 .primary-btn.home{
     margin: 5px;
 }
@@ -100,11 +103,11 @@
         font-size: 1.5rem;
         padding: 5px;
     }
-    .primary-btn.filter-btn, .primary-btn.add-obj,.primary-btn.sign, .primary-btn.comment {
+    .primary-btn.filter-btn, .primary-btn.add-obj,.primary-btn.sign, .primary-btn.comment, .primary-btn.m-btn {
         min-width: 30px;
         margin: 5px;
     }
-    .add-text, .comment-text{
+    .add-text, .comment-text, .conf-text{
         display: none;
     }
     .primary-btn.add-obj .icono, .primary-btn.comment .icono {

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'css/components/search-bar.css' %}">
     <link rel="stylesheet" href="{% static 'css/components/filter.css' %}">
     <link rel="stylesheet" href="{% static 'css/components/button.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/dropdown.css' %}">
 {% endblock %}
 
 {% block vista %}vista-admin{% endblock  %}
@@ -68,11 +69,26 @@
                             <i class="bi bi-filter"></i> <span class="filter-text">Filtros</span>
                         </button>
                     </div>
-    
                     
-                    <a href="{% url 'object_registro' %}" class="primary-btn add-obj">
-                        <i class="bi bi-plus-circle-fill icono"></i> <span class="add-text">Add</span>
-                    </a>
+                    <div class="dropdown-m">
+                        <div class="dropdown primary-btn m-btn">
+                            <div class="select-opt">
+                                <span class="selected-opt">
+                                    <i class="bi bi-gear-fill"></i>
+                                    <span class="conf-text">Settings</span>
+                                </span>
+                                <div class="caret"></div>
+                            </div>
+                            <ul class="menu">
+                                <li class="primary-btn d-btn">
+                                    <a href="{% url 'object_registro' %}" class="primary-btn d-btn">Add Objeto</a>
+                                </li>
+                                <li class="primary-btn d-btn">
+                                    <a href="#" class="primary-btn d-btn">Reclamados</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="filter-panel" class="filter-panel">
@@ -136,5 +152,6 @@
     <script type="module" src="{% static 'js/components/items.js' %}"></script>
     <script type="module" src="{% static 'js/features/search.js' %}"></script>
     <script type="module" src="{% static 'js/features/filter.js' %}"></script>
+    <script type="module" src="{% static 'js/utils/dropdown.js' %}"></script>
     <script type="module" src="{% static 'js/auth/logout.js' %}?v={{ timestamp }}"></script>
 {% endblock %}
