@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const otroLugar = document.getElementById('otro_lugar')
     const otroLugarContainer = document.getElementById('otroLugarContainer')
 
+
     lugarSelect.addEventListener('change', function () {
         if (this.value === 'otro') {
             otroLugarContainer.style.display = 'block';
@@ -259,6 +260,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // Cambiar encabezado del contenedor
         const header = document.querySelector('.header-container h2');
         if (header) header.textContent = 'Actualizar Objeto Perdido';
+
+        // Mostrar campo de "otro lugar" si aplica al cargar la página
+        if (lugarSelect.value === 'otro') {
+            otroLugarContainer.style.display = 'block';
+            otroLugar.required = true;
+        }
 
         // Cambiar texto del botón
         const boton = document.querySelector('button[type="submit"]');
