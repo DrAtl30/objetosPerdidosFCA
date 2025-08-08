@@ -10,6 +10,23 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitButton = form.querySelector('button[type="submit"]');
     let imagenesSeleccionadas = [];
     let imagenesGuardadas = [...imagenesExistentes];
+
+    const lugarSelect = document.getElementById('lugar')
+    const otroLugar = document.getElementById('otro_lugar')
+    const otroLugarContainer = document.getElementById('otroLugarContainer')
+
+    lugarSelect.addEventListener('change', function () {
+        if (this.value === 'otro') {
+            otroLugarContainer.style.display = 'block';
+            otroLugar.required = true;
+        } else {
+            otroLugarContainer.style.display = 'none';
+             otroLugar.required = false;
+            otroLugar.value = '';
+        }
+    });
+
+
     mostrarVistaPrevia();
 
     function mostrarVistaPrevia() {
@@ -187,7 +204,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const fecha = document.getElementById('fecha').value;
             const hora = document.getElementById('hora').value;
             const lugar = document.getElementById('lugar').value.trim();
+            const otro_lugar = document.getElementById('otro_lugar').value.trim();
             const encontrado_por = document.getElementById('encontrado_por').value.trim();
+            
 
 
             const formData = new FormData();
@@ -196,7 +215,11 @@ document.addEventListener('DOMContentLoaded', function () {
             formData.append('descripcion_especifica', descripcion_especifica);
             formData.append('fecha_perdida', fecha);
             formData.append('hora_perdida', hora);
-            formData.append('lugar_perdida', lugar);
+            if (lugar === 'otro') {
+                formData.append('lugar_perdida', otro_lugar);
+            } else {
+                formData.append('lugar_perdida', lugar);
+            }
             formData.append('estado_objeto', 'publicado');
             formData.append('encontrado_por', encontrado_por);
 

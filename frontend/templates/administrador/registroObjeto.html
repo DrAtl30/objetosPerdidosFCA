@@ -73,7 +73,12 @@
                             <option value="Sala de Cómputo 1" {% if objeto.lugar_perdida == 'Sala de Cómputo 1' %}selected{% endif %}>Sala de Cómputo 1</option>
                             <option value="Salón 9" {% if objeto.lugar_perdida == 'Salón 9' %}selected{% endif %}>Salón 9</option>
                             <option value="Sala de usos múltiples" {% if objeto.lugar_perdida == 'Sala de usos múltiples' %}selected{% endif %}>Sala de usos múltiples</option>
+                            <option value="otro" {% if objeto.lugar_perdida == 'otro' %}selected{% endif %}>Otro (especificar)</option>
                         </select>
+                    </div>
+                    <div class="mb-3" id="otroLugarContainer" style="display:none;">
+                        <label for="otroLugar" class="form-label">Especificar lugar</label>
+                        <input type="text" class="form-control" id="otro_lugar" name="otro_lugar">
                     </div>
                     <!-- Contenedor para centrar el botón -->
                     <div class="button-container">
