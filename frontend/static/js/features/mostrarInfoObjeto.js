@@ -1,5 +1,7 @@
 import {mostrarModal, esperarCierreModal} from '../components/modals.js';
 import {crearSlider} from '../components/slider.js';
+import {crearComentarioObjeto} from '../api/objetos.js'
+import {getCSRFToken} from '../utils/utils.js'
 
 export function mostrarInfoObjetoModal(objeto) {
     const modal = document.getElementById('info_objeto');
@@ -72,5 +74,40 @@ export function mostrarInfoObjetoModal(objeto) {
 
     mostrarModal('Informacion del objeto', 'info_objeto');
     esperarCierreModal('info_objeto',0)
+    postComentarioModal(objeto.id);
 
+}
+export function postComentarioModal(objetoId) {
+    const btnComentar = document.getElementById('btnComentar');
+    const textarea = document.getElementById('comentario');
+
+    btnComentar.onclick = async () => {
+        const textoComment = textarea.value.trim();
+
+        if (!textoComment) {
+            mostrarModal('El comentario no puede estar vacío', 'errorModal');
+            await esperarCierreModal('errorModal');
+            return;
+        }
+
+        try {
+            const csrfToken = getCSRFToken();
+            await crearComentarioObjeto(objetoId, textoComment, csrfToken);
+
+            // Opcional: limpiar textarea después de enviar
+            textarea.value = '';
+
+            // Aquí podrías recargar la lista de comentarios o actualizar la UI para mostrar el nuevo comentario
+            // Ejemplo: await cargarComentariosYRenderizar(objetoId);
+
+            mostrarModal('Comentario agregado exitosamente', 'successModal');
+            await esperarCierreModal('successModal');
+        } catch (error) {
+            mostrarModal(
+                error.message || 'Error al enviar comentario',
+                'errorModal'
+            );
+            await esperarCierreModal('errorModal');
+        }
+    };
 }

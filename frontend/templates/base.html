@@ -37,8 +37,8 @@
                 {% block content-main %}
                 {% endblock %}
                 {% block modals %}
-                    {% include 'partials/modals/message.html' %}
                 {% endblock  %}
+                {% include 'partials/modals/message.html' %}
             </div>
         </main>
         <footer>
@@ -50,7 +50,6 @@
         </footer>
     </div>
     {% block extra_js %}
-
     {% endblock %}
 </body>
 </html>

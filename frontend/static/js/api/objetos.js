@@ -83,3 +83,20 @@ export async function createOrUpdateObjeto({formData,idObjeto,csrfToken,}) {
 
     return await response.json(); // o `return true` si no necesitas la respuesta
 }
+
+export async function crearComentarioObjeto(objeto_id,textoComment, csrfToken) {
+    const response = await fetch(`/api/comentario/${objeto_id}/`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        credentials: 'include',
+        body: JSON.stringify({comentario: textoComment}),
+    });
+    if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.detail || 'Error al cargar el comentario');
+    }
+    return await response.json();
+}

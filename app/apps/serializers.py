@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 
-from .models import Usuario, Alumno, Objetoperdido, Imagenobjeto
+from .models import Usuario, Alumno, Objetoperdido, Imagenobjeto, Comentario
 
 
 class RegistroUser(serializers.ModelSerializer):
@@ -180,3 +180,14 @@ class RegistroObjeto(serializers.ModelSerializer):
 
         return objeto
 
+class ComentarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comentario
+        fields = [
+            "id_comentario",
+            "comentario",
+            "id_usuario",
+            "id_objeto",
+            "fecha_comentario"
+        ]
+        read_only_fields = ["id_comentario", "id_usuario", "fecha_comentario"]

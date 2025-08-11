@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from django.http import JsonResponse,  QueryDict
-from rest_framework import status
-from .serializers import RegistroUser, LoginUser, RegistroObjeto
+from rest_framework import status, generics, permissions
+from .serializers import RegistroUser, LoginUser, RegistroObjeto, ComentarioSerializer
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
@@ -14,7 +14,7 @@ from django.db.models import Q
 from datetime import datetime, timedelta
 from email_service.api.services.email_services import enviar_correo_confirmacion
 import logging, json, os
-from .models import Usuario, Objetoperdido,Imagenobjeto
+from .models import Usuario, Objetoperdido,Imagenobjeto, Comentario
 
 
 # Create your views here.
@@ -368,3 +368,29 @@ def obtener_ocultos(request):
 
     return Response({"ocultos": ocultos})
 
+
+class ComentarioView(generics.ListCreateAPIView):
+    serializer_class = ComentarioSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        objeto_id = self.kwargs.get("objeto_id")
+        
+        return Comentario.objects.filter(id_objeto=objeto_id).order_by("-fecha_comentario")
+    
+    def perform_create(self, serializer):
+        objeto_id = self.kwargs.get("objeto_id")
+        serializer.save(
+            id_usuario = self.request.user,
+            id_objeto_id=objeto_id,
+            fecha_comentario = timezone.now()
+        )
+        return super().perform_create(serializer)
+    
+class ComentarioAllView(generics.ListAPIView):
+    serializer_class = ComentarioSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        return Comentario.objects.all().order_by("-fecha_comentario")
+    

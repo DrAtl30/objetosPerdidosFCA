@@ -125,7 +125,6 @@ class Comentario(models.Model):
     )
     comentario = models.TextField()
     fecha_comentario = models.DateTimeField()
-    fecha_edicion = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         # managed = False
