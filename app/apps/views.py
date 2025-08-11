@@ -371,7 +371,13 @@ def obtener_ocultos(request):
 
 class ComentarioView(generics.ListCreateAPIView):
     serializer_class = ComentarioSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            # Permitir a cualquiera ver comentarios
+            return [permissions.AllowAny()]
+        # Para POST, sí requiere autenticación
+        return [permissions.IsAuthenticated()]
     
     def get_queryset(self):
         objeto_id = self.kwargs.get("objeto_id")

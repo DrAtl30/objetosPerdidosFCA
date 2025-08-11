@@ -170,18 +170,23 @@
 .modalFooter {
     flex: 0 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
     gap: 1rem;
     flex-wrap: wrap;
 }
+
+.actions{
+    width: 100%;
+}
+
 .modalComentario {
     display: flex;
     gap: 0.5rem;
     align-items: center;
     flex-wrap: nowrap;
     width: 100%;
-    max-width: 500px;
     margin-left: auto;
 }
 .modalComentario textarea{
@@ -199,6 +204,31 @@
     border-color: var(--color-info);
     box-shadow: 0 0 5px var(--color-info);
 }
+
+.listaComentarios{
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.comentarioItem{
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.textoComment{
+    text-align: justify;
+    flex: 1;
+    margin: 1rem;
+}
+.dateComment{
+    color: var(--color-gray);
+}
+
 
 /* Animaciones */
 @keyframes modal-fade {

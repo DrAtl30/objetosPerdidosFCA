@@ -1,6 +1,6 @@
 import {mostrarModal, esperarCierreModal} from '../components/modals.js';
 import {crearSlider} from '../components/slider.js';
-import {crearComentarioObjeto} from '../api/objetos.js'
+import {crearComentarioObjeto, obtenerComentarios} from '../api/objetos.js'
 import {getCSRFToken} from '../utils/utils.js'
 
 export function mostrarInfoObjetoModal(objeto) {
@@ -80,6 +80,9 @@ export function mostrarInfoObjetoModal(objeto) {
 export function postComentarioModal(objetoId) {
     const btnComentar = document.getElementById('btnComentar');
     const textarea = document.getElementById('comentario');
+    const listaComentarios = document.querySelector('.listaComentarios');
+
+    cargarComentarios(objetoId, listaComentarios);
 
     btnComentar.onclick = async () => {
         const textoComment = textarea.value.trim();
@@ -97,17 +100,46 @@ export function postComentarioModal(objetoId) {
             // Opcional: limpiar textarea después de enviar
             textarea.value = '';
 
-            // Aquí podrías recargar la lista de comentarios o actualizar la UI para mostrar el nuevo comentario
-            // Ejemplo: await cargarComentariosYRenderizar(objetoId);
+            await cargarComentarios(objetoId, listaComentarios);
 
             mostrarModal('Comentario agregado exitosamente', 'successModal');
             await esperarCierreModal('successModal');
         } catch (error) {
-            mostrarModal(
-                error.message || 'Error al enviar comentario',
-                'errorModal'
-            );
+            mostrarModal(error.message || 'Error al enviar comentario','errorModal');
             await esperarCierreModal('errorModal');
         }
     };
+}
+
+
+async function cargarComentarios(objetoId) {
+    try {
+        const data = await obtenerComentarios(objetoId);
+
+        // Aquí el arreglo real está en data.results
+        const comentarios = data.results;
+
+        const lista = document.querySelector('.listaComentarios');
+        lista.innerHTML = ''; // Limpia antes de agregar
+
+        if (comentarios.length === 0) {
+            lista.innerHTML = '<p>No hay comentarios todavía.</p>';
+            return;
+        }
+
+        comentarios.forEach((c) => {
+            const esUsuarioActual = c.id_usuario === window.usuarioActualId;
+            const nombreUsuario = esUsuarioActual ? 'Tú' : c.nombre || 'Anónimo';
+            
+            const item = document.createElement('div');
+            item.classList.add('comentarioItem');
+            const text = document.createElement('div');
+            text.classList.add('textoComment');
+            text.innerHTML = `<p><strong>${nombreUsuario}:</strong> ${c.comentario}. <small class="dateComment">${new Date(c.fecha_comentario).toLocaleString()}</small> </p>`;
+            item.appendChild(text);
+            lista.appendChild(item);
+        });
+    } catch (error) {
+        console.error('Error cargando comentarios:', error);
+    }
 }

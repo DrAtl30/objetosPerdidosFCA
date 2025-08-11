@@ -100,3 +100,14 @@ export async function crearComentarioObjeto(objeto_id,textoComment, csrfToken) {
     }
     return await response.json();
 }
+
+export async function obtenerComentarios(objetoId) {
+    const response = await fetch(`/api/comentario/${objetoId}/`, {
+        headers: {
+            // agrega token si usas autenticación con token
+        },
+        credentials: 'include', // si usas cookies o sesión
+    });
+    if (!response.ok) throw new Error('Error al obtener comentarios');
+    return await response.json();
+}

@@ -181,6 +181,7 @@ class RegistroObjeto(serializers.ModelSerializer):
         return objeto
 
 class ComentarioSerializer(serializers.ModelSerializer):
+    nombre = serializers.CharField(source='id_usuario.nombre', read_only=True)
     class Meta:
         model = Comentario
         fields = [
@@ -188,6 +189,7 @@ class ComentarioSerializer(serializers.ModelSerializer):
             "comentario",
             "id_usuario",
             "id_objeto",
-            "fecha_comentario"
+            "fecha_comentario",
+            "nombre"
         ]
         read_only_fields = ["id_comentario", "id_usuario", "fecha_comentario"]
