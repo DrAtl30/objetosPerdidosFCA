@@ -161,6 +161,11 @@ class Notificacion(models.Model):
         # managed = False
         db_table = "notificacion"
 
+class Lugar_Perdida(models.Model):
+    nombre = models.CharField(max_length=150, unique=True)
+    class Meta:
+        # manage = False
+        db_table = 'lugar_perdida'
 
 class Objetoperdido(models.Model):
     ESTADO_OBJETO = [
@@ -178,6 +183,7 @@ class Objetoperdido(models.Model):
     fecha_perdida = models.DateField()
     hora_perdida = models.TimeField()
     lugar_perdida = models.CharField(max_length=255)
+    id_lugar = models.ForeignKey(Lugar_Perdida,null=True, on_delete= models.PROTECT, related_name='objetos')
     estado_objeto = models.CharField(max_length=50, choices=ESTADO_OBJETO)
     fecha_carga = models.DateTimeField(auto_now_add=True)
     encontrado_por = models.CharField(max_length=100)

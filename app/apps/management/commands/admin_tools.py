@@ -14,6 +14,8 @@ class Command(BaseCommand):
             "3": "ver_historial_administrativo",
             "4": "crear_historial_administrativo",
             "5": "actualizar_historial_administrativo",
+            "6": "agrega_nuevo_lugar",
+            "7": "ver_all_lugares",
             "q": "Salir",
         }
 
@@ -24,6 +26,8 @@ class Command(BaseCommand):
             self.stdout.write("3 - Consultar historial del Administrador")
             self.stdout.write("4 - Vincular usuario a perfil de Administrador")
             self.stdout.write("5 - Desvincular usuario del perfil de Administrador")
+            self.stdout.write("6 - Añadir un nuevo lugar")
+            self.stdout.write("7 - Ver todos los lugares")
             self.stdout.write("q - Salir")
 
             eleccion = input("Selecciona una opción: ").strip()
