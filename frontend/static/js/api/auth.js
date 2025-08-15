@@ -51,3 +51,9 @@ export async function logout(csrfToken) {
 
     return await response.json();
 }
+
+export async function isAuth() {
+    const response = await fetch('/api/isAuth/', {credentials: 'include'});
+    if (!response.ok) throw new Error("Error al verificar la sesion");
+    return await response.json();
+}

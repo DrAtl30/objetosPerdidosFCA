@@ -64,6 +64,9 @@ def home_admin(request):
 
     return render(request, "administrador/administrador.html", {'admin_name': admin_name, 'admin_lastname': admin_lastname})
 
+def isAuth(request):
+    return JsonResponse({'auth': request.user.is_authenticated,'id_usuario_auth':request.user.id_usuario if request.user.is_authenticated else None})
+
 
 class RegistroAlumnoView(APIView):
     def post(self, request, *args, **kwargs):

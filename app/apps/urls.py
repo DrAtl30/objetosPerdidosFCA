@@ -1,12 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 # from rest_framework.authtoken.views import obtain_auth_token #es para pruebas
-from apps.views import (RegistroAlumnoView,LoginAlumnoView,LogOutAlumnoView,ConfirmarCuentaView,verificar_correo_confirmado, ReenviarCorreoConfirmacion, ObjetoPerdidoViewSet, toggle_ocultar_objeto, obtener_ocultos, ComentarioView, ComentarioAllView)
+from apps.views import (isAuth,RegistroAlumnoView,LoginAlumnoView,LogOutAlumnoView,ConfirmarCuentaView,verificar_correo_confirmado, ReenviarCorreoConfirmacion, ObjetoPerdidoViewSet, toggle_ocultar_objeto, obtener_ocultos, ComentarioView, ComentarioAllView)
 
 router = DefaultRouter()
 router.register(r'objetos', ObjetoPerdidoViewSet, basename='objetos')
 
 urlpatterns = [
+    path("isAuth/",isAuth,name="isAuth"),
     path("registro/", RegistroAlumnoView.as_view(), name="registro"),
     path("login/", LoginAlumnoView.as_view(), name="login"),
     # path("token/", obtain_auth_token, name="api_token_auth"), #es para pruebas
