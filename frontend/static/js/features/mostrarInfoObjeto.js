@@ -74,10 +74,25 @@ export function mostrarInfoObjetoModal(objeto) {
     }
 
     mostrarModal('Informacion del objeto', 'info_objeto');
-    esperarCierreModal('info_objeto',0)
+    esperarCierreModal('info_objeto',0);
+    reclamar();
     postComentarioModal(objeto.id);
 
 }
+
+function reclamar(){
+    const btnReclamar = document.getElementById('btnReclamar');
+
+    btnReclamar.onclick = async () => {
+        const {auth} = await isAuth();
+        if (!auth) {
+            mostrarModal('Debes iniciar sesion para Reclamar','errorModal');
+            await esperarCierreModal('errorModal', 2000);
+            return;
+        }
+    }
+}
+
 export function postComentarioModal(objetoId) {
     const btnComentar = document.getElementById('btnComentar');
     const textarea = document.getElementById('comentario');
