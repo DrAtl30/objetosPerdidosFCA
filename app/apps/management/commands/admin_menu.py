@@ -8,16 +8,7 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
-        opciones = {
-            "1": "crear_admin",
-            "2": "cambiar_password_admin",
-            "3": "ver_historial_administrativo",
-            "4": "crear_historial_administrativo",
-            "5": "actualizar_historial_administrativo",
-            "6": "agrega_nuevo_lugar",
-            "7": "ver_all_lugares",
-            "q": "Salir",
-        }
+        gti 
 
         while True:
             self.stdout.write("\n--- Menú para administrar cuenta Administrador ---")
