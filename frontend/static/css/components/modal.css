@@ -58,7 +58,7 @@
 }
 
 .modal--error .modalContent::before {
-    background: var(--color-warning);
+    background: var(--color-error);
 }
 .modal--confirmacion .modalContent::before {
     background: var(--color-error);
