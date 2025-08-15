@@ -1,5 +1,6 @@
 import {mostrarModal, esperarCierreModal} from '../components/modals.js';
 import {crearSlider} from '../components/slider.js';
+import {isAuth} from '../api/auth.js';
 import {crearComentarioObjeto, obtenerComentarios} from '../api/objetos.js'
 import {getCSRFToken} from '../utils/utils.js'
 
@@ -85,6 +86,13 @@ export function postComentarioModal(objetoId) {
     cargarComentarios(objetoId, listaComentarios);
 
     btnComentar.onclick = async () => {
+        const { auth } = await isAuth();
+        if (!auth) {
+            mostrarModal('Debes iniciar sesion para hacer comentarios','errorModal');
+            await esperarCierreModal('errorModal', 2000);
+            return;
+        }
+
         const textoComment = textarea.value.trim();
 
         if (!textoComment) {
@@ -114,7 +122,9 @@ export function postComentarioModal(objetoId) {
 
 async function cargarComentarios(objetoId) {
     try {
+        const {id_usuario_auth} = await isAuth();
         const data = await obtenerComentarios(objetoId);
+        
 
         // Aquí el arreglo real está en data.results
         const comentarios = data.results;
@@ -128,7 +138,7 @@ async function cargarComentarios(objetoId) {
         }
 
         comentarios.forEach((c) => {
-            const esUsuarioActual = c.id_usuario === window.usuarioActualId;
+            const esUsuarioActual = c.id_usuario === id_usuario_auth;
             const nombreUsuario = esUsuarioActual ? 'Tú' : c.nombre || 'Anónimo';
             
             const item = document.createElement('div');
