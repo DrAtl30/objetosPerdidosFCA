@@ -182,7 +182,6 @@ class Objetoperdido(models.Model):
     descripcion_especifica = models.TextField()
     fecha_perdida = models.DateField()
     hora_perdida = models.TimeField()
-    lugar_perdida = models.CharField(max_length=255)
     id_lugar = models.ForeignKey(Lugar_Perdida,null=True, on_delete= models.PROTECT, related_name='objetos')
     estado_objeto = models.CharField(max_length=50, choices=ESTADO_OBJETO)
     fecha_carga = models.DateTimeField(auto_now_add=True)

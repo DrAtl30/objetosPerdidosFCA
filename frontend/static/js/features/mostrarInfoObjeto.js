@@ -5,6 +5,7 @@ import {crearComentarioObjeto, obtenerComentarios} from '../api/objetos.js'
 import {getCSRFToken} from '../utils/utils.js'
 
 export function mostrarInfoObjetoModal(objeto) {
+    
     const modal = document.getElementById('info_objeto');
     if (!modal) return;
     
@@ -28,7 +29,7 @@ export function mostrarInfoObjetoModal(objeto) {
 
     modal.querySelector('#objetoNombre').textContent = objeto.nombre || 'Sin nombre';
     modal.querySelector('#objetoDescripcionGeneral').textContent = objeto.descripcion_general || 'Sin descripción';
-    modal.querySelector('#objetoLugar').textContent = objeto.lugar_perdida || 'Sin lugar';
+    modal.querySelector('#objetoLugar').textContent = objeto.id_lugar || 'Sin lugar';
     modal.querySelector('#objetoFecha').textContent = objeto.fecha_perdida || 'Sin fecha';
 
 
@@ -81,7 +82,12 @@ export function mostrarInfoObjetoModal(objeto) {
 }
 
 function reclamar(){
+    const isAdmin = document.body.classList.contains('vista-admin');
     const btnReclamar = document.getElementById('btnReclamar');
+
+    if (isAdmin) {
+        btnReclamar.style.display = 'none';
+    }
 
     btnReclamar.onclick = async () => {
         const {auth} = await isAuth();
@@ -151,10 +157,18 @@ async function cargarComentarios(objetoId) {
             lista.innerHTML = '<p>No hay comentarios todavía.</p>';
             return;
         }
+        
 
         comentarios.forEach((c) => {
-            const esUsuarioActual = c.id_usuario === id_usuario_auth;
-            const nombreUsuario = esUsuarioActual ? 'Tú' : c.nombre || 'Anónimo';
+            let nombreUsuario;
+
+            if (c.id_usuario === id_usuario_auth) {
+                nombreUsuario = 'Tú';
+            } else if (c.is_admin) {
+                nombreUsuario = 'Admin';
+            } else {
+                nombreUsuario = c.nombre || 'Anónimo';
+            }
             
             const item = document.createElement('div');
             item.classList.add('comentarioItem');

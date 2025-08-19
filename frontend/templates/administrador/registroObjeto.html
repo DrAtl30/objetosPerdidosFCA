@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{% static 'css/pages/registro_objeto.css' %}">
     <link rel="stylesheet" href="{% static 'css/components/slider.css' %}">
     <link rel="stylesheet" href="{% static 'css/components/button.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
 {% endblock %}
 
 {% block class-header %}objR-header{% endblock  %}
@@ -67,18 +68,13 @@
                         <input type="time" class="form-control" id="hora" name="hora" min="7:00" max="20:00" step="900" value="{{ objeto.hora_perdida|time:'H:i' }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="lugar" class="form-label">Lugar</label>
-                        <select class="form-control" id="lugar" name="lugar" required>
+                        <label for="lugar" class="form-label ">Lugar</label>
+                        <select class="form-control lugar_select" id="lugar" name="lugar"  required>
                             <option value="">Seleccione un lugar</option>
-                            <option value="Sala de Cómputo 1" {% if objeto.lugar_perdida == 'Sala de Cómputo 1' %}selected{% endif %}>Sala de Cómputo 1</option>
-                            <option value="Salón 9" {% if objeto.lugar_perdida == 'Salón 9' %}selected{% endif %}>Salón 9</option>
-                            <option value="Sala de usos múltiples" {% if objeto.lugar_perdida == 'Sala de usos múltiples' %}selected{% endif %}>Sala de usos múltiples</option>
-                            <option value="otro" {% if objeto.lugar_perdida != "Sala de Cómputo 1" and objeto.lugar_perdida != "Salón 9" and objeto.lugar_perdida != "Sala de usos múltiples" and objeto.lugar_perdida != "" %}selected{% endif %}>Otro (especificar)</option>
+                            {% for lugar in lugares %}
+                                <option value="{{lugar.id}}"{% if objeto and objeto.id_lugar.id == lugar.id %}selected{% endif %}>{{lugar.nombre}}</option>
+                            {% endfor %}
                         </select>
-                    </div>
-                    <div class="mb-3" id="otroLugarContainer" style="display:none;">
-                        <label for="otroLugar" class="form-label">Especificar lugar</label>
-                        <input type="text" class="form-control" id="otro_lugar" name="otro_lugar" {% if objeto.lugar_perdida != "Sala de Cómputo 1" and objeto.lugar_perdida != "Salón 9" and objeto.lugar_perdida != "Sala de usos múltiples" and objeto.lugar_perdida != "" %} value="{{ objeto.lugar_perdida }}"{% endif %}>
                     </div>
                     <!-- Contenedor para centrar el botón -->
                     <div class="button-container">
@@ -101,7 +97,7 @@
     {% else %}
         <script>const imagenesExistentes = [];</script>
     {% endif %}
-
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script type="module" src="/static/js/pages/registro_objeto.js"></script>
     <script src="/static/js/utils/date.js"></script>
 {% endblock %}

@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 
-from .models import Usuario, Alumno, Objetoperdido, Imagenobjeto, Comentario
+from .models import Usuario, Alumno, Objetoperdido, Imagenobjeto, Comentario, Lugar_Perdida
 
 
 class RegistroUser(serializers.ModelSerializer):
@@ -134,9 +134,15 @@ class ImagenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Imagenobjeto  # o como se llame tu modelo de imagen
         fields = ['id', 'ruta_imagen']
+        
+class LugarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lugar_Perdida
+        fields = ['id', 'nombre']
 
 class RegistroObjeto(serializers.ModelSerializer):
     estado_objeto = serializers.ChoiceField(choices=Objetoperdido.ESTADO_OBJETO)
+    id_lugar = serializers.PrimaryKeyRelatedField(queryset=Lugar_Perdida.objects.all())
     imagenes = ImagenSerializer(many=True, read_only=True)  # lectura de imágenes relacionadas
 
     # Campo para subir imágenes, solo escritura
@@ -159,7 +165,7 @@ class RegistroObjeto(serializers.ModelSerializer):
             'descripcion_especifica',
             'fecha_perdida',
             'hora_perdida',
-            'lugar_perdida',
+            'id_lugar',
             'encontrado_por',
             'estado_objeto',
             'imagenes',
@@ -182,6 +188,9 @@ class RegistroObjeto(serializers.ModelSerializer):
 
 class ComentarioSerializer(serializers.ModelSerializer):
     nombre = serializers.CharField(source='id_usuario.nombre', read_only=True)
+    is_admin = serializers.SerializerMethodField()
+    id_usuario = serializers.IntegerField(source='id_usuario.id', read_only=True)
+
     class Meta:
         model = Comentario
         fields = [
@@ -190,6 +199,10 @@ class ComentarioSerializer(serializers.ModelSerializer):
             "id_usuario",
             "id_objeto",
             "fecha_comentario",
-            "nombre"
+            "nombre",
+            "is_admin",
         ]
         read_only_fields = ["id_comentario", "id_usuario", "fecha_comentario"]
+
+    def get_is_admin(self, obj):
+        return obj.id_usuario.is_staff 
