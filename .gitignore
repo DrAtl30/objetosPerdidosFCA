@@ -1,14 +1,48 @@
+# Entorno virtual
 env/
+
+# Archivos de diagramas
 *.drawio
 *.dbml
-out/
 *.puml
+
+# Carpetas de output
+out/
 .vscode/
+
+# Variables de entorno
 .env
+
+# Archivos de media
 app/media/objetos/
+
+# Scripts temporales
 ngrok.py
+
+# Logs
 *.log
 logs/
 debug.log
-__pycache__/
+
+# ====== PYTHON - IGNORAR TODOS LOS __pycache__ Y .pyc ======
+# Ignora TODAS las carpetas __pycache__ en TODO el proyecto
+**/__pycache__/
+
+# Ignora TODOS los archivos .pyc en TODO el proyecto
 *.pyc
+
+# ====== MIGRACIONES ======
+# Ignora TODO en las carpetas de migraciones
+app/apps/migrations/*
+app/email_service/migrations/*
+
+# Pero EXCLUYE (hace excepción) para los __init__.py
+!app/apps/migrations/__init__.py
+!app/email_service/migrations/__init__.py
+
+# ====== ARCHIVOS DEL SISTEMA ======
+.DS_Store
+Thumbs.db
+
+# ====== BASE DE DATOS SQLite ======
+*.sqlite3
