@@ -1,31 +1,13 @@
 import { mostrarModal, esperarCierreModal } from '../components/modals.js';
-import {registrarAlumno} from '../api/registro.js'
-
-document.querySelectorAll('.toggle-password').forEach((icon) => {
-    icon.addEventListener('click', () => {
-        const inputId = icon.getAttribute('data-target');
-        const input = document.getElementById(inputId);
-        const isPassword = input.type === 'password';
-        input.type = isPassword ? 'text' : 'password';
-        icon.classList.toggle('bi-eye-fill');
-        icon.classList.toggle('bi-eye-slash-fill');
-    });
-});
+import {registrarAlumno} from '../api/registro.js';
+import {expresiones, validaCampo, validarPass} from '../utils/validaciones.js';
+import { initPasswordToggles} from '../utils/password.js'
 
 document.addEventListener('DOMContentLoaded', function () {
-    const csrfTokenRegistro = document.querySelector(
-        '[name=csrfmiddlewaretoken]'
-    );
+    initPasswordToggles();
+    const csrfTokenRegistro = document.querySelector('[name=csrfmiddlewaretoken]');
     const form = document.getElementById('registro-form');
     const inputs = document.querySelectorAll('#registro-form input');
-
-    //expresiones regulares para hacer validaciones
-    const expresiones = {
-        usuario: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
-        password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d\s]).{8,15}$/, // 8 a 15 digitos.
-        correo: /^[a-zA-Z0-9_.+-]+@(gmail\.com|alumno\.uaemex\.mx|maildrop\.cc|devdigs\.com)$/,
-        numCuenta: /^\d{7,7}$/,
-    };
 
     const campos = {
         name: false,
@@ -38,64 +20,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const validarFormulario = (e) => {
         switch (e.target.name) {
             case 'nombre':
-                validaCampo(expresiones.usuario, e.target, 'name');
+                validaCampo(expresiones.usuario, e.target, 'name',campos);
                 break;
             case 'apellidos':
-                validaCampo(expresiones.usuario, e.target, 'last__name');
+                validaCampo(expresiones.usuario, e.target, 'last__name',campos);
                 break;
             case 'numCuenta':
-                validaCampo(expresiones.numCuenta, e.target, 'numCuenta');
+                validaCampo(expresiones.numCuenta, e.target, 'numCuenta',campos);
                 break;
             case 'correo':
-                validaCampo(expresiones.correo, e.target, 'email');
+                validaCampo(expresiones.correo, e.target, 'email',campos);
                 break;
             case 'password':
-                validaCampo(expresiones.password, e.target, 'pass');
-                validarPass();
+                validaCampo(expresiones.password, e.target, 'pass',campos);
+                validarPass('password', 'check__pass', campos);
                 break;
             case 'check__pass':
-                validarPass();
+                validarPass('password', 'check__pass', campos);
                 break;
         }
     };
 
-    const validaCampo = (expresion, input, campo) => {
-        const errorElement = document.querySelector(
-            `#g__${campo} .formualrio__error`
-        );
-        if (input.value.trim() === '') {
-            errorElement.classList.remove('formualrio__error-activo');
-            campos[campo] = false;
-        } else if (campo === 'pass' && /\s/.test(input.value)) {
-            errorElement.classList.add('formualrio__error-activo');
-            campos[campo] = false;
-        } else if (expresion.test(input.value)) {
-            errorElement.classList.remove('formualrio__error-activo');
-            campos[campo] = true;
-        } else {
-            errorElement.classList.add('formualrio__error-activo');
-            campos[campo] = false;
-        }
-    };
-
-    const validarPass = () => {
-        const pass1 = document.getElementById('password');
-        const pass2 = document.getElementById('check__pass');
-        const errorElement = document.querySelector(
-            `#g__check__pass .formualrio__error`
-        );
-
-        if (pass1.value.trim() === '' || pass2.value.trim() === '') {
-            errorElement.classList.remove('formualrio__error-activo');
-            campos['pass'] = false;
-        } else if (pass1.value !== pass2.value) {
-            errorElement.classList.add('formualrio__error-activo');
-            campos['pass'] = false;
-        } else {
-            errorElement.classList.remove('formualrio__error-activo');
-            campos['pass'] = true;
-        }
-    };
 
     inputs.forEach((input) => {
         input.addEventListener('keyup', validarFormulario);

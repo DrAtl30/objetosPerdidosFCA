@@ -5,22 +5,26 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from rest_framework.decorators import api_view, permission_classes
 from django.http import JsonResponse,  QueryDict
 from rest_framework import status, generics, permissions
-from .serializers import RegistroUser, LoginUser, RegistroObjeto, ComentarioSerializer
+from .serializers import RegistroUser, LoginUser, RegistroObjeto
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.utils import timezone
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.urls import reverse
 from django.db.models import Q
 from datetime import datetime, timedelta
-from email_service.api.services.email_services import enviar_correo_confirmacion
+from email_service.api.services.email_services import enviar_correo_confirmacion, enviar_correo_recuperacion
 import logging, json, os
-from .models import Usuario, Objetoperdido,Imagenobjeto, Comentario
+from .models import Usuario, Objetoperdido,Imagenobjeto, Lugar_Perdida
 
 
 # Create your views here.
 logger = logging.getLogger(__name__)
 def prueba(request):
-    return render(request, 'base.html')
+    return render(request, 'auth/password_reset_confirm.html')
 
 def home(request):
     user_name = ''
@@ -29,16 +33,19 @@ def home(request):
         user_name = request.user.nombre
         user_lastname = request.user.apellidos
 
-    return render(request, "inicio.html", {'user_name': user_name, 'user_lastname': user_lastname})
+    return render(request, "home/home.html", {'user_name': user_name, 'user_lastname': user_lastname})
 
 
 def inicio_session(request):
-    return render(request, "users/inicio_sesion.html")
+    return render(request, "auth/inicio_sesion.html")
+
+def reset_password(request):
+    return render(request, "auth/password_reset.html")
 
 
 def user_registro(request):
     timestamp = datetime.now().timestamp()
-    return render(request, "users/registro.html", {"timestamp": timestamp})
+    return render(request, "auth/registro.html", {"timestamp": timestamp})
 
 
 def object_registro(request,id_objeto=None):
@@ -50,6 +57,9 @@ def object_registro(request,id_objeto=None):
         imagenes = objeto.imagenes.all()
         contexto["objeto"] = objeto
         contexto['imagenes'] = imagenes
+    
+    lugares = Lugar_Perdida.objects.all().order_by('nombre')
+    contexto ['lugares'] = lugares
     return render(request, "administrador/registroObjeto.html", contexto)
 
 
@@ -84,7 +94,7 @@ class ConfirmarCuentaView(APIView):
     def get(self, request, suid):
         exito = True
         signer = TimestampSigner()
-        max_age = 60
+        max_age = 30 * 60
         uid = None
         try:
             uid = signer.unsign(suid, max_age)
@@ -107,7 +117,7 @@ class ConfirmarCuentaView(APIView):
         except BadSignature:
             mensaje = 'El enlace es inválido'
             exito = False
-        return render(request, 'users/confirmacionCuenta.html', {'mensaje': mensaje, 'exito': exito,'uid': uid})
+        return render(request, 'auth/confirmacionCuenta.html', {'mensaje': mensaje, 'exito': exito,'uid': uid})
 
 class ReenviarCorreoConfirmacion(APIView):
     def post(self, request):
@@ -122,7 +132,7 @@ class ReenviarCorreoConfirmacion(APIView):
             mensaje = 'Se ha enviado un nuevo enlace a tu correo'
             exito = False
         
-        return render(request, 'users/confirmacionCuenta.html', {'mensaje': mensaje, 'exito': exito, 'uid':None})
+        return render(request, 'auth/confirmacionCuenta.html', {'mensaje': mensaje, 'exito': exito, 'uid':None})
 
 
 def verificar_correo_confirmado(request):
@@ -166,6 +176,102 @@ class LogOutAlumnoView(APIView):
             return Response({"mensaje": "Sesión cerrada correctamente."}, status=status.HTTP_200_OK)
         else:
             return Response({"mensaje": "No hay sesión activa."}, status=status.HTTP_400_BAD_REQUEST)
+        
+class PasswordResetView(APIView):
+    def post(self, request):
+        email = request.data.get('correo_institucional')
+        if not email:
+            return Response({'error': 'Debe proporcionar un correo electronico'}, status = status.HTTP_200_OK)
+        
+        try:
+            usuario = Usuario.objects.get(correo_institucional=email)
+        except Usuario.DoesNotExist:
+            return Response({'mensaje': 'Si el correo esta registrado, recibiras un enlace para cambiar la contraseña'}, status = status.HTTP_200_OK)
+        
+        signer = TimestampSigner()
+        
+        uid_signed = signer.sign(str(usuario.id_usuario))
+        
+        reset_url = request.build_absolute_uri(reverse('reset_pass_check', kwargs={'uidb64':uid_signed}))
+        
+        enviar_correo_recuperacion(email, reset_url)
+        
+        return Response({'mensaje': 'Si el correo está registrado, recibirás un enlace para cambiar la contraseña.', "url":reset_url}, status=status.HTTP_200_OK)
+    
+class PasswordResetConfirmView(APIView):
+    def get(self, request,uidb64):
+        max_age = 60 * 60  #minutos * segundos
+        signer = TimestampSigner()
+        context = {}
+        context['uidb64'] = uidb64
+        try:
+            uid = signer.unsign(uidb64, max_age) #30 minutos
+            
+            context['mensaje'] = "Ingrese la nueva contraseña"
+            context['exito'] = True
+            
+            
+            return render(request, 'auth/password_reset_confirm.html', context)
+            
+        except SignatureExpired:
+            context['mensaje'] = 'El enlace ha expirado'
+            context['exito'] = False
+        except BadSignature:
+            context['mensaje'] = 'El enlace es invalido'
+            context['exito'] = False
+
+            
+        return render(request, 'auth/password_reset_confirm.html', context)
+        
+    def post(self, request, uidb64):
+        nueva_password = request.data.get("password")
+        if not nueva_password:
+            return Response({"error": "La contraseña es obligatoria"},status=status.HTTP_400_BAD_REQUEST)
+        
+        signer = TimestampSigner()
+        max_age = 60 * 60  #minutos * segundos
+        
+        try:
+            # Decodificar el uid
+            uid = signer.unsign(uidb64,max_age)
+            usuario = get_object_or_404(Usuario, id_usuario=uid)
+            
+            # Cambiar contraseña
+            usuario.set_password(nueva_password)
+            usuario.save()
+            
+            return Response({"mensaje": "Contraseña actualizada con éxito"}, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+class ReenviarCorreoResetPasswordView(APIView):
+    def post(self, request):
+        uid_signed = request.data.get("uid")  # UID firmado enviado desde el frontend
+        if not uid_signed:
+            return Response({"error": "No se proporcionó UID"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        signer = TimestampSigner()
+        try:
+            # Verificamos que el UID sea válido, sin importar la expiración
+            uid = signer.unsign(uid_signed)
+            usuario = get_object_or_404(Usuario, id_usuario=uid)
+            
+            # Generar nuevo enlace con un UID fresco
+            nuevo_uid_signed = signer.sign(str(usuario.id_usuario))
+            reset_url = request.build_absolute_uri(
+                reverse('reset_pass_check', kwargs={'uidb64': nuevo_uid_signed})
+            )
+            
+            enviar_correo_recuperacion(usuario.correo_institucional, reset_url)
+            
+            return Response({"mensaje": "Se ha enviado un nuevo enlace para restablecer la contraseña"}, status=status.HTTP_200_OK)
+        
+        except BadSignature:
+            return Response({"error": "UID inválido"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 # CRUD
 class ObjetoPerdidoViewSet(ModelViewSet):
@@ -230,8 +336,9 @@ class ObjetoPerdidoViewSet(ModelViewSet):
         if busqueda:
             queryset = queryset.filter(
                 Q(nombre__icontains = busqueda) |
-                Q(descripcion__icontains = busqueda) |
-                Q(lugar_perdida__icontains = busqueda)
+                Q(descripcion_general__icontains = busqueda) |
+                Q(descripcion_especifica__icontains = busqueda) |
+                Q(id_lugar__nombre__icontains = busqueda)
             )
 
         return queryset 
@@ -261,7 +368,7 @@ class ObjetoPerdidoViewSet(ModelViewSet):
         instance.descripcion_especifica = request.data.get('descripcion_especifica', instance.descripcion_especifica)
         instance.fecha_perdida = request.data.get('fecha_perdida', instance.fecha_perdida)
         instance.hora_perdida = request.data.get('hora_perdida', instance.hora_perdida)
-        instance.lugar_perdida = request.data.get('lugar_perdida', instance.lugar_perdida)
+        instance.id_lugar = request.data.get('id_lugar', instance.id_lugar)
         instance.estado_objeto = request.data.get('estado_objeto', instance.estado_objeto)
         instance.encontrado_por = request.data.get('encontrado_por', instance.encontrado_por)
         instance.save()
@@ -307,7 +414,7 @@ class ObjetoPerdidoViewSet(ModelViewSet):
                 'descripcion_especifica': objeto.descripcion_especifica,
                 'hora_perdida': objeto.hora_perdida.strftime('%H:%M') if objeto.hora_perdida else '',
                 'fecha_perdida': objeto.fecha_perdida.strftime('%Y-%m-%d') if objeto.fecha_perdida else '',
-                'lugar_perdida': objeto.lugar_perdida,
+                'id_lugar': objeto.id_lugar.nombre,
                 'estado_objeto': objeto.estado_objeto,
                 'encontrado_por': objeto.encontrado_por,
                 'imagenes': [{'ruta_imagen': img.ruta_imagen.url} for img in objeto.imagenes.all()],
@@ -318,7 +425,6 @@ class ObjetoPerdidoViewSet(ModelViewSet):
                 'nombre': objeto.nombre,
                 'descripcion_general': objeto.descripcion_general,
                 'fecha_perdida': objeto.fecha_perdida.strftime('%Y-%m-%d') if objeto.fecha_perdida else '',
-                'lugar_perdida': objeto.lugar_perdida,
                 'imagenes': [{'ruta_imagen': img.ruta_imagen.url} for img in objeto.imagenes.all()],
             }
         return Response(data)
@@ -372,34 +478,34 @@ def obtener_ocultos(request):
     return Response({"ocultos": ocultos})
 
 
-class ComentarioView(generics.ListCreateAPIView):
-    serializer_class = ComentarioSerializer
+# class ComentarioView(generics.ListCreateAPIView):
+#     serializer_class = ComentarioSerializer
 
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            # Permitir a cualquiera ver comentarios
-            return [permissions.AllowAny()]
-        # Para POST, sí requiere autenticación
-        return [permissions.IsAuthenticated()]
+#     def get_permissions(self):
+#         if self.request.method == 'GET':
+#             # Permitir a cualquiera ver comentarios
+#             return [permissions.AllowAny()]
+#         # Para POST, sí requiere autenticación
+#         return [permissions.IsAuthenticated()]
     
-    def get_queryset(self):
-        objeto_id = self.kwargs.get("objeto_id")
+#     def get_queryset(self):
+#         objeto_id = self.kwargs.get("objeto_id")
         
-        return Comentario.objects.filter(id_objeto=objeto_id).order_by("-fecha_comentario")
+#         return Comentario.objects.filter(id_objeto=objeto_id).order_by("-fecha_comentario")
     
-    def perform_create(self, serializer):
-        objeto_id = self.kwargs.get("objeto_id")
-        serializer.save(
-            id_usuario = self.request.user,
-            id_objeto_id=objeto_id,
-            fecha_comentario = timezone.now()
-        )
-        return super().perform_create(serializer)
+#     def perform_create(self, serializer):
+#         objeto_id = self.kwargs.get("objeto_id")
+#         serializer.save(
+#             id_usuario = self.request.user,
+#             id_objeto_id=objeto_id,
+#             fecha_comentario = timezone.now()
+#         )
+#         return super().perform_create(serializer)
     
-class ComentarioAllView(generics.ListAPIView):
-    serializer_class = ComentarioSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class ComentarioAllView(generics.ListAPIView):
+#     serializer_class = ComentarioSerializer
+#     permission_classes = [permissions.IsAuthenticated]
     
-    def get_queryset(self):
-        return Comentario.objects.all().order_by("-fecha_comentario")
+#     def get_queryset(self):
+#         return Comentario.objects.all().order_by("-fecha_comentario")
     

@@ -38,6 +38,13 @@
 
 }
 
+.form-label.reset {
+    color: var(--color-button-primary-hover);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    padding-left: 0.5rem;
+}
+
 
 /* Flecha de retroceso */
 .back-arrow {

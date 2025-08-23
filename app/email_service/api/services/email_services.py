@@ -14,7 +14,7 @@ def enviar_correo_confirmacion(alumno,password=None):
 
     asunto = "Confirma tu cuenta"
     mensaje_html = render_to_string(
-        "users/confirmaCorreo.html", {
+        "auth/confirmaCorreo.html", {
             "nombre_alumno" : nombre,
             "apellidos_alumno" : apellidos,
             "url_confirmacion": url_confirmacion,
@@ -37,7 +37,7 @@ def enviar_contraseña_admin(historial, correo_admin, contrasena_nueva):
     apellidos = historial.apellidos
     asunto = "Acceso a cuenta de administrador"
     mensaje_html = render_to_string(
-        "administrador/sendPassword.html",{
+        "auth/sendPassword.html",{
             "nombre_admin": nombre,
             "apellidos_admin": apellidos,
             "email_admin": correo_admin,
@@ -61,3 +61,17 @@ def enviar_contraseña_admin(historial, correo_admin, contrasena_nueva):
     )
     email.attach_alternative(mensaje_html, "text/html")
     email.send()
+
+def enviar_correo_recuperacion(email, url_reset):
+    asunto = "Recuperación de contraseña"
+    mensaje_html = render_to_string("auth/password_reset_email.html", {"reset_url": url_reset})
+    mensaje_texto = f"Restablece tu contraseña ingresando aquí: {url_reset}"
+
+    email_msg = EmailMultiAlternatives(
+        asunto,
+        mensaje_texto,
+        settings.EMAIL_HOST_USER,
+        [email],
+    )
+    email_msg.attach_alternative(mensaje_html, "text/html")
+    email_msg.send()

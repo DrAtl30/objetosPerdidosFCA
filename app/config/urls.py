@@ -11,6 +11,7 @@ urlpatterns = [
     path("api/", include("apps.urls")),
     path("", views.home, name="home"),
     path("login/", views.inicio_session, name="login"),
+    path("reset-password/", views.reset_password, name="reset_password"),
     path("registro/", views.user_registro, name="user_registro"),
     path("registro-objeto/", views.object_registro, name="object_registro"),
     path("editar-objeto/<int:id_objeto>", views.object_registro, name="editar_objeto"),
