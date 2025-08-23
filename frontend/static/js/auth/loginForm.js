@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 mostrarModal('Inicio de sesión exitoso', 'successModal');
                 await esperarCierreModal('successModal');
-                console.log(result.rol);
                 
                 if (result.rol === 'administrador') {
                     window.location.href = '/administrador/';
