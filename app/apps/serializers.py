@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 
-from .models import Usuario, Alumno, Objetoperdido, Imagenobjeto, Comentario, Lugar_Perdida
+from .models import Usuario, Alumno, Objetoperdido, Imagenobjeto, Lugar_Perdida
 
 
 class RegistroUser(serializers.ModelSerializer):
@@ -186,23 +186,23 @@ class RegistroObjeto(serializers.ModelSerializer):
 
         return objeto
 
-class ComentarioSerializer(serializers.ModelSerializer):
-    nombre = serializers.CharField(source='id_usuario.nombre', read_only=True)
-    is_admin = serializers.SerializerMethodField()
-    id_usuario = serializers.IntegerField(source='id_usuario.id', read_only=True)
+# class ComentarioSerializer(serializers.ModelSerializer):
+#     nombre = serializers.CharField(source='id_usuario.nombre', read_only=True)
+#     is_admin = serializers.SerializerMethodField()
+#     id_usuario = serializers.IntegerField(source='id_usuario.id', read_only=True)
 
-    class Meta:
-        model = Comentario
-        fields = [
-            "id_comentario",
-            "comentario",
-            "id_usuario",
-            "id_objeto",
-            "fecha_comentario",
-            "nombre",
-            "is_admin",
-        ]
-        read_only_fields = ["id_comentario", "id_usuario", "fecha_comentario"]
+#     class Meta:
+#         model = Comentario
+#         fields = [
+#             "id_comentario",
+#             "comentario",
+#             "id_usuario",
+#             "id_objeto",
+#             "fecha_comentario",
+#             "nombre",
+#             "is_admin",
+#         ]
+#         read_only_fields = ["id_comentario", "id_usuario", "fecha_comentario"]
 
-    def get_is_admin(self, obj):
-        return obj.id_usuario.is_staff 
+#     def get_is_admin(self, obj):
+#         return obj.id_usuario.is_staff 
