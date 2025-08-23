@@ -1,8 +1,8 @@
 import {mostrarModal, esperarCierreModal} from '../components/modals.js';
 import {crearSlider} from '../components/slider.js';
 import {isAuth} from '../api/auth.js';
-import {crearComentarioObjeto, obtenerComentarios} from '../api/objetos.js'
-import {getCSRFToken} from '../utils/utils.js'
+// import {crearComentarioObjeto, obtenerComentarios} from '../api/objetos.js'
+// import {getCSRFToken} from '../utils/utils.js'
 
 export function mostrarInfoObjetoModal(objeto) {
     
@@ -12,24 +12,27 @@ export function mostrarInfoObjetoModal(objeto) {
     const descEspecifica = modal.querySelector('#objetoDescripcionEspecifica').parentElement;
     const hora = modal.querySelector('#objetoHora').parentElement;
     const who = modal.querySelector('#objetoEncontradoPor').parentElement;
+    const lugar = modal.querySelector('#objetoLugar').parentElement;
 
     if ('descripcion_especifica' in objeto) {
         descEspecifica.style.display = 'block';
         hora.style.display = 'block';
         who.style.display = 'block';
+        lugar.style.display = 'block';
 
         modal.querySelector('#objetoDescripcionEspecifica').textContent = objeto.descripcion_especifica || 'Sin descripción';
         modal.querySelector('#objetoHora').textContent = objeto.hora_perdida || 'Sin Hora';
         modal.querySelector('#objetoEncontradoPor').textContent = objeto.encontrado_por || 'Anonimo';
+        modal.querySelector('#objetoLugar').textContent = objeto.id_lugar || 'Sin lugar';
     } else {
         descEspecifica.style.display = 'none';
         hora.style.display = 'none';
         who.style.display = 'none';
+        lugar.style.display = 'none';
     }
 
     modal.querySelector('#objetoNombre').textContent = objeto.nombre || 'Sin nombre';
     modal.querySelector('#objetoDescripcionGeneral').textContent = objeto.descripcion_general || 'Sin descripción';
-    modal.querySelector('#objetoLugar').textContent = objeto.id_lugar || 'Sin lugar';
     modal.querySelector('#objetoFecha').textContent = objeto.fecha_perdida || 'Sin fecha';
 
 
@@ -77,7 +80,7 @@ export function mostrarInfoObjetoModal(objeto) {
     mostrarModal('Informacion del objeto', 'info_objeto');
     esperarCierreModal('info_objeto',0);
     reclamar();
-    postComentarioModal(objeto.id);
+    // postComentarioModal(objeto.id);
 
 }
 
@@ -99,86 +102,86 @@ function reclamar(){
     }
 }
 
-export function postComentarioModal(objetoId) {
-    const btnComentar = document.getElementById('btnComentar');
-    const textarea = document.getElementById('comentario');
-    const listaComentarios = document.querySelector('.listaComentarios');
+// export function postComentarioModal(objetoId) {
+//     const btnComentar = document.getElementById('btnComentar');
+//     const textarea = document.getElementById('comentario');
+//     const listaComentarios = document.querySelector('.listaComentarios');
 
-    cargarComentarios(objetoId, listaComentarios);
+//     cargarComentarios(objetoId, listaComentarios);
 
-    btnComentar.onclick = async () => {
-        const { auth } = await isAuth();
-        if (!auth) {
-            mostrarModal('Debes iniciar sesion para hacer comentarios','errorModal');
-            await esperarCierreModal('errorModal', 2000);
-            return;
-        }
+//     btnComentar.onclick = async () => {
+//         const { auth } = await isAuth();
+//         if (!auth) {
+//             mostrarModal('Debes iniciar sesion para hacer comentarios','errorModal');
+//             await esperarCierreModal('errorModal', 2000);
+//             return;
+//         }
 
-        const textoComment = textarea.value.trim();
+//         const textoComment = textarea.value.trim();
 
-        if (!textoComment) {
-            mostrarModal('El comentario no puede estar vacío', 'errorModal');
-            await esperarCierreModal('errorModal');
-            return;
-        }
+//         if (!textoComment) {
+//             mostrarModal('El comentario no puede estar vacío', 'errorModal');
+//             await esperarCierreModal('errorModal');
+//             return;
+//         }
 
-        try {
-            const csrfToken = getCSRFToken();
-            await crearComentarioObjeto(objetoId, textoComment, csrfToken);
+//         try {
+//             const csrfToken = getCSRFToken();
+//             await crearComentarioObjeto(objetoId, textoComment, csrfToken);
 
-            // Opcional: limpiar textarea después de enviar
-            textarea.value = '';
+//             // Opcional: limpiar textarea después de enviar
+//             textarea.value = '';
 
-            await cargarComentarios(objetoId, listaComentarios);
+//             await cargarComentarios(objetoId, listaComentarios);
 
-            mostrarModal('Comentario agregado exitosamente', 'successModal');
-            await esperarCierreModal('successModal');
-        } catch (error) {
-            mostrarModal(error.message || 'Error al enviar comentario','errorModal');
-            await esperarCierreModal('errorModal');
-        }
-    };
-}
+//             mostrarModal('Comentario agregado exitosamente', 'successModal');
+//             await esperarCierreModal('successModal');
+//         } catch (error) {
+//             mostrarModal(error.message || 'Error al enviar comentario','errorModal');
+//             await esperarCierreModal('errorModal');
+//         }
+//     };
+// }
 
 
-async function cargarComentarios(objetoId) {
-    try {
-        const {id_usuario_auth} = await isAuth();
-        const data = await obtenerComentarios(objetoId);
+// async function cargarComentarios(objetoId) {
+//     try {
+//         const {id_usuario_auth} = await isAuth();
+//         const data = await obtenerComentarios(objetoId);
         
 
-        // Aquí el arreglo real está en data.results
-        const comentarios = data.results;
+//         // Aquí el arreglo real está en data.results
+//         const comentarios = data.results;
 
-        const lista = document.querySelector('.listaComentarios');
-        lista.innerHTML = ''; // Limpia antes de agregar
+//         const lista = document.querySelector('.listaComentarios');
+//         lista.innerHTML = ''; // Limpia antes de agregar
 
-        if (comentarios.length === 0) {
-            lista.innerHTML = '<p>No hay comentarios todavía.</p>';
-            return;
-        }
+//         if (comentarios.length === 0) {
+//             lista.innerHTML = '<p>No hay comentarios todavía.</p>';
+//             return;
+//         }
         
 
-        comentarios.forEach((c) => {
-            let nombreUsuario;
+//         comentarios.forEach((c) => {
+//             let nombreUsuario;
 
-            if (c.id_usuario === id_usuario_auth) {
-                nombreUsuario = 'Tú';
-            } else if (c.is_admin) {
-                nombreUsuario = 'Admin';
-            } else {
-                nombreUsuario = c.nombre || 'Anónimo';
-            }
+//             if (c.id_usuario === id_usuario_auth) {
+//                 nombreUsuario = 'Tú';
+//             } else if (c.is_admin) {
+//                 nombreUsuario = 'Admin';
+//             } else {
+//                 nombreUsuario = c.nombre || 'Anónimo';
+//             }
             
-            const item = document.createElement('div');
-            item.classList.add('comentarioItem');
-            const text = document.createElement('div');
-            text.classList.add('textoComment');
-            text.innerHTML = `<p><strong>${nombreUsuario}:</strong> ${c.comentario}. <small class="dateComment">${new Date(c.fecha_comentario).toLocaleString()}</small> </p>`;
-            item.appendChild(text);
-            lista.appendChild(item);
-        });
-    } catch (error) {
-        console.error('Error cargando comentarios:', error);
-    }
-}
+//             const item = document.createElement('div');
+//             item.classList.add('comentarioItem');
+//             const text = document.createElement('div');
+//             text.classList.add('textoComment');
+//             text.innerHTML = `<p><strong>${nombreUsuario}:</strong> ${c.comentario}. <small class="dateComment">${new Date(c.fecha_comentario).toLocaleString()}</small> </p>`;
+//             item.appendChild(text);
+//             lista.appendChild(item);
+//         });
+//     } catch (error) {
+//         console.error('Error cargando comentarios:', error);
+//     }
+// }
