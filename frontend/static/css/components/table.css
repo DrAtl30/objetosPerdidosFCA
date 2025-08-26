@@ -1,0 +1,71 @@
+.table {
+    width: 100%;  
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    background-color: var(--color-background);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+.table thead {
+    background-color: var(--color-button-primary-hover); /* azul oscuro */
+    color: var(--color-text-light);
+}
+.table thead th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.table tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background 0.2s;
+}
+.table tbody tr:hover {
+    background-color: #f5f7fa; /* gris claro al pasar el mouse */
+}
+.table tbody td {
+    padding: 12px 15px;
+    color: #333;
+    vertical-align: middle;
+}
+.mensaje_container {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* espacio entre select y botón */
+}
+
+.mensaje-select {
+    flex: 1; /* ocupa todo el espacio posible */
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    font-size: 0.9rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.mensaje-select:focus {
+    border-color: #3498db;
+}
+
+.mensaje_container .msjbtn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    white-space: nowrap; /* evita que el texto se parta en varias líneas */
+}
+
+.table .msjbtn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    margin-top: 5px;
+}
+.table .empty{
+    text-align: center;
+}

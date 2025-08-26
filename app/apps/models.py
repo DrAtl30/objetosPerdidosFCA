@@ -186,36 +186,26 @@ class Objetoperdido(models.Model):
     estado_objeto = models.CharField(max_length=50, choices=ESTADO_OBJETO)
     fecha_carga = models.DateTimeField(auto_now_add=True)
     encontrado_por = models.CharField(max_length=100)
-    id_usuario_reclamante = models.ForeignKey(
-        "Usuario",
-        models.DO_NOTHING,
-        db_column="id_usuario_reclamante",
-        blank=True,
-        null=True,
-        default=1
-    )
 
     class Meta:
         # managed = False
         db_table = "objetoperdido"
+        
+class Reclamacion(models.Model):
+    objeto = models.ForeignKey(Objetoperdido, on_delete=models.CASCADE, related_name='reclamaciones')
+    usuario = models.ForeignKey("Usuario", on_delete=models.CASCADE, related_name='reclamaciones')
+    fecha_reclamacion = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('objeto', 'usuario')
+        db_table = 'reclamacion'
 
 
 class Reporteentrega(models.Model):
     id_reporte = models.AutoField(primary_key=True)
-    id_objeto = models.ForeignKey(
-        Objetoperdido, models.DO_NOTHING, db_column="id_objeto", null=True
-    )
+    id_objeto = models.ForeignKey(Objetoperdido, models.DO_NOTHING, db_column="id_objeto", null=True)
     fecha_hora_entrega = models.DateTimeField()
-    id_usuario_reclamante = models.ForeignKey(
-        "Usuario",
-        models.DO_NOTHING,
-        db_column="id_usuario_reclamante",
-        blank=True,
-        null=True,
-        default=51
-    )
-    imagen_evidencia = models.CharField(max_length=255)
-    observaciones = models.TextField(blank=True, null=True)
+    id_usuario_reclamante = models.ForeignKey("Usuario",models.DO_NOTHING,db_column="id_usuario_reclamante",blank=True,null=True,default=51)
 
     class Meta:
         # managed = False

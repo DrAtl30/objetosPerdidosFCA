@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 # from rest_framework.authtoken.views import obtain_auth_token #es para pruebas
-from apps.views import (isAuth,RegistroAlumnoView,LoginAlumnoView,LogOutAlumnoView,ConfirmarCuentaView,verificar_correo_confirmado, ReenviarCorreoConfirmacion, ObjetoPerdidoViewSet, toggle_ocultar_objeto, obtener_ocultos, PasswordResetView, PasswordResetConfirmView, ReenviarCorreoResetPasswordView)
+from apps.views import (isAuth,RegistroAlumnoView,LoginAlumnoView,LogOutAlumnoView,ConfirmarCuentaView,verificar_correo_confirmado, ReenviarCorreoConfirmacion, ObjetoPerdidoViewSet, toggle_ocultar_objeto, obtener_ocultos, PasswordResetView, PasswordResetConfirmView, ReenviarCorreoResetPasswordView, ReclamacionDetail)
 
 router = DefaultRouter()
 router.register(r'objetos', ObjetoPerdidoViewSet, basename='objetos')
@@ -20,6 +20,8 @@ urlpatterns = [
     path("reenviar_pass/",ReenviarCorreoResetPasswordView.as_view(),name="reenviar_pass"),
     path("toggle_ocultar/",toggle_ocultar_objeto,name="toggle_ocultar_objeto"),
     path("obtener_ocultos/",obtener_ocultos,name="obtener_ocultos"),
+    path("reclamaciones/<int:pk>/",ReclamacionDetail.as_view(),name="delete_reclamacion"),
+    path("reclamaciones/<int:pk>/",ReclamacionDetail.as_view(),name="acept_reclamacion"),
     
     # path("comentario/<int:objeto_id>/", ComentarioView.as_view(),name="comentario_by_objeto"),
     # path("comentario/", ComentarioAllView.as_view(),name="comentario"),

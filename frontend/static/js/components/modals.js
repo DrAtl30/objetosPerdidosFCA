@@ -52,7 +52,7 @@ export function esperarCierreModal(modalId, duracion = 1500) {
     });
 }
 
-export function confirmarModal(mensaje, modalId = 'modalConfirmacion') {
+export function confirmarModal(mensaje, modalId = 'modalConfirmacion',textoBotonConfirmar = 'Eliminar') {
     return new Promise((resolve) => {
         const modal = document.getElementById(modalId);
         const mensajeElemento = modal.querySelector('.modalMessage');
@@ -60,6 +60,7 @@ export function confirmarModal(mensaje, modalId = 'modalConfirmacion') {
         const btnCancelar = modal.querySelector('.close');
 
         if (mensajeElemento) mensajeElemento.textContent = mensaje;
+        if (btnConfirmar) btnConfirmar.textContent = textoBotonConfirmar;
         modal.classList.add('is-open');
         modal.setAttribute('aria-hidden', 'false');
 

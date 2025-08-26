@@ -40,23 +40,25 @@ export async function toggleOcultarObjeto(id) {
         },
         body: JSON.stringify({ id }),
     });
-    if (!response.ok) throw new Error('Error al ocultar/mostrar objeto');
     const data = await response.json();
+    if (!response.ok) {
+        throw new Error(data.error || 'Error al ocultar/mostrar objeto');
+    }
     return data;
 }
 
 export async function eliminarObjeto(id) {
-    const response = await fetch(`/api/objetos/${id}`, {
+    const response = await fetch(`/api/objetos/${id}/`, {
         method: 'DELETE',
         headers: {
             'X-CSRFToken': getCSRFToken(),
         },
     });
+    const data = await response.json();
     if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.detail || 'Error desconocido al eliminar objeto');
+        throw new Error(data.error || data.detail || 'Error desconocido al eliminar objeto');
     }
-    return true;
+    return data;
 }
 export async function createOrUpdateObjeto({formData,idObjeto,csrfToken,}) {
     const url = idObjeto ? `/api/objetos/${idObjeto}/` : '/api/objetos/';
@@ -107,5 +109,18 @@ export async function obtenerComentarios(objetoId) {
         credentials: 'include',
     });
     if (!response.ok) throw new Error('Error al obtener comentarios');
+    return await response.json();
+}
+
+export async function reclamar_objeto(objeto_id) {
+    const response = await fetch(`reclamar/${objeto_id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCSRFToken(),
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+    });
+    if (!response.ok) throw new Error('No se puede reclamar, intentelo mas tarde');
     return await response.json();
 }

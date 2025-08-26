@@ -41,8 +41,7 @@ export async function toggleOcultar(
             return isHidden;
         }
     } catch (error) {
-        console.error(error);
-        mostrarModal('Error al cambiar el estado del objeto', 'errorModal');
+        mostrarModal(error.message, 'errorModal'); // Mostrar mensaje exacto del backend
         await esperarCierreModal('errorModal');
     }
 }
@@ -53,15 +52,14 @@ export async function eliminar(id) {
     if (!confirma) return false;
 
     try {
-        await eliminarObjeto(id);
+        const data = await eliminarObjeto(id); // obtiene el JSON directamente
+        mostrarModal(data.message || 'Objeto eliminado correctamente', 'successModal');
+        await esperarCierreModal('successModal', 1500);
         return true;
     } catch (error) {
         console.error('Error al eliminar:', error);
-        mostrarModal(
-            'Error de red al intentar eliminar el objeto.',
-            'errorModal'
-        );
-        await esperarCierreModal('errorModal');
+        mostrarModal(error.message, 'errorModal'); // usa el mensaje real
+        await esperarCierreModal('errorModal', 2000);
         return false;
     }
 }

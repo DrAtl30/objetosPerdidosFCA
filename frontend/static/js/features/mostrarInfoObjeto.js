@@ -1,6 +1,7 @@
 import {mostrarModal, esperarCierreModal} from '../components/modals.js';
 import {crearSlider} from '../components/slider.js';
 import {isAuth} from '../api/auth.js';
+import {reclamar_objeto} from '../api/objetos.js';
 // import {crearComentarioObjeto, obtenerComentarios} from '../api/objetos.js'
 // import {getCSRFToken} from '../utils/utils.js'
 
@@ -79,26 +80,49 @@ export function mostrarInfoObjetoModal(objeto) {
 
     mostrarModal('Informacion del objeto', 'info_objeto');
     esperarCierreModal('info_objeto',0);
-    reclamar();
+    reclamar(objeto);
     // postComentarioModal(objeto.id);
 
 }
 
-function reclamar(){
+function reclamar(objeto){
     const isAdmin = document.body.classList.contains('vista-admin');
     const btnReclamar = document.getElementById('btnReclamar');
+    btnReclamar.setAttribute('data-id', objeto.id)
+
+    if (!btnReclamar) return;
 
     if (isAdmin) {
         btnReclamar.style.display = 'none';
     }
 
     btnReclamar.onclick = async () => {
-        const {auth} = await isAuth();
-        if (!auth) {
-            mostrarModal('Debes iniciar sesion para Reclamar','errorModal');
+        try {
+            const {auth} = await isAuth();
+            if (!auth) {
+                mostrarModal('Debes iniciar sesion para Reclamar','errorModal');
+                await esperarCierreModal('errorModal', 2000);
+                return;
+            }
+
+            const objetoId = btnReclamar.getAttribute('data-id');
+
+            const data = await reclamar_objeto(objetoId);
+
+            if (data.success) {
+                mostrarModal(data.mensaje, 'successModal');
+                await esperarCierreModal('successModal', 1500);
+            } else {
+                mostrarModal(data.mensaje, 'errorModal');
+                await esperarCierreModal('errorModal', 2000);
+            }
+        } catch (error) {
+            console.log(error);
+            
+            mostrarModal('Error al reclamar el objeto', 'errorModal');
             await esperarCierreModal('errorModal', 2000);
-            return;
         }
+        
     }
 }
 

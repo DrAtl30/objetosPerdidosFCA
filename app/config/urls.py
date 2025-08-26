@@ -16,6 +16,8 @@ urlpatterns = [
     path("registro-objeto/", views.object_registro, name="object_registro"),
     path("editar-objeto/<int:id_objeto>", views.object_registro, name="editar_objeto"),
     path("administrador/", views.home_admin, name="home_admin"),
+    path('administrador/reclamados/', views.object_reclamados, name='objetos_reclamados'),
+    path("reclamar/<int:id_objeto>/", views.reclamar_objeto, name="reclamar_objeto"),
     path("send-email", EmailAPIView.as_view(), name="send-email"),
     path("prueba/", views.prueba, name="prueba"),
 ]

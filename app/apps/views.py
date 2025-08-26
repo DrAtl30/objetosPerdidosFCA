@@ -18,13 +18,13 @@ from django.db.models import Q
 from datetime import datetime, timedelta
 from email_service.api.services.email_services import enviar_correo_confirmacion, enviar_correo_recuperacion
 import logging, json, os
-from .models import Usuario, Objetoperdido,Imagenobjeto, Lugar_Perdida
+from .models import Usuario, Objetoperdido,Imagenobjeto, Lugar_Perdida, Reclamacion, Reporteentrega
 
 
 # Create your views here.
 logger = logging.getLogger(__name__)
 def prueba(request):
-    return render(request, 'auth/password_reset_confirm.html')
+    return render(request, 'administrador/reclamados.html')
 
 def home(request):
     user_name = ''
@@ -48,6 +48,20 @@ def user_registro(request):
     return render(request, "auth/registro.html", {"timestamp": timestamp})
 
 
+
+
+
+def home_admin(request):
+    if not request.user.is_authenticated or request.user.rol != 'administrador':
+        return redirect('/')
+    admin_name = ""
+    admin_lastname = ""
+    if request.user.is_authenticated:
+        admin_name = request.user.nombre
+        admin_lastname = request.user.apellidos
+
+    return render(request, "administrador/administrador.html", {'admin_name': admin_name, 'admin_lastname': admin_lastname})
+
 def object_registro(request,id_objeto=None):
     if not request.user.is_authenticated or request.user.rol != 'administrador':
         return redirect('/')
@@ -62,17 +76,29 @@ def object_registro(request,id_objeto=None):
     contexto ['lugares'] = lugares
     return render(request, "administrador/registroObjeto.html", contexto)
 
+def object_reclamados(request):
+    objetos = Objetoperdido.objects.filter(reclamaciones__isnull=False).prefetch_related('reclamaciones__usuario').distinct()
+    return render(request, 'administrador/reclamados.html', {'objetos': objetos})
 
-def home_admin(request):
-    if not request.user.is_authenticated or request.user.rol != 'administrador':
-        return redirect('/')
-    admin_name = ""
-    admin_lastname = ""
-    if request.user.is_authenticated:
-        admin_name = request.user.nombre
-        admin_lastname = request.user.apellidos
+def reclamar_objeto(request, id_objeto):
+    if request.method == 'POST':
+        objeto = get_object_or_404(Objetoperdido, pk=id_objeto)
+        
+        reclamacion_existe = Reclamacion.objects.filter(objeto=objeto, usuario=request.user).exists()
+        if reclamacion_existe:
+            return JsonResponse({'success':False, 'mensaje':'Ya has reclamado este objeto'})
+        
+        Reclamacion.objects.create(objeto=objeto,usuario=request.user)
+        
+        objeto.estado_objeto = 'reclamado'
+        objeto.save(update_fields=['estado_objeto'])
+        
+        return JsonResponse({'success':True, 'mensaje': 'Objeto reclamado exitosamente'})
+    
+    return JsonResponse({'success':False, 'mensaje': 'Metodo no permitido'}, status=405)
 
-    return render(request, "administrador/administrador.html", {'admin_name': admin_name, 'admin_lastname': admin_lastname})
+
+    
 
 def isAuth(request):
     return JsonResponse({'auth': request.user.is_authenticated,'id_usuario_auth':request.user.id_usuario if request.user.is_authenticated else None})
@@ -363,6 +389,8 @@ class ObjetoPerdidoViewSet(ModelViewSet):
             return Response({'error': 'No tienes permiso para realizar esta acción'}, status=status.HTTP_403_FORBIDDEN)
         
         instance = self.get_object()
+        if instance.estado_objeto == 'reclamado' or instance.reclamaciones.exists():
+            return Response({'error': 'No se puede editar un objeto que ya ha sido reclamado'}, status=status.HTTP_400_BAD_REQUEST)
         instance.nombre = request.data.get('nombre', instance.nombre)
         instance.descripcion_general = request.data.get('descripcion_general', instance.descripcion_general)
         instance.descripcion_especifica = request.data.get('descripcion_especifica', instance.descripcion_especifica)
@@ -393,6 +421,9 @@ class ObjetoPerdidoViewSet(ModelViewSet):
             return Response({'error': 'No tienes permiso para realizar esta acción'}, status=status.HTTP_403_FORBIDDEN)
         
         objeto = get_object_or_404(Objetoperdido, pk=pk)
+        
+        if objeto.estado_objeto == 'reclamado' or objeto.reclamaciones.exists():
+            return Response({'error': 'No se puede eliminar un objeto que ha sido reclamado'},status=status.HTTP_400_BAD_REQUEST)
 
         # Eliminar las imágenes del sistema de archivos
         for imagen in objeto.imagenes.all():
@@ -428,6 +459,34 @@ class ObjetoPerdidoViewSet(ModelViewSet):
                 'imagenes': [{'ruta_imagen': img.ruta_imagen.url} for img in objeto.imagenes.all()],
             }
         return Response(data)
+    
+class ReclamacionDetail(APIView):
+    def post(self, request, pk):
+        reclamacion =  get_object_or_404(Reclamacion, pk=pk)
+        objeto = reclamacion.objeto
+        usuario = reclamacion.usuario
+        
+        if objeto.estado_objeto == 'entregado':
+            return Response({'error': 'El objeto ya ha sido entregado'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        objeto.estado_objeto = 'entregado'
+        objeto.save(update_fields=['estado_objeto'])
+        
+        Reporteentrega.objects.create(id_objeto = objeto,id_usuario_reclamante=usuario,fecha_hora_entrega=timezone.now() )
+        
+        reclamaciones_eliminadas = list(Reclamacion.objects.filter(objeto=objeto).values_list('id', flat=True))
+        reclamaciones_eliminadas.append(reclamacion.id)
+
+        # Borra todas
+        Reclamacion.objects.filter(objeto=objeto).delete()
+        
+        return Response({"message": "Reclamación aceptada","reclamaciones_eliminadas": reclamaciones_eliminadas}, status=status.HTTP_200_OK)
+        
+        
+    def delete(self, request, pk):
+        reclamacion = get_object_or_404(Reclamacion, pk=pk)
+        reclamacion.delete()
+        return Response({"message": "Reclamación eliminada correctamente"}, status=status.HTTP_200_OK)
 
 def toggle_ocultar_objeto(request):
     if not request.user.is_authenticated or not request.user.is_staff:
@@ -437,8 +496,14 @@ def toggle_ocultar_objeto(request):
         data = json.loads(request.body)
         objeto_id = data.get("id")
         
+        
         if not objeto_id:
             return JsonResponse({"error": "ID no proporcionado"}, status=400)
+        
+        objeto = get_object_or_404(Objetoperdido, pk=objeto_id)
+
+        if objeto.estado_objeto == 'reclamado' or objeto.reclamaciones.exists():
+            return JsonResponse({'error': 'No se puede ocultar un objeto que ha sido reclamado'}, status=400)
 
         ocultos_path = os.path.join(os.path.dirname(__file__), "../media/ocultos.json")
 
