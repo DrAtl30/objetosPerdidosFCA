@@ -30,7 +30,7 @@ document.querySelectorAll('.aceptar').forEach((btn) => {
 
         try {
             const data = await aceptarReclamacion(idReclamacion);
-            mostrarModal(data.mensaje || 'Reclamación aceptada correctamente', 'successModal');
+            mostrarModal(data.message || 'Reclamación aceptada correctamente', 'successModal');
             await esperarCierreModal('successModal', 2000);
 
             data.reclamaciones_eliminadas.forEach((id) => {

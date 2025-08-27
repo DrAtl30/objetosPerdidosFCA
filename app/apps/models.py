@@ -185,6 +185,7 @@ class Objetoperdido(models.Model):
     id_lugar = models.ForeignKey(Lugar_Perdida,null=True, on_delete= models.PROTECT, related_name='objetos')
     estado_objeto = models.CharField(max_length=50, choices=ESTADO_OBJETO)
     fecha_carga = models.DateTimeField(auto_now_add=True)
+    fecha_entrega = models.DateTimeField(null=True, blank=True)
     encontrado_por = models.CharField(max_length=100)
 
     class Meta:
@@ -206,6 +207,7 @@ class Reporteentrega(models.Model):
     id_objeto = models.ForeignKey(Objetoperdido, models.DO_NOTHING, db_column="id_objeto", null=True)
     fecha_hora_entrega = models.DateTimeField()
     id_usuario_reclamante = models.ForeignKey("Usuario",models.DO_NOTHING,db_column="id_usuario_reclamante",blank=True,null=True,default=51)
+    pdf_path = models.FileField(upload_to='reportes_entregas/', blank=True, null=True)
 
     class Meta:
         # managed = False

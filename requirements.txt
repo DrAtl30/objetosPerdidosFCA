@@ -4,3 +4,4 @@ djangorestframework==3.14.0  # o la versión más reciente
 python-decouple
 django-cors-headers==4.7.0
 Pillow>=9.0.0
+weasyprint==66.0

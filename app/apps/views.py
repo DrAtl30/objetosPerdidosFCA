@@ -3,13 +3,15 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
-from django.http import JsonResponse,  QueryDict
+from django.http import JsonResponse,  QueryDict, HttpResponse
 from rest_framework import status, generics, permissions
 from .serializers import RegistroUser, LoginUser, RegistroObjeto
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.conf import settings
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -17,7 +19,8 @@ from django.urls import reverse
 from django.db.models import Q
 from datetime import datetime, timedelta
 from email_service.api.services.email_services import enviar_correo_confirmacion, enviar_correo_recuperacion
-import logging, json, os
+import logging, json, os, tempfile
+from weasyprint import HTML
 from .models import Usuario, Objetoperdido,Imagenobjeto, Lugar_Perdida, Reclamacion, Reporteentrega
 
 
@@ -83,7 +86,9 @@ def object_reclamados(request):
 def reclamar_objeto(request, id_objeto):
     if request.method == 'POST':
         objeto = get_object_or_404(Objetoperdido, pk=id_objeto)
-        
+        if objeto.estado_objeto == 'entregado':
+            return JsonResponse({'success':False, 'mensaje':'Este objeto ya ha sido entregado y no se puede reclamar'})
+            
         reclamacion_existe = Reclamacion.objects.filter(objeto=objeto, usuario=request.user).exists()
         if reclamacion_existe:
             return JsonResponse({'success':False, 'mensaje':'Ya has reclamado este objeto'})
@@ -470,9 +475,12 @@ class ReclamacionDetail(APIView):
             return Response({'error': 'El objeto ya ha sido entregado'}, status=status.HTTP_400_BAD_REQUEST)
         
         objeto.estado_objeto = 'entregado'
-        objeto.save(update_fields=['estado_objeto'])
+        objeto.fecha_entrega = timezone.now()
+        objeto.save(update_fields=['estado_objeto','fecha_entrega'])
         
-        Reporteentrega.objects.create(id_objeto = objeto,id_usuario_reclamante=usuario,fecha_hora_entrega=timezone.now() )
+        entrega = Reporteentrega.objects.create(id_objeto = objeto,id_usuario_reclamante=usuario,fecha_hora_entrega=timezone.now() )
+        
+        pdf_path = generar_pdf_entrega(entrega, request)
         
         reclamaciones_eliminadas = list(Reclamacion.objects.filter(objeto=objeto).values_list('id', flat=True))
         reclamaciones_eliminadas.append(reclamacion.id)
@@ -480,13 +488,34 @@ class ReclamacionDetail(APIView):
         # Borra todas
         Reclamacion.objects.filter(objeto=objeto).delete()
         
-        return Response({"message": "Reclamación aceptada","reclamaciones_eliminadas": reclamaciones_eliminadas}, status=status.HTTP_200_OK)
+        
+        
+        return Response({"message": "Reclamación aceptada y pdf creado","reclamaciones_eliminadas": reclamaciones_eliminadas}, status=status.HTTP_200_OK)
         
         
     def delete(self, request, pk):
         reclamacion = get_object_or_404(Reclamacion, pk=pk)
         reclamacion.delete()
         return Response({"message": "Reclamación eliminada correctamente"}, status=status.HTTP_200_OK)
+    
+def generar_pdf_entrega(entrega, request, filename=None):
+    html_string = render_to_string('report/objeto_entregado.html', {'entrega': entrega})
+    
+    if not filename:
+        filename = f'reporte_entrega_{entrega.id_reporte}.pdf'
+    
+    pdf_path = os.path.join('reportes', filename)  # Carpeta dentro de MEDIA_ROOT
+    
+    os.makedirs(os.path.join(settings.MEDIA_ROOT, 'reportes'), exist_ok=True)
+    
+    with open(os.path.join(settings.MEDIA_ROOT, pdf_path), 'wb') as f:
+        HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf(target=f)
+    
+    entrega.pdf_path = pdf_path
+    entrega.save(update_fields=['pdf_path'])
+    
+    return pdf_path
+    
 
 def toggle_ocultar_objeto(request):
     if not request.user.is_authenticated or not request.user.is_staff:

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Reporte de Objeto Perdido</title>
+    {% load static %}
+    <style>
+        @page {
+            size: A4;
+            margin: 2.5cm 2cm 3cm 2cm;
+
+            @top-center {
+                content: element(header);
+            }
+            @bottom-left {
+                content: element(footer);
+            }
+
+            @bottom-right {
+                content: "Página " counter(page) " de " counter(pages);
+                font-size: 10pt;
+                color: white;
+            }
+        }
+
+        body { 
+            font-family: Arial, sans-serif; 
+            font-size: 11pt; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        /* Encabezado */
+        .full-page-header {
+            position: fixed;       /* Fijo en la página */
+            top: -2.5cm;                /* Comienza desde el borde superior de la hoja */
+            left: -2cm;               /* Comienza desde el borde izquierdo de la hoja */
+            width: 21cm;           /* Ancho completo de A4 */
+            height: 10rem;          
+            margin: 0;
+            padding: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Centra contenido horizontalmente */
+            background-image: url("{% static 'img/footer/pleca-con-hexagonos-LARGA.jpg' %}");
+            background-size: cover;       /* Ocupa todo el contenedor */
+            background-position: center;  /* Centra la imagen */
+            background-repeat: no-repeat;
+        }
+
+        .full-page-header img {
+            margin-left: 5rem;
+            height: 80px;
+            width: auto;
+        }
+
+        .full-page-header h1 {
+            position: absolute;   /* Posición sobre la imagen */
+            top: 50%;             /* Centrado vertical */
+            left: 50%;            /* Centrado horizontal */
+            transform: translate(-50%, -50%); /* Centrar exacto */
+            margin: 0;
+            text-align: center;
+            color: white;
+            font-size: 16pt;
+            z-index: 2;  
+        }
+
+        /* Contenido */
+        .content {
+            margin-top: 3rem; /* Espacio para el header */
+            padding: 20px;
+        }
+        
+        .section-title.title {
+            background-color: white;
+            color: #2c5234;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            background-color: #2c5234;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .info-grid.usuario{
+            grid-template-columns: 3fr 1fr; /* 75% - 25% */
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 10px;
+        }
+
+        .info-item.name {
+            grid-column: 1 / 2; /* Ocupa la primera columna */
+        }
+
+        .info-item.cuenta {
+            grid-column: 2 / 3; /* Ocupa la segunda columna */
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #2c5234;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            width: 100%;
+            word-wrap: break-word;
+            font-size: 12pt;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .objeto {
+            margin-top: 30px;
+            border: 1px solid #2c5234;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .info-grid.objeto_info .info-item {
+            border: none;           /* sin borde dentro del grid */
+            margin: 0;              /* reset margen */
+            padding: 0;             /* reset padding */
+        }
+
+        .info-grid.objeto_info .info-value {
+            width: auto;            /* deja que se ajuste al contenido */
+            display: inline-block;  /* que no se estire */
+        }
+
+        .info-grid.objeto_info {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* Izquierda: nombre, derecha: fecha/lugar */
+            column-gap: 20px;
+            row-gap: 10px;
+        }
+
+        .info-item.nombre_objeto {
+            grid-column: 1 / 2;
+        }
+
+        .info-item.fecha_p,.info-item.lugar_p {
+            grid-column: 2 / 3;
+            text-align: right;
+        }
+
+        .info-item.desc_g,
+        .info-item.desc_e {
+            grid-column: 1 / -1;  /* Ocupa todas las columnas */
+            margin-top: 15px;
+        }
+
+        .desc_g .info-value,
+        .desc_e .info-value {
+            width: 100%;          /* Ocupa todo el ancho del contenedor */
+            display: block;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            font-size: 11pt;
+            line-height: 1.4;
+            min-height: 40px;
+        }
+
+        .fecha_p .info-label,
+        .fecha_p .info-value,
+        .lugar_p .info-label,
+        .lugar_p .info-value {
+            font-size: 10pt;
+        }
+
+        .fecha_p .info-value,
+        .lugar_p .info-value {
+            padding: 4px 6px;
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: -3cm;
+            left: -2cm;
+            width: 21cm;
+            height: 5rem;
+            text-align: center;
+            padding: 10px;
+            background-color: #2c5234;
+            color: white;
+            font-size: 10pt;
+            display: flex;
+            justify-content: space-between;
+            align-items: top;
+            box-sizing: border-box;
+        }
+
+        .fecha-generacion {
+            font-style: italic;
+            color: white;
+            padding-top: .5rem;
+            margin-top: 1.5rem;
+            font-size: 10pt;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <div class="full-page-header">
+        <img src="{% static 'img/logos/escudo.png' %}" alt="logo">
+        <h1>Facultad de Contaduría y Administración</h1>
+    </div>
+
+    <div class="content">
+        <h2 class="section-title title" >Reporte de Objeto Perdido</h2>
+        <div class="section-title">INFORMACIÓN DEL RECLAMANTE</div>
+        
+        <div class="info-grid usuario">
+            <div class="info-item name">
+                <div class="info-label">Nombre:</div>
+                <div class="info-value">{{ entrega.id_usuario_reclamante.nombre }} {{ entrega.id_usuario_reclamante.apellidos }}</div>
+            </div>
+            
+            <div class="info-item cuenta">
+                <div class="info-label">No. de Cuenta:</div>
+                <div class="info-value">{{ entrega.id_usuario_reclamante.alumno.numero_cuenta}}</div>
+            </div>
+        </div>
+
+        <div class="section-title">INFORMACIÓN DEL OBJETO RECLAMADO</div>
+        
+        <div class="objeto">
+            <div class="info-grid objeto_info">
+                <div class="info-item nombre_objeto">
+                    <div class="info-label">Nombre del objeto:</div>
+                    <div class="info-value">{{ entrega.id_objeto.nombre }}</div>
+                </div>
+                
+                <div class="info-item fecha_p">
+                    <div class="info-label">Fecha de pérdida:</div>
+                    <div class="info-value">{{ entrega.id_objeto.fecha_perdida|date:"d/m/Y"}}</div>
+                </div>
+
+                <div class="info-item lugar_p">
+                    <div class="info-label">Lugar de pérdida:</div>
+                    <div class="info-value">{{ entrega.id_objeto.id_lugar.nombre}}</div>
+                </div>
+                <div class="info-item lugar_p">
+                    <div class="info-label">Fecha de entrega:</div>
+                    <div class="info-value">{{ entrega.id_objeto.fecha_entrega|date:"d/m/Y"}}</div>
+                </div>
+            </div>
+            <div class="item-grid descripcion">
+                <div class="info-item desc_g">
+                    <div class="info-label">Descripción general:</div>
+                    <div class="info-value">{{ entrega.id_objeto.descripcion_general}}</div>
+                </div> 
+                
+                <div class="info-item desc_e">
+                    <div class="info-label">Descripción específica:</div>
+                    <div class="info-value">{{ entrega.id_objeto.descripcion_especifica}}</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="fecha-generacion">
+            Reporte generado el: {% now "d/m/Y H:i" %}
+        </div>
+        
+    </footer>
+
+</body>
+</html>
