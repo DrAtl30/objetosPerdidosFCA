@@ -2,48 +2,57 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.signing import TimestampSigner
+from django.utils.html import strip_tags
+import os
+
+def enviar_correo(asunto, destinatario, plantilla, contexto, mensaje_texto=None, adjuntos = None):
+    mensaje_html = render_to_string(plantilla, contexto)
+    if not mensaje_texto:
+        try:
+            mensaje_texto = render_to_string(plantilla.replace(".html", ".txt"), contexto)
+        except Exception:
+            mensaje_texto = strip_tags(mensaje_html)
+         
+        
+    email = EmailMultiAlternatives(asunto, mensaje_texto,settings.EMAIL_HOST_USER,[destinatario])
+    email.attach_alternative(mensaje_html, "text/html")
+    
+    if adjuntos:
+        for path in adjuntos:
+            with open(path, 'rb') as f:
+                filename = os.path.basename(path)
+                email.attach(filename, f.read(), 'application/pdf')
+    email.send()
+
 
 
 def enviar_correo_confirmacion(alumno,password=None):
     signer = TimestampSigner()
-    a_id = alumno.id_usuario 
-    uid = signer.sign(str(a_id))
-    nombre = alumno.nombre
-    apellidos = alumno.apellidos
+    uid = signer.sign(str(alumno.id_usuario))
     url_confirmacion = f"{settings.FRONTEND_URL}/api/confirmar-cuenta/{uid}"
 
+    contexto = {
+        'nombre_alumno':alumno.nombre,
+        'apellidos_alumno':alumno.apellidos,
+        'url_confirmacion':url_confirmacion,
+        'password':password
+    }
     asunto = "Confirma tu cuenta"
-    mensaje_html = render_to_string(
-        "auth/confirmaCorreo.html", {
-            "nombre_alumno" : nombre,
-            "apellidos_alumno" : apellidos,
-            "url_confirmacion": url_confirmacion,
-            'password': password}
-    )
-    mensaje_texto = f"Por favor confirma tu cuenta ingresando al siguiente enlace: {url_confirmacion}"
+    enviar_correo(asunto,alumno.correo_institucional,'auth/confirmaCorreo.html',contexto,f"Por favor confirma tu cuenta ingresando al siguiente enlace: {url_confirmacion}")
 
-    email = EmailMultiAlternatives(
-        asunto,
-        mensaje_texto,
-        settings.EMAIL_HOST_USER,
-        [alumno.correo_institucional],
-    )
-    email.attach_alternative(mensaje_html, "text/html")
-    email.send()
 
-def enviar_contraseña_admin(historial, correo_admin, contrasena_nueva):
-    destino = historial.correo
-    nombre = historial.nombre
-    apellidos = historial.apellidos
+def enviar_pass_admin(historial, correo_admin, contrasena_nueva):
+    destinatario = historial.correo
     asunto = "Acceso a cuenta de administrador"
-    mensaje_html = render_to_string(
-        "auth/sendPassword.html",{
-            "nombre_admin": nombre,
-            "apellidos_admin": apellidos,
+    plantilla = "auth/sendPassword.html"
+    contexto = {
+            "titulo": "Credenciales de acceso",
+            "nombre_admin": historial.nombre,
+            "apellidos_admin": historial.apellidos,
             "email_admin": correo_admin,
-            "pass_admin": contrasena_nueva
+            "password": contrasena_nueva,
+            'tipo': 'bienvenida'
         }
-    )
     msj = f"""
     Has sido registrado como administrador del sistema.
 
@@ -52,26 +61,38 @@ def enviar_contraseña_admin(historial, correo_admin, contrasena_nueva):
 
     Por favor, inicia sesión.
     """
-
-    email = EmailMultiAlternatives(
-        asunto,
-        msj,
-        settings.EMAIL_HOST_USER,
-        [destino],
-    )
-    email.attach_alternative(mensaje_html, "text/html")
-    email.send()
+    enviar_correo(asunto, destinatario,plantilla, contexto, msj)
 
 def enviar_correo_recuperacion(email, url_reset):
     asunto = "Recuperación de contraseña"
-    mensaje_html = render_to_string("auth/password_reset_email.html", {"reset_url": url_reset})
+    contexto = {"reset_url": url_reset}
+    plantilla = "auth/password_reset_email.html"
     mensaje_texto = f"Restablece tu contraseña ingresando aquí: {url_reset}"
 
-    email_msg = EmailMultiAlternatives(
-        asunto,
-        mensaje_texto,
-        settings.EMAIL_HOST_USER,
-        [email],
-    )
-    email_msg.attach_alternative(mensaje_html, "text/html")
-    email_msg.send()
+    enviar_correo(asunto,email,plantilla,contexto,mensaje_texto)
+
+def enviar_correo_nueva_pass(alumno,password):
+    asunto = "Contraseña Actualizada"
+    plantilla = "auth/sendPassword.html"
+    contexto = {
+        "titulo": "Credenciales de acceso",
+        'nombre':alumno.nombre,
+        'apellidos':alumno.apellidos,
+        'password':password,
+        'tipo': 'bienvenida'
+    }
+    mensaje_texto = f"Tu contraseña se actualizó correctamente. Nueva contraseña: {password}"
+    enviar_correo(asunto,alumno.correo_institucional,plantilla,contexto,mensaje_texto)
+    
+def enviar_reporte_pdf_individual(alumno,objeto,adjuntos):
+    asunto = "Reporte de Entrega de Objeto"
+    plantilla = "report/reporte_email.html"
+    contexto = {
+        "titulo": "Credenciales de acceso",
+        'nombre':alumno.nombre,
+        'apellidos':alumno.apellidos,
+        'objeto': objeto.nombre,
+        'fecha_entrega':objeto.fecha_entrega
+    }
+    mensaje_texto = f"Has reclamado el objeto {objeto.nombre} en la fecha {objeto.fecha_entrega}, se adjunta el reporte en PDF"
+    enviar_correo(asunto,alumno.correo_institucional,plantilla,contexto,mensaje_texto, adjuntos)
