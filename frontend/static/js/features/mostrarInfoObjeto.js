@@ -96,6 +96,16 @@ function reclamar(objeto){
         btnReclamar.style.display = 'none';
     }
 
+    if (objeto.ya_reclamo) {
+        btnReclamar.textContent = 'En proceso';
+        btnReclamar.disabled = true; // opcional: desactivar el botón
+        return;
+    } else {
+        btnReclamar.textContent = 'Reclamar';
+        btnReclamar.disabled = false;
+    }
+
+
     btnReclamar.onclick = async () => {
         try {
             const {auth} = await isAuth();
@@ -110,6 +120,8 @@ function reclamar(objeto){
             const data = await reclamar_objeto(objetoId);
 
             if (data.success) {
+                btnReclamar.textContent = 'En proceso';
+                btnReclamar.disabled = true;
                 mostrarModal(data.mensaje, 'successModal');
                 await esperarCierreModal('successModal', 1500);
             } else {

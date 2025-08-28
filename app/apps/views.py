@@ -18,7 +18,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.urls import reverse
 from django.db.models import Q
 from datetime import datetime, timedelta
-from email_service.api.services.email_services import enviar_correo_confirmacion, enviar_correo_recuperacion
+from email_service.api.services.email_services import enviar_correo_confirmacion, enviar_correo_recuperacion, enviar_correo_nueva_pass, enviar_reporte_pdf_individual
 import logging, json, os, tempfile
 from weasyprint import HTML
 from .models import Usuario, Objetoperdido,Imagenobjeto, Lugar_Perdida, Reclamacion, Reporteentrega
@@ -271,7 +271,9 @@ class PasswordResetConfirmView(APIView):
             usuario.set_password(nueva_password)
             usuario.save()
             
-            return Response({"mensaje": "Contraseña actualizada con éxito"}, status=status.HTTP_200_OK)
+            enviar_correo_nueva_pass(usuario, nueva_password)
+            
+            return Response({"mensaje": "Contraseña actualizada con éxito, se te envio por correo"}, status=status.HTTP_200_OK)
         
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -442,6 +444,12 @@ class ObjetoPerdidoViewSet(ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         objeto = self.get_object()
         
+        usuario = request.user if request.user.is_authenticated else None
+        is_claimed = False
+        
+        if usuario:
+            is_claimed = objeto.reclamaciones.filter(usuario=usuario).exists()
+        
         if request.user.is_authenticated and request.user.rol == 'administrador':
             data = {
                 'id': objeto.id_objeto,
@@ -461,6 +469,7 @@ class ObjetoPerdidoViewSet(ModelViewSet):
                 'nombre': objeto.nombre,
                 'descripcion_general': objeto.descripcion_general,
                 'fecha_perdida': objeto.fecha_perdida.strftime('%Y-%m-%d') if objeto.fecha_perdida else '',
+                'ya_reclamo': is_claimed,
                 'imagenes': [{'ruta_imagen': img.ruta_imagen.url} for img in objeto.imagenes.all()],
             }
         return Response(data)
@@ -482,6 +491,8 @@ class ReclamacionDetail(APIView):
         
         pdf_path = generar_pdf_entrega(entrega, request)
         
+        enviar_reporte_pdf_individual(usuario, objeto, [pdf_path])
+        
         reclamaciones_eliminadas = list(Reclamacion.objects.filter(objeto=objeto).values_list('id', flat=True))
         reclamaciones_eliminadas.append(reclamacion.id)
 
@@ -495,7 +506,13 @@ class ReclamacionDetail(APIView):
         
     def delete(self, request, pk):
         reclamacion = get_object_or_404(Reclamacion, pk=pk)
+        objeto = reclamacion.objeto
+        
         reclamacion.delete()
+        
+        if not objeto.reclamaciones.exists():
+            objeto.estado_objeto = 'publicado'
+            objeto.save(update_fields=['estado_objeto'])
         return Response({"message": "Reclamación eliminada correctamente"}, status=status.HTTP_200_OK)
     
 def generar_pdf_entrega(entrega, request, filename=None):
@@ -504,17 +521,18 @@ def generar_pdf_entrega(entrega, request, filename=None):
     if not filename:
         filename = f'reporte_entrega_{entrega.id_reporte}.pdf'
     
-    pdf_path = os.path.join('reportes', filename)  # Carpeta dentro de MEDIA_ROOT
+    folder = os.path.join(settings.MEDIA_ROOT, 'reportes')
+    os.makedirs(folder, exist_ok=True)
+    pdf_path = os.path.join(folder, filename)
     
-    os.makedirs(os.path.join(settings.MEDIA_ROOT, 'reportes'), exist_ok=True)
-    
-    with open(os.path.join(settings.MEDIA_ROOT, pdf_path), 'wb') as f:
+    with open(pdf_path, 'wb') as f:
         HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf(target=f)
     
-    entrega.pdf_path = pdf_path
+    # Guardar la ruta relativa en el modelo
+    entrega.pdf_path = os.path.join('reportes', filename)
     entrega.save(update_fields=['pdf_path'])
     
-    return pdf_path
+    return pdf_path 
     
 
 def toggle_ocultar_objeto(request):
