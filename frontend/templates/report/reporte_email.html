@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Entrega</title>
+</head>
+<body>
+    <h2 style="color: #2c3e50;">¡Tu solicitud de reclamacion ha sido aceptada!</h2>
+    <p>Hola <strong>{{nombre}} {{apellidos}}</strong></p>
+    <p>Se ha completado la entrega del objeto: <strong>{{ objeto }}</strong> </p>
+    <p>Fecha de entrega: {{ fecha_entrega|date:"d/m/Y" }}</p>
+    <p>Adjunto encontrarás el reporte en PDF.</p>
+    <p><small>Si no solicitaste este registro, ignora este mensaje.</small></p>
+</body>
+</html>
