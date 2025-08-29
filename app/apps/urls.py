@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 # from rest_framework.authtoken.views import obtain_auth_token #es para pruebas
-from apps.views import (isAuth,RegistroAlumnoView,LoginAlumnoView,LogOutAlumnoView,ConfirmarCuentaView,verificar_correo_confirmado, ReenviarCorreoConfirmacion, ObjetoPerdidoViewSet, toggle_ocultar_objeto, obtener_ocultos, PasswordResetView, PasswordResetConfirmView, ReenviarCorreoResetPasswordView, ReclamacionDetail)
+from apps.views import (isAuth,RegistroAlumnoView,LoginAlumnoView,LogOutAlumnoView,ConfirmarCuentaView,verificar_correo_confirmado, ReenviarCorreoConfirmacion, ObjetoPerdidoViewSet, toggle_ocultar_objeto, obtener_ocultos, PasswordResetView, PasswordResetConfirmView, ReenviarCorreoResetPasswordView, ReclamacionDetail, obtener_notificaciones,enviar_notificacion_admin, marcar_notificaciones_leidas)
 
 router = DefaultRouter()
 router.register(r'objetos', ObjetoPerdidoViewSet, basename='objetos')
@@ -22,6 +22,9 @@ urlpatterns = [
     path("obtener_ocultos/",obtener_ocultos,name="obtener_ocultos"),
     path("reclamaciones/<int:pk>/",ReclamacionDetail.as_view(),name="delete_reclamacion"),
     path("reclamaciones/<int:pk>/",ReclamacionDetail.as_view(),name="acept_reclamacion"),
+    path('notificaciones/', obtener_notificaciones, name='obtener_notificaciones'),
+    path("enviar_notificacion_admin/", enviar_notificacion_admin, name="enviar_notificacion_admin"),
+    path('marcar_notificaciones_leidas/', marcar_notificaciones_leidas, name='marcar_notificaciones_leidas'),
     
     # path("comentario/<int:objeto_id>/", ComentarioView.as_view(),name="comentario_by_objeto"),
     # path("comentario/", ComentarioAllView.as_view(),name="comentario"),

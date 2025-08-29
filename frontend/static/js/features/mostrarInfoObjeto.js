@@ -94,12 +94,12 @@ function reclamar(objeto){
 
     if (isAdmin) {
         btnReclamar.style.display = 'none';
+        return;
     }
 
     if (objeto.ya_reclamo) {
         btnReclamar.textContent = 'En proceso';
-        btnReclamar.disabled = true; // opcional: desactivar el botón
-        return;
+        btnReclamar.disabled = true;
     } else {
         btnReclamar.textContent = 'Reclamar';
         btnReclamar.disabled = false;

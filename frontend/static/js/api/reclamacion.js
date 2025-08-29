@@ -29,3 +29,22 @@ export async function aceptarReclamacion(idReclamacion) {
 
     return data;
 }
+
+export async function enviarMensaje(reclamacionId, mensaje) {
+    const response = await fetch('/api/enviar_notificacion_admin/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCSRFToken(),
+        },
+        body: new URLSearchParams({
+            reclamacion_id: reclamacionId,
+            mensaje: mensaje,
+        }),
+    });
+
+    const data = await response.json();
+    if (!response.ok)
+        throw new Error(data.error || 'Error al aceptar la reclamación');
+
+    return data;
+}

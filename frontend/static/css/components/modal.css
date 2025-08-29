@@ -40,6 +40,16 @@
     overflow-y: auto;
 }
 
+#notificacion .modalContent{
+    width: 100%;
+    max-width: var(--modal-noti-max-width);
+    height: 30%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
 /* Variante: barra superior por estado */
 .modalContent::before {
     content: '';
@@ -109,6 +119,9 @@
     padding: 1rem 2rem;
     box-sizing: border-box;
 }
+#notificacion .modalHeader{
+    position: relative;
+}
 .modalHeader {
     flex: 0 0 auto;
     display: flex;
@@ -117,7 +130,7 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    background-color: var(--color-background);
+    background-color: var(--color-text-light);
 }
 
 .modalMain {
@@ -143,6 +156,7 @@
     margin: 1rem;
 }
 
+
 .modalMain .data {
     flex:  1;
     display: flex;
@@ -165,6 +179,12 @@
 }
 .modalMain .data strong {
     color: var(--color-text-dark);
+}
+
+#notificacion .modalMain .data {
+    gap: 0.1rem;
+    padding: .2rem;
+    border-radius: .5rem;
 }
 
 .modalFooter {

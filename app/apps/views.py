@@ -21,7 +21,8 @@ from datetime import datetime, timedelta
 from email_service.api.services.email_services import enviar_correo_confirmacion, enviar_correo_recuperacion, enviar_correo_nueva_pass, enviar_reporte_pdf_individual
 import logging, json, os, tempfile
 from weasyprint import HTML
-from .models import Usuario, Objetoperdido,Imagenobjeto, Lugar_Perdida, Reclamacion, Reporteentrega
+from .models import Usuario, Objetoperdido,Imagenobjeto, Lugar_Perdida, Reclamacion, Reporteentrega, Notificacion
+from .mensajes import MENSAJES_ADMIN, MENSAJES_USUARIO
 
 
 # Create your views here.
@@ -40,19 +41,21 @@ def home(request):
 
 
 def inicio_session(request):
+    if request.user.is_authenticated:
+        return redirect('/')
+
     return render(request, "auth/inicio_sesion.html")
 
 def reset_password(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     return render(request, "auth/password_reset.html")
 
-
 def user_registro(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     timestamp = datetime.now().timestamp()
     return render(request, "auth/registro.html", {"timestamp": timestamp})
-
-
-
-
 
 def home_admin(request):
     if not request.user.is_authenticated or request.user.rol != 'administrador':
@@ -64,6 +67,15 @@ def home_admin(request):
         admin_lastname = request.user.apellidos
 
     return render(request, "administrador/administrador.html", {'admin_name': admin_name, 'admin_lastname': admin_lastname})
+
+def enviar_mensaje(remitente, destinatario, mensaje):
+    Notificacion.objects.create(
+        remitente=remitente,
+        destinatario=destinatario,
+        mensaje=mensaje,
+        fecha_notificacion=timezone.now(),
+        estado_lectura=False
+    )
 
 def object_registro(request,id_objeto=None):
     if not request.user.is_authenticated or request.user.rol != 'administrador':
@@ -80,8 +92,24 @@ def object_registro(request,id_objeto=None):
     return render(request, "administrador/registroObjeto.html", contexto)
 
 def object_reclamados(request):
+    if not request.user.is_authenticated or request.user.rol != 'administrador':
+        return redirect('/')
     objetos = Objetoperdido.objects.filter(reclamaciones__isnull=False).prefetch_related('reclamaciones__usuario').distinct()
-    return render(request, 'administrador/reclamados.html', {'objetos': objetos})
+    
+
+    mensajes_por_reclamacion = []
+    for obj in objetos:
+        for reclamacion in obj.reclamaciones.all():
+            usuario = reclamacion.usuario.nombre
+            obj_nombre = obj.nombre
+            mensajes_actualizados = [m.replace("{usuario}", usuario).replace("{objeto}", obj_nombre)
+                                    for m in MENSAJES_ADMIN]
+            mensajes_por_reclamacion.append({
+                'reclamacion_id': reclamacion.id,
+                'mensajes': mensajes_actualizados
+            })
+    
+    return render(request, 'administrador/reclamados.html', {'objetos': objetos, 'mensajes':mensajes_por_reclamacion})
 
 def reclamar_objeto(request, id_objeto):
     if request.method == 'POST':
@@ -98,11 +126,66 @@ def reclamar_objeto(request, id_objeto):
         objeto.estado_objeto = 'reclamado'
         objeto.save(update_fields=['estado_objeto'])
         
+        mensajes = MENSAJES_USUARIO[0]
+        administradores = Usuario.objects.filter(rol='administrador')
+        for admin in administradores:
+            mensaje = mensajes.format(usuario=request.user.nombre, objeto=objeto.nombre)
+            enviar_mensaje(request.user,admin, mensaje)
+        
         return JsonResponse({'success':True, 'mensaje': 'Objeto reclamado exitosamente'})
     
     return JsonResponse({'success':False, 'mensaje': 'Metodo no permitido'}, status=405)
 
 
+def obtener_notificaciones(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'notificaciones': []})
+    usuario = request.user
+    tiempo_limite = timezone.now() - timedelta(hours=24)
+    
+    Notificacion.objects.filter(destinatario = usuario, fecha_notificacion__lt=tiempo_limite).delete()
+    
+    notificaciones = Notificacion.objects.filter(destinatario=usuario).order_by('-fecha_notificacion')
+    
+    data = [
+        {
+            "id": n.id_notificacion,
+            "mensaje": n.mensaje,
+            "fecha": n.fecha_notificacion.strftime('%Y-%m-%d %H:%M:%S'),
+            "leida": n.estado_lectura,
+            "remitente": n.remitente.nombre if n.remitente else "Sistema",
+            "remitente_id": n.remitente.id_usuario if n.remitente else None
+        }
+        for n in notificaciones
+    ]
+    
+    return JsonResponse({"notificaciones": data})
+
+def marcar_notificaciones_leidas(request):
+    usuario = request.user
+    # Marcar todas como leídas
+    Notificacion.objects.filter(destinatario=usuario, estado_lectura=False).update(estado_lectura=True)
+    return JsonResponse({"success": True})
+
+def enviar_notificacion_admin(request):
+    reclamacion_id = request.POST.get("reclamacion_id")
+    mensaje = request.POST.get("mensaje")
+
+    if not reclamacion_id or not mensaje:
+        return JsonResponse({"success": False, "mensaje": "Datos incompletos"}, status=400)
+
+    try:
+        reclamacion = Reclamacion.objects.select_related("usuario").get(pk=reclamacion_id)
+    except Reclamacion.DoesNotExist:
+        return JsonResponse({"success": False, "mensaje": "Reclamación no encontrada"}, status=404)
+
+    # remitente es el admin actual
+    remitente = request.user
+    destinatario = reclamacion.usuario
+
+    enviar_mensaje(remitente, destinatario, mensaje)
+
+    return JsonResponse({"success": True, "mensaje": "Notificación enviada"})
     
 
 def isAuth(request):
@@ -490,8 +573,16 @@ class ReclamacionDetail(APIView):
         entrega = Reporteentrega.objects.create(id_objeto = objeto,id_usuario_reclamante=usuario,fecha_hora_entrega=timezone.now() )
         
         pdf_path = generar_pdf_entrega(entrega, request)
-        
         enviar_reporte_pdf_individual(usuario, objeto, [pdf_path])
+        
+        mensaje_aceptado = MENSAJES_ADMIN[2].format(usuario=usuario.nombre, objeto=objeto.nombre)
+        enviar_mensaje(remitente=request.user, destinatario=usuario, mensaje=mensaje_aceptado)
+        
+        otrasReclamaciones = Reclamacion.objects.filter(objeto=objeto).exclude(usuario=usuario)
+        for r in otrasReclamaciones:
+            mensaje_no_aceptado = MENSAJES_ADMIN[1].format(usuario=r.usuario.nombre, objeto=objeto.nombre)
+            enviar_mensaje(remitente=request.user, destinatario=r.usuario, mensaje=mensaje_no_aceptado)
+         
         
         reclamaciones_eliminadas = list(Reclamacion.objects.filter(objeto=objeto).values_list('id', flat=True))
         reclamaciones_eliminadas.append(reclamacion.id)
@@ -501,13 +592,17 @@ class ReclamacionDetail(APIView):
         
         
         
-        return Response({"message": "Reclamación aceptada y pdf creado","reclamaciones_eliminadas": reclamaciones_eliminadas}, status=status.HTTP_200_OK)
+        return Response({"message": "Reclamación aceptada y pdf creado, mensajes enviados","reclamaciones_eliminadas": reclamaciones_eliminadas}, status=status.HTTP_200_OK)
         
         
     def delete(self, request, pk):
         reclamacion = get_object_or_404(Reclamacion, pk=pk)
         objeto = reclamacion.objeto
-        
+        usuario = reclamacion.usuario
+                
+        mensajes = MENSAJES_ADMIN[1]
+        mensaje = mensajes.format(usuario=usuario.nombre, objeto=objeto.nombre)
+        enviar_mensaje(remitente=request.user, destinatario=usuario, mensaje=mensaje)
         reclamacion.delete()
         
         if not objeto.reclamaciones.exists():

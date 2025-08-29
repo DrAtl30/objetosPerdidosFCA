@@ -1,5 +1,14 @@
+.table-container {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch; /* smooth scroll en iOS */
+    box-shadow: inset 10px 0 8px -8px rgba(0,0,0,0.1),
+                inset -10px 0 8px -8px rgba(0,0,0,0.1);
+}
+
 .table {
-    width: 100%;  
+    min-width: 700px; /* ancho mínimo para permitir scroll */
     border-collapse: collapse;
     margin-top: 1.5rem;
     font-size: 0.95rem;
@@ -8,6 +17,7 @@
     overflow: hidden;
     box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
 }
+
 .table thead {
     background-color: var(--color-button-primary-hover); /* azul oscuro */
     color: var(--color-text-light);
@@ -30,15 +40,27 @@
     color: #333;
     vertical-align: middle;
 }
+
+.table td{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
 .mensaje_container {
-    width: 70%;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px; /* espacio entre select y botón */
 }
 
 .mensaje-select {
     flex: 1; /* ocupa todo el espacio posible */
+    max-width: 200px;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
     padding: 6px 10px;
     border: 1px solid #ccc;
     border-radius: 6px;
@@ -60,12 +82,43 @@
     white-space: nowrap; /* evita que el texto se parta en varias líneas */
 }
 
-.table .msjbtn {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    border-radius: 6px;
-    margin-top: 5px;
-}
 .table .empty{
     text-align: center;
+}
+
+th.nombre-usuario { min-width: 180px; }
+th.mensaje { min-width: 200px; }
+
+.icon-text {
+    display: none;
+}
+
+.numero-cuenta {
+    max-width: 100px; /* ajusta según tu diseño */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@media screen and (max-width: 700px) {
+    .table {
+        width: auto;
+    }
+    .mensaje_container {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .numero-cuenta {
+        max-width: 80px;
+    }
+
+    .icon-text {
+        display: block;
+    }
+    .text-icon{
+        display: none;
+    }
+
+    .mensaje-select{
+        width: 100%;
+    }
 }

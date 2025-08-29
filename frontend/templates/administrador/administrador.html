@@ -21,7 +21,14 @@
 {% block nav-left %}
     <img class="logo" src="{% static 'img/logos/escudo-positivo-color-vertical-2-lineas.png' %}" alt="Escudo UAEMex">
     {% if request.user.is_authenticated %}
-        <p class="name-user"><i class="bi bi-person-circle"></i>{{ admin_name }}</p>
+        <p class="name-user " id="btnNotificaciones">
+            
+            <span id="notif-badge" class="notif-badge">1</span>
+            
+            <i class="bi bi-person-circle"></i>
+            {{ admin_name }}
+            
+        </p>
     {% endif %}
 {% endblock %}
 <!--Nav center-->
@@ -150,11 +157,13 @@
 
 {% block modals %}
     {% include 'partials/modals/info_objeto.html' %}
+    {% include 'partials/modals/notificacion.html' %}
 {% endblock  %}
 
 {% block extra_js %}
     <script type="module" src="{% static 'js/components/items.js' %}"></script>
     <script type="module" src="{% static 'js/features/search.js' %}"></script>
+    <script type="module" src="{% static 'js/features/notificacion.js' %}"></script>
     <script type="module" src="{% static 'js/features/filter.js' %}"></script>
     <script type="module" src="{% static 'js/utils/dropdown.js' %}"></script>
     <script type="module" src="{% static 'js/auth/logout.js' %}?v={{ timestamp }}"></script>

@@ -50,6 +50,23 @@
     font-size: 1.5em;
     color: #444;
 }
+
+#notif-badge{
+    display: none;
+}
+.notif-badge{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 2rem;
+    height: 2rem;
+    color: red;
+    border-radius: 50%;
+    border: 2px solid red;
+    font-weight: bold;
+}
+
 .nav-section.derecha.principal {
     gap: 10px; /* separa los elementos */
 }
@@ -80,6 +97,13 @@
     .header-nav .name-user i {
         font-size: 1.15rem;
     }
+
+    .notif-badge{
+        width: 1.45rem;
+        height: 1.45rem;
+        font-size: .9rem;
+    }
+
     .header-nav .nav-section.derecha {
         flex-direction: column; /* apila los elementos verticalmente */
         align-items: flex-end; /* opcional: alinea a la izquierda */

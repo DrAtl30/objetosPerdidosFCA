@@ -152,13 +152,13 @@ class Imagenobjeto(models.Model):
 
 class Notificacion(models.Model):
     id_notificacion = models.AutoField(primary_key=True)
-    id_usuario = models.ForeignKey("Usuario", models.DO_NOTHING, db_column="id_usuario",default=51)
+    remitente = models.ForeignKey("Usuario", models.DO_NOTHING, related_name='enviadas', null=True, blank=True, default=51)
+    destinatario = models.ForeignKey("Usuario", models.DO_NOTHING, db_column="id_usuario", related_name='recibidas', default=53)
     mensaje = models.TextField()
     fecha_notificacion = models.DateTimeField()
-    estado_lectura = models.BooleanField()
+    estado_lectura = models.BooleanField(default=False)
 
     class Meta:
-        # managed = False
         db_table = "notificacion"
 
 class Lugar_Perdida(models.Model):

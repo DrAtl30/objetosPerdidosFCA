@@ -4,7 +4,6 @@
 {% block title %}Objetos Reclamados{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/components/table.css' %}">
 <link rel="stylesheet" href="{% static 'css/components/nav.css' %}">
 <link rel="stylesheet" href="{% static 'css/components/button.css' %}">
 <link rel="stylesheet" href="{% static 'css/components/table.css' %}">
@@ -24,54 +23,70 @@
 
 {% block content-main %}
 
-    <h1>Objetos Reclamados</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre del usuario</th>
-                <th>Número de cuenta</th>
-                <th>Objeto</th>
-                <th>Mensaje</th>
-                <th>Aceptar</th>
-                <th>Declinar</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for object in objetos %}
-                {% for reclamacion in object.reclamaciones.all %}
-                    <tr data-objeto="{{ object.id }}" data-id="{{ reclamacion.id }}">
-                        <td>{{reclamacion.usuario.nombre }} {{reclamacion.usuario.apellidos }}</td>
-                        <td>{{reclamacion.usuario.alumno.numero_cuenta }}</td>
-                        <td>{{ object.nombre }}</td>
-                        <td>
-                            <div class="mensaje_container">
-                                <select name="mensaje_{{object.id}}" class="mensaje-select">
-                                    <option value="">-- Selecciona un mensaje --</option>
-                                    <option value="Tu objeto está listo para recoger">Tu objeto está listo para recoger</option>
-                                    <option value="Tu objeto sigue en revisión">Tu objeto sigue en revisión</option>
-                                    <option value="No se encontró coincidencia con la descripción">No se encontró coincidencia con la descripción</option>
-                                    <option value="Contacta al área de objetos perdidos para más detalles">Contacta al área de objetos perdidos para más detalles</option>
-                                </select>
-                                <button class="primary-btn msjbtn" data-id="{{ reclamacion.id }}">Enviar</button>
-                            </div>
-
-                        </td>
-                        <td>
-                            <button class="primary-btn msjbtn aceptar" data-id="{{ reclamacion.id }}" data-objeto="{{ object.id }}">Aceptar</button>
-                        </td>
-                        <td>
-                            <button class="primary-btn msjbtn declinar" data-id="{{ reclamacion.id }}" data-objeto="{{ object.id }}">Declinar</button>
-                        </td>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre del usuario</th>
+                    <th class="numero-cuenta">Número de cuenta</th>
+                    <th>Objeto</th>
+                    <th>Mensaje</th>
+                    <th>Aceptar</th>
+                    <th>Declinar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for object in objetos %}
+                    {% for reclamacion in object.reclamaciones.all %}
+                        <tr data-objeto="{{ object.id }}" data-id="{{ reclamacion.id }}">
+                            <td  data-label="Nombre del usuario">{{reclamacion.usuario.nombre }} {{reclamacion.usuario.apellidos }}</td>
+                            <td data-label="Número de cuenta" class="numero-cuenta">{{reclamacion.usuario.alumno.numero_cuenta }}</td>
+                            <td data-label="Objeto">{{ object.nombre }}</td>
+                            <td  data-label="Mensaje">
+                                <div class="mensaje_container">
+                                    <select name="mensaje_{{object.id}}" class="mensaje-select">
+                                        <option value="">-- Selecciona un mensaje --</option>
+                                        {% for mensaje in mensajes %}
+                                            {% if mensaje.reclamacion_id == reclamacion.id %}
+                                                {% for m in mensaje.mensajes %}
+                                                    <option value="{{ m }}">{{ m }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <button class="primary-btn msjbtn send edit" data-id="{{ reclamacion.id }}">
+                                        <i class="bi bi-send-fill icon-text"></i>
+                                        <span class="text-icon">Enviar</span>
+                                    </button>
+                                </div>
+    
+                            </td>
+                            <td data-label="Aceptar">
+                                <button class="primary-btn msjbtn aceptar" data-id="{{ reclamacion.id }}" data-objeto="{{ object.id }}">
+                                    <i class="bi bi-check-circle-fill icon-text"></i>
+                                    <span class="text-icon" >Aceptar</span>
+                                </button>
+                            </td>
+                            <td data-label="Declinar">
+                                <button class="primary-btn msjbtn declinar delete " data-id="{{ reclamacion.id }}" data-objeto="{{ object.id }}">
+                                    <i class="bi bi-x-circle-fill icon-text"></i>
+                                    <span class="text-icon">Declinar</span>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% empty %}
+                    <tr>
+                        <td class="empty" colspan="6" >No hay objetos reclamados</td>
                     </tr>
                 {% endfor %}
-            {% empty %}
-                <tr>
-                    <td class="empty" colspan="6" >No hay objetos reclamados</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
+
+
 {% block extra_js %}
     <script type="module" src="{% static 'js/features/reclamacion.js' %}"></script>
+    <script type="module" src="{% static 'js/pages/reclamaciones.js' %}"></script>
 {% endblock %}

@@ -55,7 +55,7 @@
     text-align: center;
 }
 
-.primary-btn.add-obj .icono, .primary-btn.comment .icono {
+.primary-btn.add-obj .icono, .primary-btn.comment .icono{
     display: none;
 }
 
@@ -103,7 +103,7 @@
         font-size: 1.5rem;
         padding: 5px;
     }
-    .primary-btn.filter-btn, .primary-btn.add-obj,.primary-btn.sign, .primary-btn.comment, .primary-btn.m-btn {
+    .primary-btn.filter-btn, .primary-btn.add-obj,.primary-btn.sign, .primary-btn.comment, .primary-btn.m-btn, .primary-btn.msjbtn {
         min-width: 30px;
         margin: 5px;
     }
